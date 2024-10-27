@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/result.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/node-vibrant/2.1.0/vibrant.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    <script src="~/js/result.js" defer></script>
+</head>
+<body>
+    <div class="intro">
+        <div class="intro_result">
+            <div class="intro__media_result">
+                <video class="intro__media-video_result" src="~/lib/resources/lv_0_20240716115956.mp4" autoplay muted loop></video>
+            </div>
+        </div>
+        <div class="main-panel">
+            <img src="~/lib/resources/kandinsky-download-1725187229371.jpeg" class="logo-service">
+            <p class="name-service">Mell Music</p>
+            <a asp-controller="Home" asp-action="Index">
+                <button class="btn-home" asp-action="Index">Главная</button>
+            </a>
+            <button class="btn-favorites">Фавориты</button>
+        </div>
+        <div class="result_content">
+            <div class="tracksQuery" type="hidden"  style="display: none" data-value="@ViewData["Model"]"></div>
+            <div class="artists">
+                <h2 id="artist-text">Артисты</h2>
+                <ul class="result-artists">
+                    <li class="result_item">
+                            <img src="~/lib/resources/test pic/m1000x1000.jpg"
+                                 alt="Обложка песни" class="cover-artist">
+                            <h3 class="artist_name">voscresenskiy</h3>
+                        <div class="blur_artist_cover"></div>
+                    </li>
+                    <li class="result_item">
+                        <img src="~/lib/resources/test pic/lo_moon__lo_moon_2_lp1.jpg"
+                             alt="Обложка песни" class="cover-artist">
+                        <h3 class="artist_name">voscresenskiy</h3>
+                        <div class="blur_artist_cover"></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="albums">
+                <h2 id="artist-text">Альбомы</h2>
+                <ul class="result_albums">
+                    <li class="result_item_album">
+                        <img src="~/lib/resources/test pic/89_2.jpg"
+                             alt="Обложка песни" class="cover-album">
+                        <h3 class="album_name">name album</h3>
+                        <div class="blur_album_cover"></div>
+                        <h4 class="album_artist">большая сперма</h4>
+                        <h4 class="album_year">2015</h4>
+                    </li>
+                    <li class="result_item_album">
+                        <img src="~/lib/resources/test pic/i (1).webp"
+                             alt="Обложка песни" class="cover-album">
+                        <h3 class="album_name">name album</h3>
+                        <div class="blur_album_cover"></div>
+                        <h4 class="album_artist">artist name</h4>
+                        <h4 class="album_year">2023</h4>
+                    </li>
+                </ul>
+            </div>
+            <div class="result-tracks">
+                <h2 id="artist-text">Треки</h2>
+                <ul class="tracks">
+                    @* <li class="track-item">
+                        <img src="~/lib/resources//test pic/89_2.jpg" alt="Обложка песни" class="cover">
+                        <div class="track-info">
+                            <h3 class="track-title">sex</h3>
+                            <p class="track-artist">text</p>
+                            <div class="container-time">
+                                <p class="track-time">02:46</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="track-item">
+                        <img src="~/lib/resources//test pic/89_2.jpg" alt="Обложка песни" class="cover">
+                        <div class="track-info">
+                            <h3 class="track-title">sex</h3>
+                            <p class="track-artist">text</p>
+                            <div class="container-time">
+                                <p class="track-time">02:46</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="track-item">
+                        <img src="~/lib/resources//test pic/89_2.jpg" alt="Обложка песни" class="cover">
+                        <div class="track-info">
+                            <h3 class="track-title">sex</h3>
+                            <p class="track-artist">text</p>
+                            <div class="container-time">
+                                <p class="track-time">02:46</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="track-item">
+                        <img src="~/lib/resources//test pic/89_2.jpg" alt="Обложка песни" class="cover">
+                        <div class="track-info">
+                            <h3 class="track-title">sex</h3>
+                            <p class="track-artist">text</p>
+                            <div class="container-time">
+                                <p class="track-time">02:46</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="track-item">
+                        <img src="~/lib/resources//test pic/89_2.jpg" alt="Обложка песни" class="cover">
+                        <div class="track-info">
+                            <h3 class="track-title">sex</h3>
+                            <p class="track-artist">text</p>
+                            <div class="container-time">
+                                <p class="track-time">02:46</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="track-item">
+                        <img src="~/lib/resources//test pic/89_2.jpg" alt="Обложка песни" class="cover">
+                        <div class="track-info">
+                            <h3 class="track-title">sex</h3>
+                            <p class="track-artist">text</p>
+                            <div class="container-time">
+                                <p class="track-time">02:46</p>
+                            </div>
+                        </div>
+                    </li> *@
+                </ul>
+            </div>
+        </div>
+        <div class="music-panel" id="gradient-box">
+            <img alt="Обложка песни" class="cover-panel" id="img-for-gradient">
+            <div class="track-info-panel">
+                <h3 class="track-title-panel">hooch</h3>
+                <p class="track-artist-panel">an.heaL</p>
+            </div>
+            <audio id="track_for_url"></audio>
+            <div class="music-buttons">
+                <img src="~/lib/resources/gray left.png" class="prev-track-button">
+                <img src="~/lib/resources/play (2).jpg" class="stop-track-button" id="play-music-btn">
+                <img src="~/lib/resources/gray right.png" class="next-track-button">
+            </div>
+
+            <!-- Прогресс-бар перемещен внутрь music-buttons -->
+            <div class="progress__container">
+                <div class="progress" id="progress_bar"></div>
+            </div>
+        </div>
+    </div>
+        <input type="hidden" class="data-tracks" >
+        <input type="hidden" class="data-tracks" value="@ViewData["Model"]"></input>
+</body>
+
+</html>

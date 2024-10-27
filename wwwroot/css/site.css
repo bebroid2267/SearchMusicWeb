@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+body {
+    scrollbar-width: thin;
+    scrollbar-color: gray black;
+}
+.intro {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+
+.intro__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #ccc url(~/lib/resources/4fea30d2395e228a9adc1e9e949ce62c59b5790d.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+    .intro__media::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+.intro__media-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+
+.intro__content, .result-tracks {
+    color: whitesmoke;
+    position: fixed;
+    margin-top: -35%;
+    z-index: 5;
+    width: 20%;
+    border-radius: 15%;
+}
+
+.result-tracks {
+    position: relative;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin-top: -15%;
+    z-index: 5;
+    border-radius: 15%;
+}
+
+h1 {
+    font-size: 42px;
+    color: whitesmoke;
+}
+
+input {
+    caret-color: white;
+    width: 74%;
+    height: 60px;
+    background: #2b303bb2;
+    border: none;
+    font-size: 15px;
+    float: left;
+    color: whitesmoke;
+    padding-left: 15px;
+    border-radius: 10px;
+    transition: background .55s ease;
+}
+
+::placeholder {
+    color: gray;
+    font-size: 17px;
+}
+
+input:focus {
+    outline: none;
+    background-color: aliceblue;
+    color: black;
+}
+
+.btn_queary {
+    width: 16%;
+    margin-left: 8px;
+    height: 60px;
+    background: rgba(255, 254, 254, 0);
+    border: none;
+    border-radius: 17px;
+    background-image: url('/lib/resources/yalogo.svg');
+    background-size: cover;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1); /* Исходный размер */
+    }
+
+    50% {
+        transform: scale(1.1); /* Увеличение размера */
+    }
+
+    100% {
+        transform: scale(1); /* Возврат к исходному размеру */
+    }
+}
+    .btn_queary:hover {
+        background-color: whitesmoke;
+    }
+
+ul {
+    background-color: transparent !important;
+    list-style: none;
+    padding: 0;
+    max-height: 1000px;
+    height: 500px;
+    overflow-y: auto;
+}
+
+li {
+    background-color: transparent;
+    position: relative;
+    padding-left: 15px;
+    height: 60px;
+    border-radius: 15px;
+}
+
+    li:hover {
+        background-color: rgb(48, 47, 47);
+        cursor: pointer;
+    }
+
+.track-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.cover {
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.track-info {
+    flex-grow: 1;
+    margin-left: 7px;
+}
+
+.track-title {
+    margin: 0;
+    font-size: 17px;
+}
+
+.track-artist {
+    margin: 0;
+    margin-top: 5px;
+    color: #b9abab;
+}
+
+.music-panel {
+    position: fixed; /* Оставляем фиксированное позиционирование */
+    bottom: 0; /* Фиксируем панель внизу */
+    left: 50%; /* Устанавливаем левый край по центру */
+    transform: translateX(-50%); /* Сдвигаем на половину ширины панели для центрирования */
+    width: 50%; /* Ширина панели */
+    bottom: 0;
+    background-color: gray; /* Цвет фона */
+    padding-bottom: 1px; /*/ /* Отступ снизу */
+    z-index: 10; /* Убедитесь, что панель выше других элементов, если это необходимо */
+    border-radius: 13px 13px 0 0 !important;
+    display: flex;
+    align-items: center;
+    color: floralwhite;
+}
+.cover-panel {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 10%;
+    width: 7%;
+    border-radius: 15px;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
+}
+.track-info-panel {
+    margin-top: 1%;
+    margin-left: 3%;
+}
+.track-title-panel {
+    font-size: 22px;
+}
+.track-artist-panel {
+    margin-top: 10px;
+    font-size: 17px;
+    color: darkgrey;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    text-stroke: 1px black;
+}
+.music-buttons {
+    margin-top: 1%;
+    margin-bottom: 32px; /* Уменьшен отступ снизу */
+    margin-left: 25%;
+    height: 20px;
+    width: 200px;
+    display: flex;
+    justify-content: center; /* Центровка кнопок по горизонтали */
+    align-items: center;
+}
+
+.prev-track-button, .next-track-button {
+    height: 25px;
+    width: 25px;
+}
+
+.prev-track-button, .next-track-button, .stop-track-button:hover {
+    -webkit-filter: brightness(150%);
+    cursor: pointer;
+}
+
+.stop-track-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 35px;
+    width: 35px;
+}
+
+.progress__container {
+    background: gray !important;
+    border-radius: 5px;
+    width: 300px; /* Ширина прогресс-бара с учетом отступов */
+    height: 10px;
+    margin: 0 auto; /* Центровка по горизонтали */
+    margin-top: 50px; /* Отступ от кнопок */
+    margin-left: -250px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.progress {
+    background: white !important;
+    border-radius: 5px;
+    height: 6px;
+    /*width: 150px;*/
+}
+.main-panel {
+    position: fixed; /* Оставляем фиксированное позиционирование */
+    top: 0; /* Фиксируем панель внизу */
+    left: 50%; /* Устанавливаем левый край по центру */
+    height: 50px;
+    transform: translateX(-50%); /* Сдвигаем на половину ширины панели для центрирования */
+    margin: 0 auto;
+    width: 80%;
+    /* background-color: gray;*/ /* Цвет фона */
+    padding-bottom: 1px; /*/ /* Отступ снизу */
+    z-index: 10; /* Убедитесь, что панель выше других элементов, если это необходимо */
+    border-radius: 0 0 13px 13px !important;
+    display: flex;
+    align-items: center;
+    color: floralwhite;
+    text-align: center;
+    background-color: rgba(50, 256, 100, 0.1);
+}
+
+.logo-service {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    margin-left: 15px;
+}
+
+.name-service {
+    margin-top: 15px;
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+.btn-home, .btn-favorites {
+    color: black;
+    position: absolute;
+    right: 10px; /* Устанавливаем позицию относительно правого края */
+    top: 50%; /* Выравниваем по вертикали по центру */
+    transform: translateY(-50%);
+    background: none; /* Убираем фон */
+    border: none; /* Убираем границу */
+    color: white; /* Цвет текста */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Указываем, что это кнопка */
+    text-align: left; /* Выравниваем текст по левому краю */
+    margin-bottom: 10px; /* Отступ между кнопками */
+}
+
+.btn-home {
+    right: 20px;
+}
+
+.btn-favorites {
+    right: 110px;
+}
+
+    .btn-home:hover, .btn-favorites:hover {
+        color: #9932CC; /* Пример: изменение цвета текста при наведении */
+    }
+
+.btn-home::before, .btn-favorites::before {
+    content: ''; /* Пустой контент для создания черточки */
+    position: absolute;
+    left: -3px; /* Располагаем черточку слева */
+    top: 50%; /* Выравниваем по вертикали */
+    transform: translateY(-50%); /* Центрируем по вертикали */
+    height: 100%; /* Высота черточки равна высоте кнопки */
+    width: 2px; /* Ширина черточки */
+    background-color: white; /* Цвет черточки */
+}
+
+.btn-home:hover::before, .btn-favorites:hover::before {
+    background-color: #9932CC; /* Меняем цвет черточки при наведении */
+}

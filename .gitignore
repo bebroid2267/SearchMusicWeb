@@ -1,0 +1,60 @@
+﻿# .NET Core
+bin/
+obj/
+*.user
+*.sln.docstates
+
+# Visual Studio
+.vs/
+*.suo
+*.userprefs
+
+# Rider
+.idea/
+*.sln.iml
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm].*
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# NuGet Packages
+*.nupkg
+**/packages/*
+!**/packages/build/
+!**/packages/build/*.props
+!**/packages/build/*.targets
+
+# Visual Studio Code
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# User-specific files
+*.dbmdl
+*.dbproj.schemaview
+
+# Azure Web App publish folder
+publish/
+
+# Local development environment settings
+appsettings.Development.json
+
+# Docker
+docker-compose.override.yml
+
+# Other
+*.pdb
+*.mdb

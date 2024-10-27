@@ -1,0 +1,478 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+.intro {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+
+.intro__media_result {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #ccc url(~/lib/resources/4fea30d2395e228a9adc1e9e949ce62c59b5790d.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+    .intro__media_result::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+.intro__media-video_result {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+
+.result_content {
+    position: absolute;
+    margin: 0 auto;
+    width: 80%;
+    height: 80%;
+    color: whitesmoke;
+    z-index: 3; /* Контент выше видео и затемнения */
+}
+
+.artists {
+    position: relative;
+    height: 30%;
+    /*background-color: aqua;*/
+}
+
+    .artists h2 {
+        font-size: 2em;
+        color: #fff;
+        margin: 0;
+    }
+
+/*.cover-container {
+    position: absolute;
+    width: 100px;*/ /* Adjust size as needed */
+    /*height: 100px;
+}*/
+
+.cover-artist {
+    position: absolute;
+    border-radius: 55% /*55% 25% 25%*/;
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    margin-left: -9px;
+}
+
+.result-artists {
+    list-style-type: none;
+    margin-top: 30px;
+    margin-left: 0px;
+}
+
+result_albums {
+    list-style-type: none;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.result_item {
+    width: 180px;
+    height: 170px;
+    text-align: center;
+    display: inline-block;
+}
+
+.result_item_album {
+    padding-top: 7px;
+    width: 180px;
+    height: 220px;
+    text-align: center;
+    display: inline-block;
+}
+.blur_artist_cover {
+    margin-left: 10px;
+    border-radius: 55%;
+    margin-top: 81px;
+    background: linear-gradient(to top, black -5%, transparent 150%);
+    opacity: 1;
+    width: 80%;
+    height: 70px;
+    position: relative;
+}
+.artist_name {
+    position: relative;
+    top: 75%;
+    color: white; /* Or any other color to make it visible */
+    font-size: 16px; /* Adjust as needed */
+    line-height: 1.2;
+    margin-left: 12px;
+    margin-right: 20px;
+    z-index: 5;
+}
+.albums {
+    position: relative;
+    height: 30%;
+}
+
+.cover-album {
+    position: absolute;
+    border-radius: 15% /*55% 25% 25%*/;
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    margin-left: -10px;
+}
+
+.album_name {
+    position: relative;
+    top: 65%;
+    color: white; /* Or any other color to make it visible */
+    font-size: 16px; /* Adjust as needed */
+    line-height: 1.2;
+    margin-left: 12px;
+    margin-right: 20px;
+    z-index: 5;
+}
+
+.album_artist {
+    position: relative;
+    z-index: 10;
+    color: darkgray;
+    font-size: 14px;
+    margin-left: -5px;
+    margin-top: 3px;
+}
+.blur_album_cover {
+    margin-left: -12px;
+    border-radius: 25% 25% 25px 25px;
+    margin-top: 102px;
+    background: linear-gradient(to top, black -5%, transparent 150%);
+    opacity: 1;
+    width: 107%;
+    height: 50px;
+    position: relative;
+}
+
+.album_year {
+    position: relative;
+    z-index: 10;
+    color: darkgray;
+    font-size: 14px;
+    margin-left: -5px;
+    margin-top: -7px;
+}
+
+.result-tracks {
+    margin-top: 50px;
+    height: 35%;
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    max-height: 1000px;
+    overflow-y: auto;
+    width: 1400px;
+}
+
+li {
+    padding-left: 15px;
+    height: 60px;
+    border-radius: 15px;
+}
+
+    li:hover {
+        background-color: rgb(48, 47, 47);
+        cursor: pointer;
+    }
+
+.track-item {
+    align-items: center;
+    width: 100%;
+    margin-bottom: -1px;
+}
+
+.cover {
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.track-info {
+    flex-grow: 1;
+    margin-left: 7px;
+}
+
+.track-title {
+    margin: 0;
+    font-size: 17px;
+}
+
+.track-artist {
+    margin: 0;
+    margin-top: 5px;
+    color: #b9abab;
+}
+
+
+.track-time {
+    position: absolute;
+    right: 10px; /* Устанавливаем позицию относительно правого края */
+    top: 50%; /* Выравниваем по вертикали по центру */
+    transform: translateY(-50%);
+    color: #b9abab;
+}
+.tracks {
+    height: 420px;
+    display: grid;
+    grid-template-columns: repeat(2, 0.1fr);
+    grid-template-rows: repeat(4, 0.1fr); /* Четыре строки фиксированной высоты */
+    grid-column-gap: 10px;
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .tracks {
+        grid-template-columns: repeat(4, 1fr); /* Три столбца для больших экранов */
+    }
+    .track-item {
+        width: auto; /* Используем auto для адаптации под ширину колонки */
+    }
+}
+
+
+@media (max-width: 1200px) {
+    .tracks {
+        grid-template-columns: repeat(2, 1fr); /* Вернуть два столбца для маленьких экранов */
+    }
+
+    .track-item {
+        width: auto; /* Используем auto для адаптации под ширину колонки */
+    }
+}
+
+
+.music-panel {
+    position: fixed; /* Оставляем фиксированное позиционирование */
+    bottom: 0; /* Фиксируем панель внизу */
+    margin: 0 auto;
+    width: 80%;
+    bottom: 0;
+    height: 70px;
+    background-color: gray; /* Цвет фона */
+    padding-bottom: 1px; /*/ /* Отступ снизу */
+    z-index: 10; /* Убедитесь, что панель выше других элементов, если это необходимо */
+    border-radius: 13px 13px 0 0 !important;
+    display: flex;
+    align-items: center;
+    color: floralwhite;
+}
+
+.cover-panel {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 30px;
+    width: 58px;
+    height: 58px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
+}
+
+.track-info-panel {
+    position: relative;
+    margin-bottom: 18px;
+    margin-left: 20px;
+    height: 50px;
+}
+
+.track-title-panel {
+    font-size: 22px;
+}
+
+.track-artist-panel {
+    margin-top: -1px;
+    font-size: 17px;
+    color: darkgrey;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    text-stroke: 1px black;
+}
+
+.music-buttons {
+    position: absolute; /* Поменял на relative */
+    margin: 0 auto;
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center; /* Центровка кнопок и прогресс-бара по горизонтали */
+    align-items: center;
+}
+
+.prev-track-button, .next-track-button {
+    height: 25px;
+    width: 25px;
+}
+
+.prev-track-button, .next-track-button, .stop-track-button:hover {
+    -webkit-filter: brightness(150%);
+    cursor: pointer;
+}
+
+.stop-track-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 35px;
+    width: 35px;
+}
+
+
+
+.progress__container {
+    position: absolute;
+    display: inline-flex;
+    background: gray !important;
+    border-radius: 5px;
+    width: 300px; /* Ширина прогресс-бара */
+    height: 10px;
+    margin: 0 auto;
+    margin-top: 43px;
+    left: 25%;
+    right: 25%;
+    cursor: pointer;
+}
+
+.progress {
+    background: white;
+    border-radius: 5px;
+    height: 6px;
+    /*width: 150px;*/
+}
+@media (max-width: 800px) {
+    .prev-track-button, .next-track-button, .stop-track-button {
+        width: 20px; /* Уменьшенный размер для маленьких экранов */
+        height: 20px; /* Уменьшенный размер для маленьких экранов */
+    }
+
+    .stop-track-button {
+        margin-left: 5px;
+        margin-right: 5px;
+        height: 25px; /* Немного больше, чтобы выделить кнопку воспроизведения */
+        width: 25px;
+    }
+
+    .progress__container {
+        width: 200px;
+    }
+
+    .track-title-panel {
+        margin-top: 7px;
+        font-size: 18px;
+    }
+
+    .track-artist-panel {
+        font-size: 13px;
+    }
+}
+@media (max-width: 700px) {
+    .cover-panel {
+        margin-left: 10px;
+        width: 48px;
+        height: 48px;
+    }
+    .track-info-panel {
+        margin-left: 10px;
+    }
+
+    .progress__container {
+        width: 100px;
+    }
+}
+
+.main-panel {
+    position: fixed; /* Оставляем фиксированное позиционирование */
+    top: 0; /* Фиксируем панель внизу */
+    left: 50%; /* Устанавливаем левый край по центру */
+    height: 50px;
+    transform: translateX(-50%); /* Сдвигаем на половину ширины панели для центрирования */
+    margin: 0 auto;
+    width: 80%;
+    /* background-color: gray;*/ /* Цвет фона */
+    padding-bottom: 1px; /*/ /* Отступ снизу */
+    z-index: 10; /* Убедитесь, что панель выше других элементов, если это необходимо */
+    border-radius: 0 0 13px 13px !important;
+    display: flex;
+    align-items: center;
+    color: floralwhite;
+    text-align: center;
+    background-color: rgba(50, 256, 100, 0.1);
+}
+
+.logo-service {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    margin-left: 15px;
+}
+.name-service {
+    margin-top: 15px;
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+.btn-home, .btn-favorites {
+    color: black;
+    position: absolute;
+    right: 10px; /* Устанавливаем позицию относительно правого края */
+    top: 50%; /* Выравниваем по вертикали по центру */
+    transform: translateY(-50%);
+    background: none; /* Убираем фон */
+    border: none; /* Убираем границу */
+    color: white; /* Цвет текста */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Указываем, что это кнопка */
+    text-align: left; /* Выравниваем текст по левому краю */
+    margin-bottom: 10px; /* Отступ между кнопками */
+}
+.btn-home {
+    right: 20px;
+}
+.btn-favorites {
+    right: 110px;
+}
+    .btn-home:hover, .btn-favorites:hover {
+        color: #9932CC; /* Пример: изменение цвета текста при наведении */
+    }
+
+button::before {
+    content: ''; /* Пустой контент для создания черточки */
+    position: absolute;
+    left: -3px; /* Располагаем черточку слева */
+    top: 50%; /* Выравниваем по вертикали */
+    transform: translateY(-50%); /* Центрируем по вертикали */
+    height: 100%; /* Высота черточки равна высоте кнопки */
+    width: 2px; /* Ширина черточки */
+    background-color: white; /* Цвет черточки */
+}
+
+button:hover::before {
+    background-color: #9932CC; /* Меняем цвет черточки при наведении */
+}
