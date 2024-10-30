@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let resultTracks = [];
 
+    var currentTrack;
+
     const trackForUrl = document.querySelector('#track_for_url');
     const progressBar = document.querySelector('.progress');
     const progressContainer = document.querySelector('.progress__container');
@@ -89,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                 $('.tracks').append(
                                     `<li class="track-item" data-id="${track.id}" 
-                                                        data-download-url="${track.donwloadUrl}"
                                                         data-cover-path="${track.coverPath}" 
                                                         data-title="${track.title}" 
                                                         data-artist="${track.artist}">
@@ -118,33 +119,28 @@ document.addEventListener('DOMContentLoaded', function () {
             //    alert("Введите запрос для поиска.");
             //}
         });
-            $('.tracks').on('click', '.track-item', function () {
+    $('.tracks').on('click', '.track-item', function () {
 
-                const panelArtist = $('.track-artist-panel').text();
-                const panelTitle = $('.track-title-panel').text();
+        const panelArtist = $('.track-artist-panel').text();
+        const panelTitle = $('.track-title-panel').text();
 
-                const chooseTrackTitle = $(this).data('title');
-                const chooseTrackArtist = $(this).data('artist');
-                const chooseTrackCover = $(this).data('cover-path');
-                const chooseTrackUrl = $(this).data('download-url');
+        const chooseTrackTitle = $(this).data('title');
+        const chooseTrackArtist = $(this).data('artist');
+        const chooseTrackCover = $(this).data('cover-path');
+        var chooseTrackUrl = $(this).data('download-url');
+        var chooseTrackId = $(this).data('id');
 
-                console.log(chooseTrackTitle);
-                console.log(chooseTrackArtist);
-
-                if (panelArtist !== chooseTrackArtist || panelTitle !== chooseTrackTitle) {
-
-                    const track = {
-                        artist: chooseTrackArtist,
-                        title: chooseTrackTitle,
-                        coverPath: chooseTrackCover,
-                        donwloadUrl: chooseTrackUrl
-                    };
-                    changeTrackPanel(track);
-
-                    playSong();
-                    $('#play-music-btn').attr('src', '/lib/resources/pause.png');
-                }
-            });
+            const track = {
+                artist: chooseTrackArtist,
+                title: chooseTrackTitle,
+                coverPath: chooseTrackCover,
+                downloadUrl: chooseTrackUrl,
+                id: chooseTrackId
+        };
+        //currentTrack = track;
+            changeTrackPanel(track);
+        
+    });
 
 
 
@@ -187,33 +183,55 @@ document.addEventListener('DOMContentLoaded', function () {
         function pauseSong() {
             trackForUrl.pause();
         }
-    function findIndexCurrentTrack() {
-        console.log(resultTracks.length);
+    function getIndexCurrentTrack(track) {
         for (var i = 0; i < resultTracks.length; i++) {
-            if (resultTracks[i].donwloadUrl === trackForUrl.src) {
+            console.log(track);
+            console.log(resultTracks[i]);
+            if (resultTracks[i].id == track.id) {
                     return i;
                 }
             }
         }
 
-        function nextTrack() {
-            var indexCurrentTrack = findIndexCurrentTrack();
+    function nextTrack() {
+        var indexCurrentTrack = getIndexCurrentTrack(currentTrack);
             console.log(indexCurrentTrack);
 
             // Проверяем, не является ли текущий трек последним в списке
             if (indexCurrentTrack === resultTracks.length - 1) {
                 changeTrackPanel(resultTracks[0]); // Переход к первому треку
+            //currentTrack = resultTracks[0];
             } else {
                 changeTrackPanel(resultTracks[indexCurrentTrack + 1]); // Переход к следующему треку
+            //currentTrack = resultTracks[indexCurrentTrack + 1];
             }
 
             playSong(); // Начинаем воспроизведение следующего трека
         }
+    function loadTrack(chooseTrackId) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/Home/GetUrlForTrack',
+                type: 'GET',
+                data: { trackId: chooseTrackId },
+                success: function (url) {
+                    if (url) {
+                        resolve(url);
+                    } else {
+                        reject('URL не найден');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    reject(errorThrown);
+                }
+            });
+        });
+    }
 
-        function prevTrack() {
-            var indexCurrentTrack = findIndexCurrentTrack();
 
-            // Проверяем, не является ли текущий трек первым в списке
+    function prevTrack() {
+        var indexCurrentTrack = getIndexCurrentTrack(currentTrack);
+
             if (indexCurrentTrack === 0) {
                 changeTrackPanel(resultTracks[resultTracks.length - 1]); // Переход к последнему треку
             } else {
@@ -225,7 +243,32 @@ document.addEventListener('DOMContentLoaded', function () {
         function changeTrackPanel(track) {
             $('.track-artist-panel').text(track.artist);
             $('.track-title-panel').text(track.title);
-            $('#img-for-gradient').attr('src', track.coverPath + '?t=' + new Date().getTime());
-            trackForUrl.src = track.donwloadUrl;
+            $('#img-for-gradient').attr('src', track.coverPath + '?t=' + new Date().getTime()); 
+
+            if (track.downloadUrl === undefined || track.downloadUrl === null) {
+                loadTrack(track.id)
+                    .then(url => {
+                        track.donwloadUrl = url;
+                        trackForUrl.src = track.donwloadUrl;
+
+                        for (var i = 0; i < resultTracks.length; i++) {
+                            if (track.id === resultTracks[i].id) {
+                                console.log(currentTrack);
+                                console.log(resultTracks[i]);
+
+
+                                resultTracks[i].donwloadUrl = url;
+                            }
+                        }
+                        playSong();
+                    });
+
+            }
+            else {
+                trackForUrl.src = track.downloadUrl;
+                playSong();
+            }
+            currentTrack = track;
+            $('#play-music-btn').attr('src', '/lib/resources/pause.png');
         }
 });

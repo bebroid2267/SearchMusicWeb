@@ -37,6 +37,11 @@ namespace search_musics.Controllers
 
             var trackList = YandexMusic.GetInfoTracks(model.Queary);
 
+            if (trackList == null)
+            {
+                return BadRequest(ModelState);
+            }
+
             var tracksArray = trackList._tracks.Select(x => x.Value).ToArray();
             return Json(new { TrackList = tracksArray }); // Возвращаем TrackList
         }
@@ -49,6 +54,21 @@ namespace search_musics.Controllers
             var artistList = YandexMusic.GetInfoArtists(model.Queary);
 
             return Json(new { ArtistList = artistList.ToArray()});
+        }
+
+        [HttpGet]
+        public IActionResult GetUrlForTrack(string trackId)
+        {
+            string url =  YandexMusic.GetUrlForDownloadTrack(trackId);
+
+            if (url == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(url);
+            }
         }
         [HttpPost]
         public IActionResult ResultSearch([FromForm] QuearyModel model)
