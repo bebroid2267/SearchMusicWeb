@@ -58,3 +58,4 @@ docker-compose.override.yml
 # Other
 *.pdb
 *.mdb
+node_modules

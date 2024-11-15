@@ -32,7 +32,7 @@ namespace search_musics.Controllers
         [HttpPost]
         public IActionResult SearchTracks([FromBody] QuearyModel model)
         {
-            if (!ModelState.IsValid) // Изменено на "!" для корректной проверки
+            if (!ModelState.IsValid) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "!" пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 return BadRequest(ModelState);
 
             var trackList = YandexMusic.GetInfoTracks(model.Queary);
@@ -43,12 +43,12 @@ namespace search_musics.Controllers
             }
 
             var tracksArray = trackList._tracks.Select(x => x.Value).ToArray();
-            return Json(new { TrackList = tracksArray }); // Возвращаем TrackList
+            return Json(new { TrackList = tracksArray }); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ TrackList
         }
         [HttpPost]
         public IActionResult SearchArtists([FromBody] QuearyModel model)
         {
-            if (!ModelState.IsValid) // Изменено на "!" для корректной проверки
+            if (!ModelState.IsValid) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "!" пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 return BadRequest(ModelState);
 
             var artistList = YandexMusic.GetInfoArtists(model.Queary);
@@ -74,7 +74,7 @@ namespace search_musics.Controllers
         public IActionResult ResultSearch([FromForm] QuearyModel model)
         {
             ViewData["Model"] = model.Queary;
-            return View("ResultSearch"); // Если данных нет, передаем пустой массив
+            return View("ResultSearch"); // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         }
 
     }

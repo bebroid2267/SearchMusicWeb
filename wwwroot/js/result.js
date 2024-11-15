@@ -1,96 +1,73 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    const img = document.getElementById('img-for-gradient');
-    const gradientDiv = document.getElementById('gradient-box');
-
-    img.crossOrigin = "anonymous";
-    // Создаем временный canvas
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    img.onload = function () {
-        // Устанавливаем размеры canvas такие же, как у изображения
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        // Рисуем изображение на canvas
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        // Извлекаем данные о пикселях
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-
-        let r = 0, g = 0, b = 0, count = 0;
-
-        // Проходим по пикселям и суммируем значения цветов
-        for (let i = 0; i < data.length; i += 4) {
-            r += data[i];
-            g += data[i + 1];
-            b += data[i + 2];
-            count++;
-        }
-
-        // Находим средние значения
-        r = Math.floor(r / count);
-        g = Math.floor(g / count);
-        b = Math.floor(b / count);
-
-        // Создаем градиент от белого к среднему цвету изображения
-        const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
-        gradientDiv.style.background = gradient;
-    };
-
-    // Заставляем обновить градиент при изменении изображения
-    $('#img-for-gradient').on('load', function () {
-        img.src = img.src; // Перезагружаем изображение, чтобы вызвать событие onload
-    });
-});
-
+import TrackManager from "./trackManager.js";
 document.addEventListener('DOMContentLoaded', function () {
+    $(function () {
+        const img = document.getElementById('img-for-gradient');
+        const gradientDiv = document.getElementById('gradient-box');
+        img.crossOrigin = "anonymous";
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                let r = 0, g = 0, b = 0, count = 0;
+                for (let i = 0; i < data.length; i += 4) {
+                    r += data[i];
+                    g += data[i + 1];
+                    b += data[i + 2];
+                    count++;
+                }
+                r = Math.floor(r / count);
+                g = Math.floor(g / count);
+                b = Math.floor(b / count);
+                const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
+                gradientDiv.style.background = gradient;
+            };
+        }
+        $('#img-for-gradient').on('load', function () {
+            const originalSrc = img.src;
+            img.src = '';
+            img.src = originalSrc;
+        });
+    });
+    const trackManager = new TrackManager();
+    const progressBar = document.querySelector('.progress');
     const tracksElement = document.querySelector('.tracksQuery');
     const tracksValue = tracksElement.dataset.value;
-
-
-    let resultTracks = [];
-
-    var currentTrack;
-
-    const trackForUrl = document.querySelector('#track_for_url');
-    const progressBar = document.querySelector('.progress');
     const progressContainer = document.querySelector('.progress__container');
-
     const nextTrackBtn = document.querySelector('.next-track-button');
     const prevTrackBtn = document.querySelector('.prev-track-button');
-
-    //const trackQuery = document.querySelector('.data-tracks').value;
-
-    nextTrackBtn.addEventListener('click', nextTrack);
-    prevTrackBtn.addEventListener('click', prevTrack);
-
-    let countTracks = [];
-    var indexTrack;
-
-    progressContainer.addEventListener('click', setProgress);
-    trackForUrl.addEventListener('timeupdate', updateProgress);
-    
-        let isPlaying = false;
-        $(function () {
-                $.ajax({
-                    url: '/Home/SearchTracks',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ Queary: tracksValue }),
-                    success: function (response) {
-                        $('.tracks').empty();
-
-                        // Проверяем, существует ли TrackList и является ли он объектом с _tracks
-                        if (response && response.trackList && Array.isArray(response.trackList)) {
-                            resultTracks.length = 0;
-                            response.trackList.forEach(function (track) {
-
-                                resultTracks.push(track);
-
-                                $('.tracks').append(
-                                    `<li class="track-item" data-id="${track.id}" 
+    nextTrackBtn.addEventListener('click', trackManager.nextTrack);
+    prevTrackBtn.addEventListener('click', trackManager.prevTrack);
+    progressContainer.addEventListener('click', (e) => {
+        const width = progressContainer.clientWidth; // используем progressContainer напрямую
+        const clickX = e.offsetX;
+        const duration = trackManager.trackForUrl.duration;
+        trackManager.trackForUrl.currentTime = (clickX / width) * duration;
+    });
+    if (trackManager.trackForUrl) {
+        trackManager.trackForUrl.addEventListener('timeupdate', updateProgressTrack);
+    }
+    else {
+        console.error("Элемент #track_for_url не найден.");
+    }
+    trackManager.playTrackBtn.addEventListener('click', () => trackManager.playTrackClick());
+    $(function () {
+        $.ajax({
+            url: '/Home/SearchTracks',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ Queary: tracksValue }),
+            success: function (response) {
+                $('.tracks').empty();
+                if (response && response.trackList && Array.isArray(response.trackList)) {
+                    trackManager.resultTracks.length = 0;
+                    response.trackList.forEach(function (track) {
+                        trackManager.resultTracks.push(track);
+                        $('.tracks').append(`<li class="track-item" data-id="${track.id}" 
                                                         data-cover-path="${track.coverPath}" 
                                                         data-title="${track.title}" 
                                                         data-artist="${track.artist}">
@@ -99,176 +76,40 @@ document.addEventListener('DOMContentLoaded', function () {
                                                 <h3 class="track-title">${track.title}</h3>
                                                 <p class="track-artist">${track.artist}</p>
                                             </div>
-                                    </li>`
-                                );
-                            });
-                            $('.result-tracks').show();
-
-                        } else {
-                            $('.tracks').append('<li>Треки не найдены.</li>');
-                            $('.result-tracks').show();
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        if (xhr.responseJSON) {
-                            alert(xhr.responseJSON.errors.Queary[0]); // Показываем сообщение об ошибке валидации
-                        }
-                    }
-                });
-            //} else {
-            //    alert("Введите запрос для поиска.");
-            //}
+                                    </li>`);
+                    });
+                    $('.result-tracks').show();
+                }
+                else {
+                    $('.tracks').append('<li>Треки не найдены.</li>');
+                    $('.result-tracks').show();
+                }
+            },
+            error: function (xhr) {
+                if (xhr.responseJSON) {
+                    alert(xhr.responseJSON.errors.Queary[0]);
+                }
+            }
         });
+    });
     $('.tracks').on('click', '.track-item', function () {
-
-        const panelArtist = $('.track-artist-panel').text();
-        const panelTitle = $('.track-title-panel').text();
-
         const chooseTrackTitle = $(this).data('title');
         const chooseTrackArtist = $(this).data('artist');
         const chooseTrackCover = $(this).data('cover-path');
-        var chooseTrackUrl = $(this).data('download-url');
-        var chooseTrackId = $(this).data('id');
-
-            const track = {
-                artist: chooseTrackArtist,
-                title: chooseTrackTitle,
-                coverPath: chooseTrackCover,
-                downloadUrl: chooseTrackUrl,
-                id: chooseTrackId
+        const chooseTrackUrl = $(this).data('download-url');
+        const chooseTrackId = $(this).data('id');
+        const track = {
+            artist: chooseTrackArtist,
+            title: chooseTrackTitle,
+            coverPath: chooseTrackCover,
+            downloadUrl: chooseTrackUrl,
+            id: chooseTrackId
         };
-        //currentTrack = track;
-            changeTrackPanel(track);
-        
+        trackManager.changeTrackPanel(track);
     });
-
-
-
-            $('#play-music-btn').click(function () {
-                isPlaying = !isPlaying;
-
-                if (isPlaying) {
-                    // Если воспроизводим, меняем на иконку паузы
-                    $('#play-music-btn').attr('src', '/lib/resources/play (2).jpg');
-                    // Здесь можно добавить код для начала воспроизведения музыки
-                    pauseSong();
-                } else {
-                    playSong();
-                    // Если на паузе, меняем на иконку воспроизведения
-                    $('#play-music-btn').attr('src', '/lib/resources/pause.png');
-                    // Здесь можно добавить код для остановки воспроизведения музыки
-                }
-            });
-    
-
-        
-        function updateProgress(e) {
-            const { duration, currentTime } = e.srcElement;
-            const progressPercent = (currentTime / duration) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-        }
-        function setProgress(e) {
-            const width = this.clientWidth;
-            const clickX = e.offsetX;
-            const duration = trackForUrl.duration;
-
-            trackForUrl.currentTime = (clickX / width) * duration;
-        }
-        //progressContainer.addEventListener('click', setProgress);
-        //trackForUrl.addEventListener('timeupdate', updateProgress);
-        function playSong() {
-            trackForUrl.play();
-        }
-
-        function pauseSong() {
-            trackForUrl.pause();
-        }
-    function getIndexCurrentTrack(track) {
-        for (var i = 0; i < resultTracks.length; i++) {
-            console.log(track);
-            console.log(resultTracks[i]);
-            if (resultTracks[i].id == track.id) {
-                    return i;
-                }
-            }
-        }
-
-    function nextTrack() {
-        var indexCurrentTrack = getIndexCurrentTrack(currentTrack);
-            console.log(indexCurrentTrack);
-
-            // Проверяем, не является ли текущий трек последним в списке
-            if (indexCurrentTrack === resultTracks.length - 1) {
-                changeTrackPanel(resultTracks[0]); // Переход к первому треку
-            //currentTrack = resultTracks[0];
-            } else {
-                changeTrackPanel(resultTracks[indexCurrentTrack + 1]); // Переход к следующему треку
-            //currentTrack = resultTracks[indexCurrentTrack + 1];
-            }
-
-            playSong(); // Начинаем воспроизведение следующего трека
-        }
-    function loadTrack(chooseTrackId) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: '/Home/GetUrlForTrack',
-                type: 'GET',
-                data: { trackId: chooseTrackId },
-                success: function (url) {
-                    if (url) {
-                        resolve(url);
-                    } else {
-                        reject('URL не найден');
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(errorThrown);
-                }
-            });
-        });
+    function updateProgressTrack(e) {
+        const { duration, currentTime } = e.srcElement;
+        const progressPercent = (currentTime / duration) * 100;
+        progressBar.style.width = `${progressPercent}%`;
     }
-
-
-    function prevTrack() {
-        var indexCurrentTrack = getIndexCurrentTrack(currentTrack);
-
-            if (indexCurrentTrack === 0) {
-                changeTrackPanel(resultTracks[resultTracks.length - 1]); // Переход к последнему треку
-            } else {
-                changeTrackPanel(resultTracks[indexCurrentTrack - 1]); // Переход к предыдущему треку
-            }
-            playSong(); // Начинаем воспроизведение предыдущего трека
-        }
-
-        function changeTrackPanel(track) {
-            $('.track-artist-panel').text(track.artist);
-            $('.track-title-panel').text(track.title);
-            $('#img-for-gradient').attr('src', track.coverPath + '?t=' + new Date().getTime()); 
-
-            if (track.downloadUrl === undefined || track.downloadUrl === null) {
-                loadTrack(track.id)
-                    .then(url => {
-                        track.donwloadUrl = url;
-                        trackForUrl.src = track.donwloadUrl;
-
-                        for (var i = 0; i < resultTracks.length; i++) {
-                            if (track.id === resultTracks[i].id) {
-                                console.log(currentTrack);
-                                console.log(resultTracks[i]);
-
-
-                                resultTracks[i].donwloadUrl = url;
-                            }
-                        }
-                        playSong();
-                    });
-
-            }
-            else {
-                trackForUrl.src = track.downloadUrl;
-                playSong();
-            }
-            currentTrack = track;
-            $('#play-music-btn').attr('src', '/lib/resources/pause.png');
-        }
 });

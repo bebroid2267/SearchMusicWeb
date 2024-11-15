@@ -15,12 +15,20 @@ namespace search_musics
             var connectionString = builder.Configuration.GetConnectionString("Default");
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp",
+                    builder => builder
+                        .WithOrigins("http://localhost:5173") // или ваш React-порт
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+
             var app = builder.Build();
 
             //FileServerOptions fileServerOptions = new FileServerOptions();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("Index.cshtml");
-
 
 
             // Configure the HTTP request pipeline.
@@ -34,6 +42,7 @@ namespace search_musics
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseCors("AllowReactApp");
             app.UseRouting();
 
             app.UseAuthorization();

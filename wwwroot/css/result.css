@@ -44,10 +44,13 @@
 .result_content {
     position: absolute;
     margin: 0 auto;
-    width: 80%;
+    width: 85%;
     height: 80%;
     color: whitesmoke;
     z-index: 3; /* Контент выше видео и затемнения */
+    left: 10%;
+    right: 10%;
+    top: 10%;
 }
 
 .artists {

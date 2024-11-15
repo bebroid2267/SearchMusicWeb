@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
-
-    "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "commonjs", /* Specify what module code is generated. */
-    "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */ /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
-    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
-    "strict": true, /* Enable all strict type-checking options. */
+    "target": "ES2015",
+    "module": "esnext",
+    "moduleResolution": "node", // Меняем модульную систему на Node
+    "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "moduleResolution": "Node",
-    "lib": [ "DOM", "DOM.Iterable", "ESNext" ],
-    "jsx": "react-jsx"
-  }
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./wwwroot/js",
+    "rootDir": "./wwwroot/js",
+    "allowJs": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "wwwroot/js/*.ts"
+  ],
+  "exclude": [
+    "wwwroot/js/**/*.js"
+  ]
 }
