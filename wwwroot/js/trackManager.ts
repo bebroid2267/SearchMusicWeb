@@ -56,6 +56,10 @@ export default class TrackManager {
         this.prevTrack = this.prevTrack.bind(this);
     }
 
+    setElement(name: string, element: any) {
+        this[name] = element;
+    }
+
     playTrackClick(): void {
         if (!this.playTrackBtn) {
             console.error("playTrackBtn не инициализирован или не является jQuery объектом.");
