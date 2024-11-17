@@ -1,4 +1,4 @@
-import TrackManager from "./trackManager.js";
+import TrackManager from "../js/trackManager.js";
 document.addEventListener('DOMContentLoaded', function () {
     $(function () {
         const img = document.getElementById('img-for-gradient');

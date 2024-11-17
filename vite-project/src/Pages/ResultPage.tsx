@@ -7,35 +7,33 @@ import MainPanel from '../customComponents/mainPanel';
 import MusicPanel from '../customComponents/musicPanel';
 import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useTrackManager } from '../contexts/TrackManagerContext';
-import { useEffect, useRef } from 'react';
+import  { TrackManagerContext, useTrackManager } from '../contexts/TrackManagerContext';
+import TrackManager from '../../../wwwroot/js/trackManager';
 
 export default function ResultPage( {results} : any ) {
-  const progressBarRef = useRef(null);
-  const tracksElementRef = useRef(null);
-  const progressContainerRef = useRef(null);
-  const nextTrackBtnRef = useRef(null);
-  const prevTrackBtnRef = useRef(null);
 
-  const trackManager = useTrackManager();
+  const trackManager = new TrackManager();
 
-  useEffect(() => {
-    trackManager.
-  })
+  const { tracks, artist, albums } = results;
 
+  console.log(tracks);
+  console.log(artist);
+  console.log(albums);
 
     return (
+      <TrackManagerContext.Provider value={trackManager}>
       <div className='pupupu'>
           <div className="intro_result">
             <BackgroundVideo />
             <MainPanel />
             <div className='result_content'>
-                <Artists />
-                <Albums />
-                <Tracks tracks={results}/>
+                <Artists artists={artist}/>
+                <Albums albums={albums}/>
+                <Tracks tracks={tracks}/>
                 <MusicPanel />
             </div>
           </div>  
       </div>
+      </TrackManagerContext.Provider>
     );
 }

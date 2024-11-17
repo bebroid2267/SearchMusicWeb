@@ -8,6 +8,15 @@ export default class TrackManager {
         this.trackArtistPanel = null;
         this.trackTitlePanel = null;
         this.imgForGradient = null;
+        this.progressBar = null;
+        this.progressContainer = null;
+        this.nextTrackBtn = null;
+        this.prevTrackBtn = null;
+        this.gradientDiv = null;
+        this.onTrackChange = null;
+        this.onProgressBarChange = null;
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d');
         // Ищем элементы в DOM, если они уже существуют
         this.trackForUrl = document.querySelector('#track_for_url');
         this.resultTracks = [];
@@ -45,6 +54,23 @@ export default class TrackManager {
         this.nextTrack = this.nextTrack.bind(this);
         this.prevTrack = this.prevTrack.bind(this);
     }
+    updateProgressTrack(e) {
+        const { duration, currentTime } = e.srcElement;
+        const progressPercent = (currentTime / duration) * 100;
+        this.progressBar.style.width = `${progressPercent}%`;
+    }
+    setCurrentTrack(newTrack) {
+        this.currentTrack = newTrack;
+        if (this.onTrackChange) {
+            this.onTrackChange(newTrack);
+        }
+    }
+    setOnTrackChangeListener(callback) {
+        this.onTrackChange = callback;
+    }
+    setOnProgressBarChangeListener(callback) {
+        this.onProgressBarChange = callback;
+    }
     playTrackClick() {
         if (!this.playTrackBtn) {
             console.error("playTrackBtn не инициализирован или не является jQuery объектом.");
@@ -52,12 +78,14 @@ export default class TrackManager {
         }
         this.isPlaying = !this.isPlaying;
         if (this.isPlaying) {
-            this.playTrackBtn.setAttribute('src', '/lib/resources/play (2).jpg');
+            console.log('if');
+            this.playTrackBtn.setAttribute('src', '../lib/resources/play (2).jpg');
             this.pauseTrack();
         }
         else {
+            console.log('else');
             this.playTrack();
-            this.playTrackBtn.setAttribute('src', '/lib/resources/pause.png');
+            this.playTrackBtn.setAttribute('src', 'lib/resources/pause.png');
         }
     }
     playTrack() {
@@ -110,28 +138,63 @@ export default class TrackManager {
     }
     loadTrack(chooseTrackId) {
         return new Promise((resolve, reject) => {
-            $.ajax({
-                url: '/Home/GetUrlForTrack',
-                type: 'GET',
-                data: { trackId: chooseTrackId },
-                success: function (url) {
-                    if (url) {
-                        resolve(url);
-                    }
-                    else {
-                        reject('URL не найден');
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    reject(errorThrown);
-                },
+            fetch(`https://localhost:44303/Home/GetUrlForTrack?trackId=${chooseTrackId}`, {
+                method: 'GET',
+            })
+                .then(response => {
+                if (!response.ok) {
+                    console.log('fuckup');
+                }
+                return response.text();
+            })
+                .then(url => {
+                if (url) {
+                    resolve(url);
+                }
+                else {
+                    reject('url not found');
+                }
+            })
+                .catch(error => {
+                reject(error.method);
             });
         });
+    }
+    ;
+    changeBackgroundMusicPanel() {
+        const currentImage = this.imgForGradient;
+        console.log(currentImage);
+        if (this.ctx && currentImage) {
+            this.canvas.width = currentImage.width;
+            this.canvas.height = currentImage.height;
+            this.ctx.drawImage(currentImage, 0, 0, this.canvas.width, this.canvas.height);
+            const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+            const data = imageData.data;
+            let r = 0, g = 0, b = 0, count = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+                count++;
+            }
+            r = Math.floor(r / count);
+            g = Math.floor(g / count);
+            b = Math.floor(b / count);
+            console.log(`${r} + ${g} + ${b}`);
+            // Обновление градиента
+            const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
+            this.gradientDiv.style.background = gradient;
+            this.gradientDiv.style.background = gradient;
+        }
     }
     changeTrackPanel(track) {
         this.trackArtistPanel.textContent = track.artist;
         this.trackTitlePanel.textContent = track.title;
+        this.imgForGradient.crossOrigin = 'anonymous';
         this.imgForGradient.setAttribute('src', track.coverPath + '?t=' + new Date().getTime());
+        this.imgForGradient.onload = () => {
+            this.changeBackgroundMusicPanel();
+        };
         const playAfterLoad = () => {
             this.playTrack();
             this.trackForUrl.removeEventListener('loadeddata', playAfterLoad);
@@ -154,7 +217,9 @@ export default class TrackManager {
             this.trackForUrl.src = track.downloadUrl;
             this.trackForUrl.addEventListener('loadeddata', playAfterLoad);
         }
-        this.currentTrack = track;
-        this.playTrackBtn.setAttribute('src', '/lib/resources/pause.png');
+        this.setCurrentTrack(track);
+        console.log('в трек менеджере');
+        console.log(this.currentTrack);
+        this.playTrackBtn.setAttribute('src', 'lib/resources/pause.png');
     }
 }

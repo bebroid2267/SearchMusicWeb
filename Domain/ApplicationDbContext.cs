@@ -1,14 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using search_musics.Domain.Entities;
 
 namespace search_musics.Domain
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public DbSet<Track> Tracks { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Artist> Artists { get; set; }
 
-        public ApplicationDbContext(DbContextOptions options) : base (options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base (options)
         {
             
         }

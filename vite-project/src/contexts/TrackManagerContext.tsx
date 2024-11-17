@@ -1,10 +1,25 @@
 import React, { createContext, useContext } from "react";
 import TrackManager from "../../../wwwroot/js/trackManager";
 
-const trackManager = new TrackManager();
+// Создаем контекст
+export const TrackManagerContext = createContext<TrackManager | null>(null);
 
-const TrackManagerContext = createContext(trackManager);
+// Провайдер для контекста
+export const TrackManagerProvider = ({ children }: { children: React.ReactNode }) => {
+    const trackManager = new TrackManager();
 
-export const useTrackManager = () => useContext(TrackManagerContext);
+    return (
+        <TrackManagerContext.Provider value={trackManager}>
+            {children}
+        </TrackManagerContext.Provider>
+    );
+};
 
-export default TrackManagerContext;
+// Хук для использования контекста
+export const useTrackManager = () => {
+    const context = useContext(TrackManagerContext);
+    if (!context) {
+        throw new Error("useTrackManager must be used within a TrackManagerProvider");
+    }
+    return context;
+};

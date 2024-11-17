@@ -1,4 +1,5 @@
-﻿using YandexMusicApi.Api;
+﻿using Newtonsoft.Json.Linq;
+using YandexMusicApi.Api;
 using YandexMusicApi.Network;
 
 
@@ -16,6 +17,47 @@ namespace search_musics.Domain.Entities
 
         private static readonly YandexMusicApi.Api.Artist artist = new YandexMusicApi.Api.Artist(networkParams, token);
 
+        public static List<Album> GetInfoAlbums(string queary)
+        {
+            List<Album> albums = new();
+
+            int countTracks = 0;
+
+            var searchResult = defApi.Search(queary, typeSearch: "album", pageSize: 8).Result;
+
+            var albumResults = searchResult?["result"]?["albums"]?["results"];
+
+            if (albumResults == null)
+            {
+                return null;
+            }
+
+            foreach (var item in albumResults)
+            {
+                var coverUri = string.Empty;
+                var artistName = string.Empty;
+
+                if ( item["coverUri"] != null)
+                {
+                    coverUri = GetCoverUri(item["coverUri"].ToString(), "1000x1000");
+                }
+                if (item["artists"] is JArray artistsArray && artistsArray.Count > 0)
+                {
+                    artistName = artistsArray[0]["name"]?.ToString() ?? "Unknown Artist";
+                }
+
+                albums.Add(new Album()
+                {
+                    id = item["id"].ToString(),
+                    CoverPath = coverUri,
+                    Title = item["title"].ToString(),
+                    Year = item["year"].ToString(),
+                    ArtistName = artistName,
+                });
+            }
+
+            return albums;
+        }
         public static TrackList GetInfoTracks(string queary)
         {
             TrackList tracks = new();
@@ -36,7 +78,8 @@ namespace search_musics.Domain.Entities
                     item["id"].ToString(),
                     item["title"].ToString(),
                     item["artists"][0]["name"].ToString(),
-                    GetCoverUri(item["coverUri"].ToString()));
+                    GetCoverUri(item["coverUri"].ToString(),
+                    "100x100"));
 
                 countTracks++;
             }
@@ -62,7 +105,7 @@ namespace search_musics.Domain.Entities
         {
             List<Artist> artists = new List<Artist>();
 
-            var searhResultArtist = defApi.Search(titleTrack, typeSearch: "artist", pageSize: 5).Result;
+            var searhResultArtist = defApi.Search(titleTrack, typeSearch: "artist", pageSize: 8).Result;
             if (searhResultArtist != null)
             {
                 var apiResult = searhResultArtist["result"];
@@ -78,7 +121,7 @@ namespace search_musics.Domain.Entities
                         var coverUri = string.Empty;
                         if (item["cover"] != null && item["cover"]["uri"] != null)
                         {
-                            coverUri = GetCoverUri(item["cover"]["uri"].ToString());
+                            coverUri = GetCoverUri(item["cover"]["uri"].ToString(), "1000x1000");
                         }
 
                         artists.Add(new Artist() 
@@ -92,10 +135,9 @@ namespace search_musics.Domain.Entities
             }
             return artists;
         }
-        private static string GetCoverUri(string coverUri)
+        private static string GetCoverUri(string coverUri, string px)
         {
-            return coverUri != null ? "https://" + coverUri.Replace("%%", "100x100") : null;
+            return coverUri != null ? "https://" + coverUri.Replace("%%", px) : null;
         }
-
     }
 }

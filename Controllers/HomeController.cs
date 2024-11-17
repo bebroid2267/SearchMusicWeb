@@ -37,6 +37,8 @@ namespace search_musics.Controllers
 
             var trackList = YandexMusic.GetInfoTracks(model.Queary);
 
+
+
             if (trackList == null)
             {
                 return BadRequest(ModelState);
@@ -52,8 +54,17 @@ namespace search_musics.Controllers
                 return BadRequest(ModelState);
 
             var artistList = YandexMusic.GetInfoArtists(model.Queary);
-
             return Json(new { ArtistList = artistList.ToArray()});
+        }
+
+        [HttpPost]
+        public IActionResult SearchAlbums([FromBody] QuearyModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var albumsList = YandexMusic.GetInfoAlbums(model.Queary);
+            return Json(new {  AlbumList = albumsList.ToArray()});
         }
 
         [HttpGet]

@@ -70,6 +70,60 @@
     width: 100px;*/ /* Adjust size as needed */
     /*height: 100px;
 }*/
+.button-container {
+    position: absolute;
+    margin-top: 440px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Добавляем отступ между кнопками */
+}
+.auth__content {
+    color: whitesmoke;
+    position: fixed;
+    margin-top: -100px; /* Центрируем по вертикали */
+    left: 50%; /* Центрируем по горизонтали */
+    transform: translate(-50%, -50%); /* Корректируем точку отсчета для центровки */
+    z-index: 5;
+    width: 25%; /* Можно увеличить ширину, если инпуты не помещаются */
+    border-radius: 15%;
+    height: auto; /* Высота будет зависеть от контента */
+    padding: 20px; /* Добавляем отступы внутри контейнера */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Выравниваем элементы по центру */
+    justify-content: center;
+}
+
+
+.authButton, .enterButton, .changeAuthStateButton {
+    width: 200px; /* Фиксированная ширина кнопок */
+    height: 50px;
+    margin: 5px 0;
+    display: block;
+    text-align: center; /* Выравнивание текста по центру кнопки */
+}
+
+.enterButton {
+    width: 75px;
+    background-color: rgb(153, 56, 56);
+    border-radius: 15px;
+    border-width: 1px;
+}
+
+.changeAuthStateButton {
+    background-color: rgba(128, 128, 128, 0.445);
+    color: white;
+    border-radius: 15px;
+    width: 60px;
+}
+
+.authButton {
+    background-color: gray;
+}
 
 .cover-artist {
     position: absolute;
@@ -174,6 +228,10 @@ result_albums {
     position: relative;
 }
 
+.zindexAuth {
+    z-index: 10;
+    display: block;
+}
 .album_year {
     position: relative;
     z-index: 10;
@@ -194,7 +252,7 @@ ul {
     padding: 0;
     max-height: 1000px;
     overflow-y: auto;
-    width: 1400px;
+    width: 1800px;
 }
 
 li {
@@ -366,7 +424,7 @@ li {
 .progress {
     background: white;
     border-radius: 5px;
-    height: 6px;
+    height: 3px;
     /*width: 150px;*/
 }
 @media (max-width: 800px) {
@@ -441,41 +499,52 @@ li {
     font-size: 20px;
 }
 
-.btn-home, .btn-favorites {
+.btn-home, .btn-favorites, .btn-enter, .btn-exit {
     color: black;
     position: absolute;
-    right: 10px; /* Устанавливаем позицию относительно правого края */
-    top: 50%; /* Выравниваем по вертикали по центру */
+    right: 10px;
+    top: 50%;
     transform: translateY(-50%);
-    background: none; /* Убираем фон */
-    border: none; /* Убираем границу */
-    color: white; /* Цвет текста */
-    font-size: 16px; /* Размер шрифта */
-    cursor: pointer; /* Указываем, что это кнопка */
-    text-align: left; /* Выравниваем текст по левому краю */
-    margin-bottom: 10px; /* Отступ между кнопками */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.btn-enter {
+    right: 200px;
+}
+
+.btn-exit {
+    right: 250px;
 }
 .btn-home {
     right: 20px;
 }
+
 .btn-favorites {
     right: 110px;
 }
-    .btn-home:hover, .btn-favorites:hover {
-        color: #9932CC; /* Пример: изменение цвета текста при наведении */
-    }
 
-button::before {
-    content: ''; /* Пустой контент для создания черточки */
-    position: absolute;
-    left: -3px; /* Располагаем черточку слева */
-    top: 50%; /* Выравниваем по вертикали */
-    transform: translateY(-50%); /* Центрируем по вертикали */
-    height: 100%; /* Высота черточки равна высоте кнопки */
-    width: 2px; /* Ширина черточки */
-    background-color: white; /* Цвет черточки */
+.btn-home:hover, .btn-favorites:hover, .btn-enter:hover, .btn-exit:hover {
+    color: #9932CC;
 }
 
-button:hover::before {
-    background-color: #9932CC; /* Меняем цвет черточки при наведении */
+/* Псевдоэлемент для черточки, только для кнопок .btn-home и .btn-favorites */
+.btn-home::before, .btn-favorites::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    width: 2px;
+    background-color: white;
+}
+
+.btn-home:hover::before, .btn-favorites:hover::before {
+    background-color: #9932CC;
 }

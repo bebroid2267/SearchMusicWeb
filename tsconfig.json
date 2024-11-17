@@ -14,7 +14,7 @@
   },
   "include": [
     "wwwroot/js/*.ts"
-  ],
+, "wwwroot/js/trackManager.ts"  ],
   "exclude": [
     "wwwroot/js/**/*.js"
   ]
