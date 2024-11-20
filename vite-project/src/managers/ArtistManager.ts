@@ -1,6 +1,3 @@
-import { IArtist } from "../../../wwwroot/js/Interfaces/Interfaces";
+import { IArtist } from '../../../wwwroot/js/Interfaces/Interfaces';
 
-export default class ArtistManager {
-
-    
-}
+export default class ArtistManager {}

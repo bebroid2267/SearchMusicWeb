@@ -1,0 +1,85 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  MSSQL_PASSWORD: "YourPassword123"
+  MSSQL_SERVER: "localhost"
+  MSSQL_DB_NAME: "TestDb"
+
+before_script:
+  - echo "Start CI/CD Pipeline"
+
+backend_build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:9.0
+  script:
+    - cd backend
+    - dotnet restore
+    - dotnet build --configuration Release
+    - dotnet publish --configuration Release --output ./publish
+  artifacts:
+    paths:
+      - backend/publish/
+
+backend_test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:7.0
+  script:
+    - cd backend
+    - dotnet test --configuration Release --logger:trx
+  dependencies:
+    - backend_build
+
+frontend_build:
+  stage: build
+  image: node:16
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build/
+
+frontend_test:
+  stage: test
+  image: node:16
+  script:
+    - cd frontend
+    - npm install
+    - npm run test -- --coverage
+  dependencies:
+    - frontend_build
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying to production..."
+    - ssh username@yourserver "bash deploy_backend.sh"
+    - ssh username@yourserver "bash deploy_frontend.sh"
+  only:
+    - main
+
+services:
+  - name: mcr.microsoft.com/mssql/server:2019-latest
+    alias: db
+    command:
+      - "bash"
+      - "-c"
+      - "sleep 30 && /opt/mssql/bin/sqlservr"
+
+integration_test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:7.0
+  script:
+    - cd backend
+    - dotnet test --configuration Release --logger:trx
+    - echo "Testing with MSSQL"
+    - export ConnectionString="Server=db;Database=$MSSQL_DB_NAME;User Id=sa;Password=$MSSQL_PASSWORD"
+    - dotnet test
+  dependencies:
+    - backend_build
+  services:
+    - mcr.microsoft.com/mssql/server:2019-latest

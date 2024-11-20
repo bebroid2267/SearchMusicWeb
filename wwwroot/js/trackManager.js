@@ -13,6 +13,8 @@ export default class TrackManager {
         this.nextTrackBtn = null;
         this.prevTrackBtn = null;
         this.gradientDiv = null;
+        this.imgPlay = null;
+        this.imgStop = null;
         this.onTrackChange = null;
         this.onProgressBarChange = null;
         this.canvas = document.createElement('canvas');
@@ -73,19 +75,14 @@ export default class TrackManager {
     }
     playTrackClick() {
         if (!this.playTrackBtn) {
-            console.error("playTrackBtn не инициализирован или не является jQuery объектом.");
             return;
         }
         this.isPlaying = !this.isPlaying;
         if (this.isPlaying) {
-            console.log('if');
-            this.playTrackBtn.setAttribute('src', '../lib/resources/play (2).jpg');
             this.pauseTrack();
         }
         else {
-            console.log('else');
             this.playTrack();
-            this.playTrackBtn.setAttribute('src', 'lib/resources/pause.png');
         }
     }
     playTrack() {
@@ -143,7 +140,6 @@ export default class TrackManager {
             })
                 .then(response => {
                 if (!response.ok) {
-                    console.log('fuckup');
                 }
                 return response.text();
             })
@@ -163,7 +159,6 @@ export default class TrackManager {
     ;
     changeBackgroundMusicPanel() {
         const currentImage = this.imgForGradient;
-        console.log(currentImage);
         if (this.ctx && currentImage) {
             this.canvas.width = currentImage.width;
             this.canvas.height = currentImage.height;
@@ -180,7 +175,6 @@ export default class TrackManager {
             r = Math.floor(r / count);
             g = Math.floor(g / count);
             b = Math.floor(b / count);
-            console.log(`${r} + ${g} + ${b}`);
             // Обновление градиента
             const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
             this.gradientDiv.style.background = gradient;
@@ -211,15 +205,12 @@ export default class TrackManager {
                 }
                 this.trackForUrl.addEventListener('loadeddata', playAfterLoad);
             })
-                .catch((error) => console.error(error)); // Уточненный тип ошибки
+                .catch((error) => { }); // Уточненный тип ошибки
         }
         else {
             this.trackForUrl.src = track.downloadUrl;
             this.trackForUrl.addEventListener('loadeddata', playAfterLoad);
         }
         this.setCurrentTrack(track);
-        console.log('в трек менеджере');
-        console.log(this.currentTrack);
-        this.playTrackBtn.setAttribute('src', 'lib/resources/pause.png');
     }
 }

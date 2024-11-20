@@ -83,6 +83,7 @@ namespace search_musics.Domain.Entities
 
                 countTracks++;
             }
+
             return tracks;
         }
 
@@ -108,29 +109,28 @@ namespace search_musics.Domain.Entities
             var searhResultArtist = defApi.Search(titleTrack, typeSearch: "artist", pageSize: 8).Result;
             if (searhResultArtist != null)
             {
-                var apiResult = searhResultArtist["result"];
-                var apiResultArtists = searhResultArtist["result"]["artists"];
-                var apiResultArtistsResult = searhResultArtist["result"]["artists"]["results"];
 
-                if (apiResult != null && apiResultArtists != null && apiResultArtistsResult != null)
+                var apiResultArtistsResult = searhResultArtist["result"]?["artists"]?["results"];
+
+                if (apiResultArtistsResult == null)
                 {
-                    var artistResult = apiResultArtistsResult;
+                    return null;
+                }
 
-                    foreach (var item in artistResult)
+                foreach (var item in apiResultArtistsResult)
+                {
+                    var coverUri = string.Empty;
+                    if (item["cover"] != null && item["cover"]["uri"] != null)
                     {
-                        var coverUri = string.Empty;
-                        if (item["cover"] != null && item["cover"]["uri"] != null)
-                        {
-                            coverUri = GetCoverUri(item["cover"]["uri"].ToString(), "1000x1000");
-                        }
-
-                        artists.Add(new Artist() 
-                        { 
-                            Id = item["id"].ToString(),
-                            CoverPath = coverUri,
-                            Name = item["name"].ToString()
-                        }); 
+                        coverUri = GetCoverUri(item["cover"]["uri"].ToString(), "1000x1000");
                     }
+
+                    artists.Add(new Artist()
+                    {
+                        Id = item["id"].ToString(),
+                        CoverPath = coverUri,
+                        Name = item["name"].ToString()
+                    });
                 }
             }
             return artists;

@@ -9,7 +9,6 @@ export const register = async (email: string, password: string) => {
 };
 
 export const login = async (email: string, password: string) => {
-  console.log('login');
   const response = await axios.post(`${API_URL}/login`, { email, password });
   if (response.data.token) {
     localStorage.setItem('token', response.data.token);
@@ -18,23 +17,16 @@ export const login = async (email: string, password: string) => {
 };
 
 export const getCurrentUser = () => {
-  console.log('Fetching user from token...');
   const token = localStorage.getItem('token');
-  
+
   if (!token) {
-    console.log('No token found in localStorage');
     return null;
   }
-  
-  console.log('Token found:', token);
 
   try {
-    // Расширяем тип JwtPayload, добавляя поле email
     const decodedToken = jwtDecode<JwtPayload & { email: string }>(token);
-    console.log('Decoded token:', decodedToken);
     return decodedToken;
   } catch (error) {
-    console.error('Error decoding token:', error);
     return null;
   }
 };

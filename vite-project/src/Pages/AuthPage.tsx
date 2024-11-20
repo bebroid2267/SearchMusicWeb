@@ -22,9 +22,9 @@ const AuthPage = () => {
     // Получаем текущего пользователя при монтировании компонента
     const currentUser = getCurrentUser();
     if (currentUser !== null) {
-        setUser(currentUser);
+      setUser(currentUser);
     }
-  }, []);  // Пустой массив зависимостей, хук сработает только один раз при монтировании
+  }, []); // Пустой массив зависимостей, хук сработает только один раз при монтировании
 
   const handleRegister = async () => {
     try {
@@ -42,8 +42,7 @@ const AuthPage = () => {
       setMessage(`Login successful! Token: ${data.token}`);
       const currentUser = getCurrentUser(); // Получаем пользователя после логина
       setUser(currentUser);
-      navigate("/");
-
+      navigate('/');
     } catch (error: any) {
       setMessage(error.response?.data?.message || 'Error during login.');
     }
@@ -56,54 +55,50 @@ const AuthPage = () => {
   };
 
   return (
-    <div className='intro'>
+    <div className="intro">
       <BackgroundVideo />
       <MainPanel />
-      <div className='auth__content'>
-        <h1 className='textAuth'>{isRegistering ? 'Register' : 'Login'}</h1> {/* Меняется в зависимости от состояния */}
-        
+      <div className="auth__content">
+        <h1 className="textAuth">{isRegistering ? 'Register' : 'Login'}</h1>{' '}
+        {/* Меняется в зависимости от состояния */}
         <input
-          className='zindexAuth'
+          className="zindexAuth"
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          className='zindexAuth'
+          className="zindexAuth"
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <div className="button-container">
+          {/* Кнопка, которая меняется в зависимости от состояния */}
+          <button
+            className="enterButton"
+            onClick={isRegistering ? handleRegister : handleLogin}
+          >
+            {isRegistering ? 'Register' : 'Login'}
+          </button>
 
-        <div className='button-container'>
-            {/* Кнопка, которая меняется в зависимости от состояния */}
-            <button 
-              className='enterButton' 
-              onClick={isRegistering ? handleRegister : handleLogin}
-            >
-              {isRegistering ? 'Register' : 'Login'}
-            </button>
-            
-            {/* Кнопка для переключения между регистрацией и авторизацией */}
-            <button 
-              className='changeAuthStateButton'
-              onClick={handleChangeAuthState}
-            >
-              {isRegistering ? 'Login' : 'Register'}
-            </button>
+          {/* Кнопка для переключения между регистрацией и авторизацией */}
+          <button
+            className="changeAuthStateButton"
+            onClick={handleChangeAuthState}
+          >
+            {isRegistering ? 'Login' : 'Register'}
+          </button>
 
-            {/* Кнопка выхода, показывается только если пользователь авторизован */}
-            {user && (
-              <button 
-                className='authButton'
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            )}
-        </div>  
+          {/* Кнопка выхода, показывается только если пользователь авторизован */}
+          {user && (
+            <button className="authButton" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
+        </div>
         {message && <p>{message}</p>}
         {user && <p>Logged in as: {user.email}</p>}
       </div>

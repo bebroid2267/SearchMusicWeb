@@ -15,6 +15,9 @@ export default class TrackManager {
     public prevTrackBtn: HTMLImageElement | null = null;
     public gradientDiv: HTMLDivElement | null = null;
 
+    public imgPlay: any | null = null;
+    public imgStop: any | null = null;
+
     private onTrackChange: any | null = null;
     private onProgressBarChange: any | null = null;
 
@@ -96,20 +99,15 @@ export default class TrackManager {
     
     playTrackClick(): void {
         if (!this.playTrackBtn) {
-            console.error("playTrackBtn не инициализирован или не является jQuery объектом.");
             return;
         }
 
         this.isPlaying = !this.isPlaying;
 
         if (this.isPlaying) {
-            console.log('if');
-            this.playTrackBtn.setAttribute('src', '../lib/resources/play (2).jpg');
             this.pauseTrack();
         } else {
-            console.log('else');
             this.playTrack();
-            this.playTrackBtn.setAttribute('src', 'lib/resources/pause.png');
         }
     }
 
@@ -172,7 +170,6 @@ export default class TrackManager {
                 })
                 .then( response => {
                     if (!response.ok) {
-                        console.log('fuckup');
                     }
                     return response.text();
                 })
@@ -191,8 +188,6 @@ export default class TrackManager {
 
     changeBackgroundMusicPanel() {
         const currentImage = this.imgForGradient;
-
-        console.log(currentImage);
     
             if (this.ctx && currentImage) {
                 this.canvas.width = currentImage.width;
@@ -215,7 +210,6 @@ export default class TrackManager {
                 g = Math.floor(g / count);
                 b = Math.floor(b / count);
     
-                console.log(`${r} + ${g} + ${b}`);
                 // Обновление градиента
                 const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
                 this.gradientDiv!.style.background = gradient;
@@ -251,15 +245,12 @@ export default class TrackManager {
 
                     this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);
                 })
-                .catch((error: unknown): void => console.error(error)); // Уточненный тип ошибки
+                .catch((error: unknown): void => {}); // Уточненный тип ошибки
         } else {
             this.trackForUrl!.src = track.downloadUrl;
             this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);
         }
 
         this.setCurrentTrack(track);
-        console.log('в трек менеджере');
-        console.log(this.currentTrack);
-        this.playTrackBtn!.setAttribute('src', 'lib/resources/pause.png');
     }
 }

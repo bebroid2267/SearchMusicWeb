@@ -54,6 +54,7 @@ namespace search_musics.Controllers
                 return BadRequest(ModelState);
 
             var artistList = YandexMusic.GetInfoArtists(model.Queary);
+            if (artistList == null) return BadRequest();
             return Json(new { ArtistList = artistList.ToArray()});
         }
 
