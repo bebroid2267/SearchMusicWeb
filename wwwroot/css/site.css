@@ -16,6 +16,7 @@ body {
     display: block;
 }
 
+
 .intro__media {
     position: absolute;
     top: 0;
@@ -122,7 +123,7 @@ input:focus {
     background: rgba(255, 254, 254, 0);
     border: none;
     border-radius: 17px;
-    background-image: url('/lib/resources/yalogo.svg');
+    background-image: url('/wwwroot//lib//resources/yalogo.svg');
     background-size: cover;
     animation: pulse 1.5s infinite;
 }

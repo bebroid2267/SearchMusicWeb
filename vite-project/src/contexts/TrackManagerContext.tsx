@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import TrackManager from '../../../wwwroot/js/trackManager';
+import TrackManager from '../managers/trackManager';
 
 // Создаем контекст
 export const TrackManagerContext = createContext<TrackManager | null>(null);

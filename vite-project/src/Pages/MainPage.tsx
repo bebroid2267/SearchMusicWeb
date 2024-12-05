@@ -20,6 +20,7 @@ export default function MainPage({ onChange }: any) {
     e.preventDefault();
     if (!queary.trim()) {
       alert('Введите запрос');
+      quearySearch;
       return;
     }
 
@@ -38,7 +39,8 @@ export default function MainPage({ onChange }: any) {
 
   async function postRequestsToServer(request: string) {
     try {
-      const response = await fetch(`https://localhost:44303/Home/${request}`, {
+      console.log(`https://a30895-8359.x.d-f.pw/Home/${request}`);
+      const response = await fetch(`https://a30895-8359.x.d-f.pw/Home/${request}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +74,7 @@ export default function MainPage({ onChange }: any) {
             className="btn_queary"
             id="btn_queary"
             style={{
-              backgroundImage: "url('../src/resources/yalogo.svg')",
+              backgroundImage: "url('/assets/yalogo.svg')",
               backgroundSize: 'cover',
               animation: 'pulse 1.5s infinite',
             }}

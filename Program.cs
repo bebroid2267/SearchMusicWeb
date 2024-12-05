@@ -48,9 +48,9 @@ namespace search_musics
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowReactApp",
+                options.AddPolicy("AllowAllApps",
                     builder => builder
-                        .WithOrigins("http://localhost:5173") // или ваш React-порт
+                        .WithOrigins("http://mellmusic.infy.uk", "http://localhost:5173") // –азрешаем оба источника
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
@@ -73,7 +73,7 @@ namespace search_musics
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseCors("AllowReactApp");
+            app.UseCors("AllowAllApps");
             app.UseRouting();
 
             app.UseAuthorization();

@@ -29,6 +29,7 @@ export default class TrackManager {
     constructor() {
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d');
+        this.onProgressBarChange;
 
         // Ищем элементы в DOM, если они уже существуют
         this.trackForUrl = document.querySelector('#track_for_url') as HTMLAudioElement | null;
@@ -165,7 +166,8 @@ export default class TrackManager {
     }
     loadTrack(chooseTrackId: number): Promise<string> {
         return new Promise((resolve, reject) => {
-                fetch(`https://localhost:44303/Home/GetUrlForTrack?trackId=${chooseTrackId}`, {
+
+                fetch(`https://a30895-8359.x.d-f.pw/Home/GetUrlForTrack?trackId=${chooseTrackId}`, {
                 method: 'GET',
                 })
                 .then( response => {
@@ -245,7 +247,7 @@ export default class TrackManager {
 
                     this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);
                 })
-                .catch((error: unknown): void => {}); // Уточненный тип ошибки
+                .catch((error: unknown): void => {error}); // Уточненный тип ошибки
         } else {
             this.trackForUrl!.src = track.downloadUrl;
             this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);

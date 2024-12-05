@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
-import { ITrack } from '../../../wwwroot/js/Interfaces/Interfaces';
+import { ITrack } from '../Interfaces';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 
 export default function Tracks({ tracks }: { tracks: any }) {

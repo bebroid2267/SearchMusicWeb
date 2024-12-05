@@ -1,6 +1,5 @@
 import './App.css';
 import '../../wwwroot/css/site.css';
-import { Provider } from './components/ui/provider';
 import MainPage from './Pages/MainPage';
 import { Route, Routes } from 'react-router-dom';
 import ResultPage from './Pages/ResultPage';
@@ -8,7 +7,7 @@ import { useState } from 'react';
 import AuthPage from './Pages/AuthPage';
 import FavoriteTracksPage from './Pages/FavoriteTracksPage';
 import { TrackManagerContext } from './contexts/TrackManagerContext';
-import TrackManager from '../../wwwroot/js/trackManager';
+import TrackManager from '../src/managers/trackManager';
 
 function App() {
   const [searchResults, setSearchResults] = useState(null);

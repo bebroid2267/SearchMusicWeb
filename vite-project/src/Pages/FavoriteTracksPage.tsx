@@ -15,7 +15,8 @@ export default function ResultPage({ results }: any) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const API_URL = 'https://localhost:44303/api/tracksLike';
+    const API_URL = 'https://a30895-8359.x.d-f.pw/api/tracksLike';
+    results;
     const fetchLikedTracks = async () => {
       const token = localStorage.getItem('token');
 

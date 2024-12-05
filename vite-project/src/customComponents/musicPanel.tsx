@@ -46,6 +46,8 @@ export default function MusicPanel() {
     trackManager.imgPlay = imgPlay;
     trackManager.imgStop = imgStop;
 
+    currentProgressBar;
+
     if (trackManager.trackForUrl) {
       trackManager.trackForUrl.addEventListener(
         'timeupdate',
@@ -81,7 +83,7 @@ export default function MusicPanel() {
   }, [trackManager]);
 
   useEffect(() => {
-    const API_URL = 'https://localhost:44303/api/tracksLike';
+    const API_URL = 'https://a30895-8359.x.d-f.pw/api/tracksLike';
     try {
       const token = localStorage.getItem('token');
 
@@ -100,10 +102,12 @@ export default function MusicPanel() {
             headers,
           })
           .then(function (response) {
+            response;
             setImage(likeTrack);
             setLiked(true);
           })
           .catch((error) => {
+            error;
             setImage(unlikeTrack);
             setLiked(false);
           });
@@ -126,7 +130,7 @@ export default function MusicPanel() {
   };
 
   const handleLike = async () => {
-    const API_URL = 'https://localhost:44303/api/tracksLike';
+    const API_URL = 'https://a30895-8359.x.d-f.pw/api/tracksLike';
     try {
       const token = localStorage.getItem('token');
 
