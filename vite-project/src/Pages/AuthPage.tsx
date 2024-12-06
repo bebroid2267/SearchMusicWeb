@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { register, login, getCurrentUser, logout } from '../auth/authService';
+import { register, login, getCurrentUser, logout } from '../services/authService';
 import BackgroundVideo from '../customComponents/backVideo';
 import '../../../wwwroot/css/result.css';
 import { useNavigate } from 'react-router-dom';

@@ -64,8 +64,8 @@ namespace search_musics.Controllers
             // Создаем новый лайк
             var like = new TrackLike
             {
+                Id = Guid.NewGuid().ToString(),
                 Track = track,
-                Id = track.Id,
                 UserId = user.Id,
                 TrackId = track.Id
             };

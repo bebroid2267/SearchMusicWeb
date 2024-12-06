@@ -2,7 +2,7 @@ import ImageMainMapel from '../../src/resources/kandinsky-download-1725187229371
 import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/result.css';
 import { useEffect, useState } from 'react';
-import { getCurrentUser, logout } from '../auth/authService'; // Импортируем методы для работы с авторизацией
+import { getCurrentUser, logout } from '../services/authService'; // Импортируем методы для работы с авторизацией
 import { useNavigate } from 'react-router-dom';
 
 export default function MainPanel() {

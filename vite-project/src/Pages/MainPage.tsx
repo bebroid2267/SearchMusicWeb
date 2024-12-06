@@ -4,6 +4,7 @@ import MainPanel from '../customComponents/mainPanel';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
+import { getDifferentMusicResult } from '../services/musicService';
 
 export type onChangeServer = {
   tracks: any;
@@ -12,7 +13,6 @@ export type onChangeServer = {
 };
 
 export default function MainPage({ onChange }: any) {
-  const { quearySearch } = useParams();
   const [queary, setQueary] = useState('');
   const navigate = useNavigate();
 
@@ -20,13 +20,12 @@ export default function MainPage({ onChange }: any) {
     e.preventDefault();
     if (!queary.trim()) {
       alert('Введите запрос');
-      quearySearch;
       return;
     }
 
-    const dataTracks = await postRequestsToServer('SearchTracks');
-    const dataArtists = await postRequestsToServer('SearchArtists');
-    const dataAlbums = await postRequestsToServer('SearchAlbums');
+    const dataTracks = await getDifferentMusicResult('SearchTracks', queary);
+    const dataArtists = await getDifferentMusicResult('SearchArtists', queary);
+    const dataAlbums = await getDifferentMusicResult('SearchAlbums', queary);
 
     const serverResponse: onChangeServer = {
       tracks: dataTracks,
@@ -37,23 +36,6 @@ export default function MainPage({ onChange }: any) {
     navigate(`/Result/${queary}`);
   };
 
-  async function postRequestsToServer(request: string) {
-    try {
-      console.log(`https://a30895-8359.x.d-f.pw/Home/${request}`);
-      const response = await fetch(`https://a30895-8359.x.d-f.pw/Home/${request}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ Queary: queary }),
-      });
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
   return (
     <div className="intro">
       <BackgroundVideo />

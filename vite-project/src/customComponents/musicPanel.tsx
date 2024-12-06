@@ -6,9 +6,9 @@ import { useTrackManager } from '../contexts/TrackManagerContext';
 import { useEffect, useRef, useState } from 'react';
 import likeTrack from '../../../wwwroot/lib/resources/heart (1).png';
 import unlikeTrack from '../../../wwwroot/lib/resources/unheart (1).png';
-import axios from 'axios';
 import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 import imgStop from '../../../wwwroot/lib/resources/pause.png';
+import { isCurrentTrackLiked, likedTrack } from '../services/musicService';
 
 export default function MusicPanel() {
   const trackManager = useTrackManager();
@@ -45,77 +45,61 @@ export default function MusicPanel() {
     trackManager.gradientDiv = gradientDiv.current;
     trackManager.imgPlay = imgPlay;
     trackManager.imgStop = imgStop;
-
     currentProgressBar;
-
-    if (trackManager.trackForUrl) {
-      trackManager.trackForUrl.addEventListener(
-        'timeupdate',
-        trackManager.updateProgressTrack.bind(trackManager)
-      );
-    }
-
-    trackManager.nextTrackBtn!.addEventListener(
-      'click',
-      trackManager.nextTrack
-    );
-    trackManager.prevTrackBtn!.addEventListener(
-      'click',
-      trackManager.prevTrack
-    );
-
-    trackManager.progressContainer!.addEventListener('click', (e: any) => {
-      const width = trackManager.progressContainer!.clientWidth; // используем progressContainer напрямую
+  
+    const updateProgress = trackManager.updateProgressTrack.bind(trackManager);
+    const handleClick = (e: any) => {
+      const width = trackManager.progressContainer!.clientWidth;
       const clickX = e.offsetX;
       const duration = trackManager.trackForUrl!.duration;
-
+  
       trackManager.trackForUrl!.currentTime = (clickX / width) * duration;
-    });
-  });
-
-  useEffect(() => {
-    trackManager.setOnTrackChangeListener((newTrack: any) => {
-      setCurrentTrack(newTrack);
-    });
-    trackManager.setOnProgressBarChangeListener((newProgressBar: any) => {
-      setCurrentProgressBar(newProgressBar);
-    });
+    };
+  
+    if (trackManager.trackForUrl) {
+      trackManager.trackForUrl.addEventListener('timeupdate', updateProgress);
+    }
+    trackManager.nextTrackBtn!.addEventListener('click', trackManager.nextTrack);
+    trackManager.prevTrackBtn!.addEventListener('click', trackManager.prevTrack);
+    trackManager.progressContainer!.addEventListener('click', handleClick);
+  
+    return () => {
+      if (trackManager.trackForUrl) {
+        trackManager.trackForUrl.removeEventListener('timeupdate', updateProgress);
+      }
+      trackManager.nextTrackBtn!.removeEventListener('click', trackManager.nextTrack);
+      trackManager.prevTrackBtn!.removeEventListener('click', trackManager.prevTrack);
+      trackManager.progressContainer!.removeEventListener('click', handleClick);
+    };
   }, [trackManager]);
+  
 
   useEffect(() => {
-    const API_URL = 'https://a30895-8359.x.d-f.pw/api/tracksLike';
-    try {
-      const token = localStorage.getItem('token');
+    const handleTrackChange = (newTrack: any) => setCurrentTrack(newTrack);
+    const handleProgressBarChange = (newProgressBar: any) => setCurrentProgressBar(newProgressBar);
+  
+    trackManager.setOnTrackChangeListener(handleTrackChange);
+    trackManager.setOnProgressBarChangeListener(handleProgressBarChange);
+  
+    return () => {
+      trackManager.setOnTrackChangeListener(null);
+      trackManager.setOnProgressBarChangeListener(null);
+    };
+  }, [trackManager]);
+  
 
-      if (!token) {
-        return;
-      }
-
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      };
-
-      if (trackManager.currentTrack?.coverPath !== 'test') {
-        axios
-          .get(`${API_URL}/${trackManager.currentTrack!.id}/likedthis`, {
-            headers,
-          })
-          .then(function (response) {
-            response;
-            setImage(likeTrack);
-            setLiked(true);
-          })
-          .catch((error) => {
-            error;
-            setImage(unlikeTrack);
-            setLiked(false);
-          });
-      }
-    } catch (error) {}
-
+  useEffect(() => {
+    const updateTrackLikedState = async () => {
+      const { isLiked, image } = await isCurrentTrackLiked(trackManager, unlikeTrack, likeTrack);
+      setLiked(isLiked);
+      setImage(image);
+    };
+  
+    updateTrackLikedState();
     trackManager.playTrackBtn!.src = imgStop;
   }, [currentTrack]);
+  
+  
 
   const handlePlayClick = () => {
     if (play) {
@@ -130,19 +114,6 @@ export default function MusicPanel() {
   };
 
   const handleLike = async () => {
-    const API_URL = 'https://a30895-8359.x.d-f.pw/api/tracksLike';
-    try {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        return;
-      }
-
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      };
-
       const track = {
         id: String(trackManager.currentTrack!.id),
         title: trackManager.currentTrack!.title,
@@ -150,21 +121,16 @@ export default function MusicPanel() {
         coverPath: trackManager.currentTrack?.coverPath,
         downloadUrl: trackManager.currentTrack?.downloadUrl,
       };
-
+      
+      await likedTrack(like, track);
       if (like) {
-        await axios.delete(`${API_URL}/${track.id}/like`, { headers });
         setImage(unlikeTrack);
       } else {
-        await axios.post(
-          `${API_URL}/${track.id}/like?idTrack=${track.id}&titleTrack=${track.title}&artistTrack=${track.artist}&coverPath=${track.coverPath}&downloadUrl=${track.downloadUrl}`,
-          {},
-          { headers }
-        );
         setImage(likeTrack);
       }
       setLiked(!like);
-    } catch (error) {}
   };
+
   return (
     <div className="music-panel" ref={gradientDiv} id="gradient-box">
       <img

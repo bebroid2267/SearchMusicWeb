@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
-const API_URL = 'https://a30895-8359.x.d-f.pw/api/account';
+const API_URL = 'https://localhost:44303/api/account';
 
 export const register = async (email: string, password: string) => {
   const response = await axios.post(`${API_URL}/register`, { email, password });
