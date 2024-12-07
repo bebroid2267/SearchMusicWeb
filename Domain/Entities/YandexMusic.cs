@@ -101,7 +101,18 @@ namespace search_musics.Domain.Entities
             else
                 return null;
         }
+        public static List<Track> GetTracksArtist(string artistId)
+        {
+            List<Track> tracks = new List<Track>();
 
+            var resultTracks = artist.GetTracks(int.Parse(artistId),pageSize: 10).Result;
+
+            if (resultTracks == null)
+            {
+                return null;
+            }
+            return tracks;
+        }
         public static List<Artist> GetInfoArtists(string titleTrack)
         {
             List<Artist> artists = new List<Artist>();

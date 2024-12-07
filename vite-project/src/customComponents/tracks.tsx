@@ -1,10 +1,16 @@
 import { useEffect } from 'react';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
+import '../../../wwwroot/css/favoritespage.css'
 import { ITrack } from '../Interfaces';
 import { useTrackManager } from '../contexts/TrackManagerContext';
+interface TracksProps {
+  tracks: any;
+  className: any;
+  classNameForTrackText: any;
+}
 
-export default function Tracks({ tracks }: { tracks: any }) {
+export default function Tracks({ tracks, className, classNameForTrackText }: TracksProps) {
   const trackManager = useTrackManager();
 
   useEffect(() => {
@@ -17,9 +23,9 @@ export default function Tracks({ tracks }: { tracks: any }) {
     trackManager.changeTrackPanel(track);
   };
   return (
-    <div className="result-tracks">
-      <h2 id="artist-text">Треки</h2>
-      <ul className="tracks">
+    <div className={'result-' + className}>
+      <h2 id={classNameForTrackText}>Треки</h2>
+      <ul className={className}>
         {tracks && tracks.trackList
           ? tracks.trackList.map((track: ITrack) => (
               <li

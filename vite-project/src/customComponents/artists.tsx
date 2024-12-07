@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import { IArtist } from '../../../wwwroot/js/Interfaces/Interfaces';
 
 export default function Artists({ artists }: any) {
+  const navigate = useNavigate();
   return (
     <div className="artists">
       <h2 id="artist-text">Артисты</h2>
@@ -15,6 +17,7 @@ export default function Artists({ artists }: any) {
                 data-cover-part={artist.coverPath}
                 data-name={artist.name}
                 className="result_item"
+                onClick={() => {navigate('/Artist')}}
               >
                 <img
                   src={artist.coverPath}

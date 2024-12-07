@@ -1,0 +1,134 @@
+body {
+    scrollbar-width: thin;
+    scrollbar-color: gray black;
+}
+.intro {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.favorite_content {
+    position: absolute;
+    margin: 0 auto;
+    width: 85%;
+    height: 900px;
+    color: whitesmoke;
+    z-index: 3; /* Контент выше видео и затемнения */
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    overflow-y: hidden;
+    overflow-x: hidden;   
+}
+
+.result-favorites {
+    margin-top: 50px;
+    height: 35%;
+    width: 100%;
+}
+
+.favorites {
+    width: 900px;
+    height: 250%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(10000, 0.01fr);
+    grid-column-gap: 10px;
+    overflow-y: auto;
+}
+
+#tracks-text {
+    margin-top: -50px;
+    width: 200px;
+}
+@media (max-width: 1700px) {
+    .favorites {
+        width: 800px;
+    }
+    #tracks-text {
+        margin-top: -30px;
+    }
+}
+
+@media (max-width: 1600px) {
+    .favorites {
+        width: 700px;
+    }
+    #tracks-text {
+        margin-top: -8px;
+    }
+
+}
+
+@media (max-width: 1400px) {
+    .favorites {
+        width: 600px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .favorites {
+        width: 500px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .favorites {
+        width: 480px;
+    }
+}
+
+@media (max-width: 900px) {
+    .favorites {
+        width: 400px;
+        display: block;
+    }
+}
+@media (max-width: 800px) {
+    .favorites {
+        width: 370px;
+    }
+}
+
+@media (max-width: 700px) {
+    .favorites {
+        margin-left: -50px;
+    }
+}
+
+@media (max-height: 1000px) {
+    .favorites {
+        height: 220%;
+    }
+}
+@media (max-height: 935px) {
+    .favorites {
+        height: 190%;
+    }
+}
+@media (max-height: 800px) {
+    .favorites {
+        height: 160%;
+    }
+}
+@media (max-height: 720px) {
+    .favorites {
+        height: 135%;
+    }
+}
+
+@media (max-height: 600px) {
+    .favorites {
+        height: 110%;
+    }
+}
+
+@media (max-height: 500px) {
+    .favorites {
+        height: 80%;
+    }
+}

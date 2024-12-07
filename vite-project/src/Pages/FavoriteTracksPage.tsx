@@ -1,8 +1,6 @@
-import '../../../wwwroot/css/result.css';
-import '../../../wwwroot/css/site.css';
+import '../../../wwwroot/css/favoritespage.css'
 import BackgroundVideo from '../customComponents/backVideo';
 import MainPanel from '../customComponents/mainPanel';
-import MusicPanel from '../customComponents/musicPanel';
 import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
@@ -34,9 +32,8 @@ export default function ResultPage() {
       <div className="intro_result">
         <BackgroundVideo />
         <MainPanel />
-        <div className="result_content">
-          <Tracks tracks={tracks} />
-          <MusicPanel />
+        <div className="favorite_content">
+          <Tracks tracks={tracks} className={'favorites'} classNameForTrackText={'tracks-text'}/>
         </div>
       </div>
     </div>

@@ -75,7 +75,7 @@ const AuthPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div className="button-container">
+        <div className="auth-button-container">
           {/* Кнопка, которая меняется в зависимости от состояния */}
           <button
             className="enterButton"
@@ -98,9 +98,9 @@ const AuthPage = () => {
               Logout
             </button>
           )}
-        </div>
-        {message && <p>{message}</p>}
+          <p style={{ minHeight: '5em'}}>{message}</p>
         {user && <p>Logged in as: {user.email}</p>}
+        </div>
       </div>
     </div>
   );

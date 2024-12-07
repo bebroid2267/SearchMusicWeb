@@ -4,7 +4,6 @@ import Albums from '../customComponents/albums';
 import Artists from '../customComponents/artists';
 import BackgroundVideo from '../customComponents/backVideo';
 import MainPanel from '../customComponents/mainPanel';
-import MusicPanel from '../customComponents/musicPanel';
 import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -19,8 +18,7 @@ export default function ResultPage({ results }: any) {
         <div className="result_content">
           <Artists artists={artist} />
           <Albums albums={albums} />
-          <Tracks tracks={tracks} />
-          <MusicPanel />
+          <Tracks tracks={tracks} className={'tracks'} classNameForTrackText={'artist-text'} />
         </div>
       </div>
     </div>

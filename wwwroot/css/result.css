@@ -90,9 +90,9 @@
     left: 50%; /* Центрируем по горизонтали */
     transform: translate(-50%, -50%); /* Корректируем точку отсчета для центровки */
     z-index: 5;
-    width: 25%; /* Можно увеличить ширину, если инпуты не помещаются */
+    width: 200px; /* Можно увеличить ширину, если инпуты не помещаются */
     border-radius: 15%;
-    height: auto; /* Высота будет зависеть от контента */
+    height: 300px; /* Высота будет зависеть от контента */
     padding: 20px; /* Добавляем отступы внутри контейнера */
     display: flex;
     flex-direction: column;
@@ -579,6 +579,17 @@ li {
 }
 
 @media (max-width: 450px) {
+    .cover-artist {
+        width: 130px;
+        height: 130px;
+    }
+    .blur_artist_cover {
+        margin-top: 70px;
+        height: 50px;
+    }
+    .artist_name {
+        font-size: 14px;
+    }
     .result_item {
         height: 130px;
         width: 140px;
@@ -587,6 +598,64 @@ li {
     }
     .result-artists {
         width: 400px !important;
+        margin-left: -15px;
+    }
+
+    .result_albums {
+        margin-left: -5px;
+        width: 350px !important;
+    }
+
+    .result_item_album {
+        width: 140px;
+        height: 180px;
+        margin-left: 19px;
+    }
+    .cover-album {
+        width: 130px;
+        height: 130px;   
+    }
+    .blur_album_cover {
+        margin-top: 80px;
+        height: 35px;
+    }
+    .album_name {
+        font-size: 14px;
+    }
+    .album_artist, .album_year {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    .result-artists {
+        width: 370px !important;
+        margin-left: -30px;
+    }
+    .result_albums {
+        margin-left: -21px;
+    }
+
+}
+
+@media (max-width: 380px) {
+    .result_content {
+        width: 90%;
+    }
+    .result-artists {
+        margin-left: -38px;
+    }
+    .result_albums {
+        margin-left: -28px;
+    }
+}
+@media (max-width: 360px) {
+    .result_albums {
+        margin-left: -40px;
+    }
+    .result-artists {
+        width: 365px !important;
+        margin-left: -50px;
     }
 }
 @media (min-width: 600px) {
@@ -623,6 +692,7 @@ li {
     .result-artists {
         width: 1200px;
     }
+    
 }
 
 @media (max-width: 1300px) {
@@ -684,6 +754,9 @@ li {
     .result-tracks {
         margin-top: 500px;
     }
+    .auth__content {
+        margin-top: -25%;
+    }
 }
 @media (max-height: 700px) {
     .albums {
@@ -691,6 +764,14 @@ li {
     }
     .result-tracks {
         margin-top: 550px;
+    }
+    .auth__content {
+        margin-top: 10%;
+    }
+}
+@media (max-height: 650px) {
+    .auth__content {
+        margin-top: 15%;
     }
 }
 .button-container-main-panel {
@@ -763,4 +844,33 @@ li {
 
 .btn-home:hover::before, .btn-favorites:hover::before {
     background-color: #9932CC;
+}
+.zindexAuth {
+    width: 200px;
+    margin-bottom: 5px;
+}
+
+
+
+@media (min-width: 1650px) {
+    #tracks-text {
+        margin-top: -150px;
+    }
+}
+@media (min-width: 1701px) {
+    #tracks-text {
+        margin-top: 40px;
+    }
+}
+
+.auth-button-container {
+    position: absolute;
+    margin-top: 650px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Добавляем отступ между кнопками */
 }

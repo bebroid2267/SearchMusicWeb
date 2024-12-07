@@ -41,7 +41,7 @@ export default function MainPage({ onChange }: any) {
       <BackgroundVideo />
       <MainPanel />
       <div className="intro__content">
-        <h1>Найти трек. Легко.</h1>
+        <h1 className='intro-text'>Найти трек. Легко.</h1>
         <form onSubmit={handleSubmit}>
           <input
             className="text_queary"

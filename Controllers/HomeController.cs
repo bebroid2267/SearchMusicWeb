@@ -63,7 +63,7 @@ namespace search_musics.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+            YandexMusic.GetTracksArtist("234234");
             var albumsList = YandexMusic.GetInfoAlbums(model.Queary);
             return Json(new {  AlbumList = albumsList.ToArray()});
         }

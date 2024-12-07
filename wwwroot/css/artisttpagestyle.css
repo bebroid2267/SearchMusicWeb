@@ -1,0 +1,84 @@
+.intro {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.artist-container {
+    position: absolute;
+    margin: 0 auto;
+    width: 80%;
+    height: 85%;
+    color: whitesmoke;
+    z-index: 3; /* Контент выше видео и затемнения */
+    left: 10%;
+    right: 10%;
+    top: 4.75%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: gray;
+    border-radius: 25px;
+}
+.header-artist-info {
+    display: inline-flex;
+    margin-top: 20px;
+}
+.artist-article {
+    color: black;
+    margin-top: 50px;
+}
+.artist-cover {
+    margin-left: 20px;
+    border-radius: 55%;
+    width: 250px;
+    height: 250px;
+}
+.about-artist {
+    display: block;
+    margin-left: 25px;
+    margin-top: -25px;
+}
+.count-listeners-yandex {
+    display: flex;   
+    background-color: rgba(128, 128, 128, 0.39);
+    border-radius: 10px;
+    height: 30px;
+}
+.img-ya-logo {
+    width: 25px;
+    height: 25px;
+}
+
+.results {
+    display: flex;
+    height: 450px;
+}
+
+.artist-result-tracks, .artist-result-albums {
+    margin-left: 20px;
+    width: 50%;
+    height: 450px;
+}
+ul {
+    width: 100%;
+    margin-left: -30px;
+}
+
+.artist-result-tracks {
+    height: 420px;
+    grid-template-columns: repeat(2, 0.1fr);
+    grid-template-rows: repeat(10000, 0.1fr); /* Четыре строки фиксированной высоты */
+    grid-column-gap: 10px;
+}
+.result_item_album {
+    margin-left: 10px;
+}
+.result-albums-ul {
+    margin-left: 20px;
+}
+.album-article-result {
+    margin-left: 70px;
+}
