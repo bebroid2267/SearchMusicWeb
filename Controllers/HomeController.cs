@@ -63,11 +63,29 @@ namespace search_musics.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            YandexMusic.GetTracksArtist("234234");
             var albumsList = YandexMusic.GetInfoAlbums(model.Queary);
             return Json(new {  AlbumList = albumsList.ToArray()});
         }
-
+        [HttpPost]
+        public IActionResult GetAlbumsArtist([FromBody] QuearyModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var albumsList = YandexMusic.GetAlbumsArtist(model.Queary);
+            return Json(new { AlbumList = albumsList.ToArray()});
+        }
+        [HttpPost]
+        public IActionResult GetTracksArtist([FromBody] QuearyModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var trackList = YandexMusic.GetTracksArtist(model.Queary);
+            return Json(new { TrackList = trackList.ToArray() });
+        }
         [HttpGet]
         public IActionResult GetUrlForTrack(string trackId)
         {

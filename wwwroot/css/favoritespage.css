@@ -1,6 +1,6 @@
 body {
     scrollbar-width: thin;
-    scrollbar-color: gray black;
+    scrollbar-color: gray rgba(0, 0, 0, 0);
 }
 .intro {
     position: fixed;

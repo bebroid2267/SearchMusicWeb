@@ -1,12 +1,21 @@
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
+import '../../../wwwroot/css/artisttpagestyle.css'
 import { IAlbum } from '../../../wwwroot/js/Interfaces/Interfaces';
 
-export default function Albums({ albums }: any) {
+interface AlbumsProps {
+  albums: any,
+  className: any
+}
+export default function Albums({ albums, className }: AlbumsProps) {
+  const divClass = className === 'artistPage' ? 'artist-result-albums' : 'albums';
+  const h2Class = className === 'artistPage' ? 'album-article-result' : 'artist-text';
+  const ulClass = className === 'artistPage' ? 'result-albums-ul' : 'result_albums';
+
   return (
-    <div className="albums">
-      <h2 id="artist-text">Альбомы</h2>
-      <ul className="result_albums">
+    <div className={divClass}>
+      <h2 id={h2Class}>Альбомы</h2>
+      <ul className={ulClass}>
         {albums && albums.albumList
           ? albums.albumList.map((album: IAlbum) => (
               <li
@@ -31,4 +40,4 @@ export default function Albums({ albums }: any) {
       </ul>
     </div>
   );
-}
+};

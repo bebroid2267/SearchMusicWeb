@@ -3,7 +3,6 @@ import { register, login, getCurrentUser, logout } from '../services/authService
 import BackgroundVideo from '../customComponents/backVideo';
 import '../../../wwwroot/css/result.css';
 import { useNavigate } from 'react-router-dom';
-import MainPanel from '../customComponents/mainPanel';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -57,7 +56,6 @@ const AuthPage = () => {
   return (
     <div className="intro">
       <BackgroundVideo />
-      <MainPanel />
       <div className="auth__content">
         <h1 className="textAuth">{isRegistering ? 'Register' : 'Login'}</h1>{' '}
         {/* Меняется в зависимости от состояния */}

@@ -107,11 +107,56 @@ namespace search_musics.Domain.Entities
 
             var resultTracks = artist.GetTracks(int.Parse(artistId),pageSize: 10).Result;
 
-            if (resultTracks == null)
+            var filteredAsnwer = resultTracks["result"]?["tracks"];
+
+            if (filteredAsnwer == null)
             {
                 return null;
             }
+
+            foreach (var item in filteredAsnwer)
+            {
+                tracks.Add(new Track()
+                {
+                    Id = item["id"].ToString(),
+                    Title = item["title"].ToString(),
+                    Artist = item["artists"][0]["name"].ToString(),
+                    CoverPath = GetCoverUri(item["coverUri"].ToString(),
+                    "100x100")
+                });
+            }
             return tracks;
+        }
+        public static List<Album> GetAlbumsArtist(string artistId)
+        {
+            List<Album> albums = new List<Album>();
+
+            var resultAlbums = artist.GetDirectAlbums(int.Parse(artistId), pageSize: 10).Result;
+
+            var filteredAnswer = resultAlbums["result"]?["albums"];
+            if (filteredAnswer == null)
+            {
+                return null;
+            }
+
+            foreach (var item in filteredAnswer)
+            {
+                var coverUri = string.Empty;
+                if (item["coverUri"] != null)
+                {
+                    coverUri = GetCoverUri(item["coverUri"].ToString(), "1000x1000");
+                }
+
+                albums.Add(new Album()
+                {
+                    id = item["id"].ToString(),
+                    CoverPath = coverUri,
+                    Title = item["title"].ToString(),
+                    Year = item["year"].ToString(),
+                    ArtistName = item["artists"][0]["name"].ToString(),
+                });
+            }
+            return albums;
         }
         public static List<Artist> GetInfoArtists(string titleTrack)
         {

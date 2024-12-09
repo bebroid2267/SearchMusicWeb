@@ -2,7 +2,7 @@
 
 body {
     scrollbar-width: thin;
-    scrollbar-color: gray black;
+    scrollbar-color: gray;
 }
 .intro {
     position: fixed;
@@ -429,4 +429,16 @@ li {
 
 .btn-home:hover::before, .btn-favorites:hover::before {
     background-color: #9932CC; /* ������ ���� �������� ��� ��������� */
+}
+.fav-img, .main-img {
+    width: 30px;
+    height: 30px;
+    margin-left: 20%;
+}
+
+/* .fav-img {
+    margin-left: 25px;
+} */
+.main-img {
+    margin-right: 200px;
 }

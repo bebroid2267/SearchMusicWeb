@@ -2,9 +2,25 @@ import { useNavigate } from 'react-router-dom';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import { IArtist } from '../../../wwwroot/js/Interfaces/Interfaces';
+import { getInfoArtist } from '../services/artistService';
+import { onChangeServer } from '../Pages/MainPage';
 
-export default function Artists({ artists }: any) {
+export default function Artists({ artists, onChangeArtist }: any) {
   const navigate = useNavigate();
+  const handleOpenArtistPage = async (artist: IArtist) => {
+
+    const dataTracks = await getInfoArtist('GetTracksArtist', artist.id.toString());
+    const dataAlbums =  await getInfoArtist('GetAlbumsArtist', artist.id.toString());
+    const serverResponse: onChangeServer = {
+      tracks: dataTracks,
+      albums: dataAlbums,
+      artist: artist
+    };
+
+    onChangeArtist(serverResponse);
+    navigate(`/Artist/${artist.name}`);
+  };
+
   return (
     <div className="artists">
       <h2 id="artist-text">Артисты</h2>
@@ -17,7 +33,7 @@ export default function Artists({ artists }: any) {
                 data-cover-part={artist.coverPath}
                 data-name={artist.name}
                 className="result_item"
-                onClick={() => {navigate('/Artist')}}
+                onClick={() => {handleOpenArtistPage(artist)}}
               >
                 <img
                   src={artist.coverPath}

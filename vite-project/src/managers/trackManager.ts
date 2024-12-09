@@ -17,6 +17,7 @@ export default class TrackManager {
 
     public imgPlay: any | null = null;
     public imgStop: any | null = null;
+    public mainPanel: HTMLDivElement | null = null;
 
     private onTrackChange: any | null = null;
     private onProgressBarChange: any | null = null;
@@ -186,6 +187,37 @@ export default class TrackManager {
             } 
     )};
 
+    changeBackgroundMainPanel() {
+        const currentImage = this.imgForGradient;
+
+        if (this.ctx && currentImage) {
+            this.canvas.width = currentImage.width;
+            this.canvas.height = currentImage.height;
+            this.ctx.drawImage(currentImage, 0, 0, this.canvas.width, this.canvas.height);
+
+            const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+            const data = imageData.data;
+
+            let r = 0, g = 0, b = 0, count = 0;
+
+            for (let i = 0; i < data.length; i += 4) {
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+                count++;
+            }
+
+            r = Math.floor(r / count);
+            g = Math.floor(g / count);
+            b = Math.floor(b / count);
+
+            // Обновление градиента
+            const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
+            this.mainPanel!.style.background = gradient;
+            this.mainPanel!.style.background = gradient;
+        }
+
+    }
     changeBackgroundMusicPanel() {
         const currentImage = this.imgForGradient;
     
@@ -224,6 +256,7 @@ export default class TrackManager {
 
         this.imgForGradient!.onload = () => {
             this.changeBackgroundMusicPanel();
+            this.changeBackgroundMainPanel();
         };
 
         const playAfterLoad = () => {

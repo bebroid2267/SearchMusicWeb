@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import BackgroundVideo from '../customComponents/backVideo';
-import MainPanel from '../customComponents/mainPanel';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import { getDifferentMusicResult } from '../services/musicService';
@@ -39,7 +38,6 @@ export default function MainPage({ onChange }: any) {
   return (
     <div className="intro">
       <BackgroundVideo />
-      <MainPanel />
       <div className="intro__content">
         <h1 className='intro-text'>Найти трек. Легко.</h1>
         <form onSubmit={handleSubmit}>

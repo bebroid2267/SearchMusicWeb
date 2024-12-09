@@ -57,10 +57,13 @@
     height: 450px;
 }
 
-.artist-result-tracks, .artist-result-albums {
+.result-result-artist-ul, .artist-result-albums {
     margin-left: 20px;
     width: 50%;
     height: 450px;
+}
+.artist-result-albums {
+    
 }
 ul {
     width: 100%;
@@ -74,7 +77,7 @@ ul {
     grid-column-gap: 10px;
 }
 .result_item_album {
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .result-albums-ul {
     margin-left: 20px;
