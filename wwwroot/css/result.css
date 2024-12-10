@@ -405,8 +405,8 @@ li {
     width: 25px;
 }
 
-.prev-track-button, .next-track-button, .stop-track-button:hover {
-    -webkit-filter: brightness(150%);
+.prev-track-button:hover, .next-track-button:hover, .stop-track-button:hover {
+    -webkit-filter: brightness(500%);
     cursor: pointer;
 }
 
@@ -769,14 +769,6 @@ li {
         margin-top: 15%;
     }
 }
-.button-container-main-panel {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex; /* Включаем flexbox для управления кнопками */
-    gap: 10px; /* Расстояние между кнопками */
-}
 .btn-home, .btn-favorites, .btn-enter, .btn-exit {
     color: black;
     position: absolute;
@@ -792,19 +784,16 @@ li {
     margin-bottom: 10px;
 }
 
-.btn-enter {
-    right: 250px;
+.btn-enter, .btn-exit {
+    right: 220px;
 }
 
-.btn-exit {
-    right: 250px;
-}
 .btn-home {
-    right: 20px;
+    right: 0px;
 }
 
 .btn-favorites {
-    right: 110px;
+    right: 90px;
 }
 
 .btn-home:hover, .btn-favorites:hover, .btn-enter:hover, .btn-exit:hover {
@@ -826,7 +815,7 @@ li {
 }
 
 /* Псевдоэлемент для черточки, только для кнопок .btn-home и .btn-favorites */
-.btn-home::before, .btn-favorites::before {
+/* .btn-home::before, .btn-favorites::before {
     content: '';
     position: absolute;
     left: -3px;
@@ -839,7 +828,7 @@ li {
 
 .btn-home:hover::before, .btn-favorites:hover::before {
     background-color: #9932CC;
-}
+} */
 .zindexAuth {
     width: 200px;
     margin-bottom: 5px;

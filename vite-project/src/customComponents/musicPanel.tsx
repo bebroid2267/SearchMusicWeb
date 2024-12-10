@@ -4,10 +4,10 @@ import img2 from '../../../wwwroot/lib/resources/play (2).jpg';
 import img3 from '../../../wwwroot/lib/resources/gray right.png';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import { useEffect, useRef, useState } from 'react';
-import likeTrack from '../../../wwwroot/lib/resources/heart (1).png';
-import unlikeTrack from '../../../wwwroot/lib/resources/unheart (1).png';
+import likeTrack from '../../lib/resources/heartreal.png';
+import unlikeTrack from '../../lib/resources/unheartreal.png';
 import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
-import imgStop from '../../../wwwroot/lib/resources/pause.png';
+import imgStop from '../../src/resources/pause.png';
 import { isCurrentTrackLiked, likedTrack } from '../services/musicService';
 
 export default function MusicPanel() {

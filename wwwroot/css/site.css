@@ -255,11 +255,15 @@ li {
 .prev-track-button, .next-track-button {
     height: 25px;
     width: 25px;
+    -webkit-filter: brightness(150%);
 }
 
-.prev-track-button, .next-track-button, .stop-track-button:hover {
-    -webkit-filter: brightness(150%);
+.prev-track-button:hover, .next-track-button:hover, .stop-track-button:hover {
+    -webkit-filter: brightness(500%);
     cursor: pointer;
+}
+.stop-track-button {
+    -webkit-filter: brightness(150%);
 }
 
 .stop-track-button {
@@ -386,13 +390,13 @@ li {
     top: 50%;
     transform: translateY(-50%);
     display: flex; /* Включаем flexbox для управления кнопками */
-    gap: 10px; /* Расстояние между кнопками */
+    gap: 5px; /* Расстояние между кнопками */
 }
 
 .btn-home, .btn-favorites {
     color: black;
     position: absolute;
-    right: 10px; /* ������������� ������� ������������ ������� ���� */
+    right: 5px; /* ������������� ������� ������������ ������� ���� */
     top: 50%; /* ����������� �� ��������� �� ������ */
     transform: translateY(-50%);
     background: none; /* ������� ��� */
@@ -405,7 +409,7 @@ li {
 }
 
 .btn-home {
-    right: 20px;
+    right: 5px !important;
 }
 
 .btn-favorites {
@@ -416,29 +420,38 @@ li {
         color: #9932CC; /* ������: ��������� ����� ������ ��� ��������� */
     }
 
-.btn-home::before, .btn-favorites::before {
-    content: ''; /* ������ ������� ��� �������� �������� */
+ /* .btn-favorites::before {
+    content: ''; 
     position: absolute;
-    left: -3px; /* ����������� �������� ����� */
-    top: 50%; /* ����������� �� ��������� */
-    transform: translateY(-50%); /* ���������� �� ��������� */
-    height: 100%; /* ������ �������� ����� ������ ������ */
-    width: 2px; /* ������ �������� */
-    background-color: white; /* ���� �������� */
-}
-
-.btn-home:hover::before, .btn-favorites:hover::before {
-    background-color: #9932CC; /* ������ ���� �������� ��� ��������� */
-}
-.fav-img, .main-img {
-    width: 30px;
-    height: 30px;
-    margin-left: 20%;
-}
-
-/* .fav-img {
-    margin-left: 25px;
+    left: -30px !important;
+    top: 50%;
+    transform: translateY(-50%); 
+    height: 150%;
+    width: 2px;
+    background-color: white;
 } */
+.btn-enter, .btn-exit, .btn-favorites, .btn-home {
+    font-size: 12px !important;
+}
+/* .btn-home:hover::before, .btn-favorites:hover::before {
+    background-color: #9932CC;
+} */
+.fav-img, .main-img, .exit-img, .enter-img {
+    width: 25px;
+    height: 25px;
+}
+
+.fav-img {
+    margin-left: 50px;
+    margin-right: 50px;
+}
 .main-img {
-    margin-right: 200px;
+    margin-right: -205px;
+    margin-left: 17px;
+}
+.enter-img {
+    margin-right: 235px;
+}
+.exit-img {
+    margin-right: 235px;
 }
