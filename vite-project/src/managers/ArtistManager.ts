@@ -1,4 +1,4 @@
-import { IArtist } from "../Interfaces";
+import { IAlbum, IArtist } from "../Interfaces";
 
 export default class ArtistManager {
     public coverArtist: HTMLImageElement | null = null;
@@ -52,4 +52,12 @@ export default class ArtistManager {
             this.changeBackgroundArtistPanel();
         }
     };
+    public changeAlbum(album: IAlbum) {
+        this.coverArtist!.crossOrigin = 'anonymous';
+        this.coverArtist!.setAttribute('src', album.coverPath + '?t=' + new Date().getTime());
+        
+        this.coverArtist!.onload = () => {
+            this.changeBackgroundArtistPanel();
+        }
+    }
 }

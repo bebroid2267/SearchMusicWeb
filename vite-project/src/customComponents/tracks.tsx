@@ -4,6 +4,7 @@ import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/favoritespage.css'
 import { ITrack } from '../Interfaces';
 import { useTrackManager } from '../contexts/TrackManagerContext';
+
 interface TracksProps {
   tracks: any;
   className: any;
@@ -15,6 +16,7 @@ export default function Tracks({ tracks, className, classNameForTrackText }: Tra
 
   useEffect(() => {
     if (tracks && tracks.trackList) {
+      trackManager.resultTracks!.length = 0;
       trackManager.resultTracks = [...tracks.trackList];
     }
   }, [tracks]);

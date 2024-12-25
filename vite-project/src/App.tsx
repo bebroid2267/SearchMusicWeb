@@ -12,10 +12,12 @@ import MusicPanel from './customComponents/musicPanel';
 import ArtistPage from './Pages/ArtistPage';
 import ArtistManager from './managers/ArtistManager';
 import MainPanel from './customComponents/mainPanel';
+import AlbumPage from './Pages/AlbumPage';
 
 function App() {
   const [searchResults, setSearchResults] = useState(null);
   const [artist, setArtist] = useState(null);
+  const [album, setAlbum] = useState(null);
 
   const trackManager = new TrackManager();
   const artistManger = new ArtistManager();
@@ -28,11 +30,12 @@ function App() {
             <Route path="/" element={<MainPage onChange={setSearchResults} />} />
             <Route
               path="Result/:quearySearch"
-              element={<ResultPage results={searchResults} onChangeArtist={setArtist}/>}
+              element={<ResultPage results={searchResults} onChangeArtist={setArtist} onChangeAlbum={setAlbum}/>}
             />
             <Route path="Auth" element={<AuthPage />}></Route>
             <Route path="Favorites" element={<FavoriteTracksPage />}></Route>
-            <Route path='Artist/:quearySearch' element={<ArtistPage result={artist}/>}></Route>
+            <Route path='Artist/:quearySearch' element={<ArtistPage result={artist} onChangeAlbum={setAlbum}/>}></Route>
+            <Route path='Album/:quearySearch' element={<AlbumPage result={album} />}></Route>
           </Routes>
           </ArtistManagerContext.Provider>
       </TrackManagerContext.Provider>

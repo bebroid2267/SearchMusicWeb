@@ -13,9 +13,9 @@ namespace search_musics.Domain.Entities
 
         private static readonly Default defApi = new(networkParams, token);
 
-        private static readonly YandexMusicApi.Api.Track track = new(networkParams, token);
-
-        private static readonly YandexMusicApi.Api.Artist artist = new YandexMusicApi.Api.Artist(networkParams, token);
+        private static readonly YandexMusicApi.Api.Track _track = new(networkParams, token);
+        private static readonly YandexMusicApi.Api.Artist _artist = new (networkParams, token);
+        private static readonly YandexMusicApi.Api.Album _album = new (networkParams, token);
 
         public static List<Album> GetInfoAlbums(string queary)
         {
@@ -89,23 +89,50 @@ namespace search_musics.Domain.Entities
 
         public static string GetUrlForDownloadTrack(string trackId)
         {
-            var downloadInfo = track.GetDownloadInfoWithToken(trackId).Result;
+            var downloadInfo = _track.GetDownloadInfoWithToken(trackId).Result;
 
             if (downloadInfo["result"] != null && downloadInfo["result"][0] != null && downloadInfo["result"][0]["downloadInfoUrl"] != null)
             {
                 var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString();
-                var directLink = track.GetDirectLink(downloadInfoUrl).Result;
+                var directLink = _track.GetDirectLink(downloadInfoUrl).Result;
 
                 return directLink;
             }
             else
                 return null;
         }
+        public static List<Track> GetTracksAlbum(string albumId)
+        {
+            List<Track> tracks = new List<Track>();
+            var resultTracks = _album.GetTracks(int.Parse(albumId), pageSize: 10).Result;
+
+            var filteredAnswer = resultTracks["result"]?["volumes"];
+
+            if (filteredAnswer == null)
+            {
+                return null;
+            }
+
+            foreach (var items in filteredAnswer)
+            {
+                foreach (var track in items)
+                {
+                    tracks.Add(new Track()
+                    {
+                        Id = track["id"].ToString(),
+                        Title = track["title"].ToString(),
+                        Artist = track["artists"][0]["name"].ToString(),
+                        CoverPath = GetCoverUri(track["coverUri"].ToString(),"100x100")
+                    });
+                }
+            }
+            return tracks;
+        }
         public static List<Track> GetTracksArtist(string artistId)
         {
             List<Track> tracks = new List<Track>();
 
-            var resultTracks = artist.GetTracks(int.Parse(artistId),pageSize: 10).Result;
+            var resultTracks = _artist.GetTracks(int.Parse(artistId),pageSize: 10).Result;
 
             var filteredAsnwer = resultTracks["result"]?["tracks"];
 
@@ -131,7 +158,7 @@ namespace search_musics.Domain.Entities
         {
             List<Album> albums = new List<Album>();
 
-            var resultAlbums = artist.GetDirectAlbums(int.Parse(artistId), pageSize: 10).Result;
+            var resultAlbums = _artist.GetDirectAlbums(int.Parse(artistId), pageSize: 10).Result;
 
             var filteredAnswer = resultAlbums["result"]?["albums"];
             if (filteredAnswer == null)

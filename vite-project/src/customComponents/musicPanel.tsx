@@ -58,6 +58,7 @@ export default function MusicPanel() {
   
     if (trackManager.trackForUrl) {
       trackManager.trackForUrl.addEventListener('timeupdate', updateProgress);
+      trackManager.trackForUrl.addEventListener('ended', trackManager.nextTrack);
     }
     trackManager.nextTrackBtn!.addEventListener('click', trackManager.nextTrack);
     trackManager.prevTrackBtn!.addEventListener('click', trackManager.prevTrack);

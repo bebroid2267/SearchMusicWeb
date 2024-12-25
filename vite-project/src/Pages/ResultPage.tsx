@@ -6,10 +6,8 @@ import BackgroundVideo from '../customComponents/backVideo';
 import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function ResultPage({ results, onChangeArtist }: any) {
+export default function ResultPage({ results, onChangeArtist, onChangeAlbum }: any) {
   const { tracks, artist, albums } = results;
-
-
 
   return (
     <div className="intro">
@@ -17,7 +15,7 @@ export default function ResultPage({ results, onChangeArtist }: any) {
         <BackgroundVideo />
         <div className="result_content">
           <Artists artists={artist} onChangeArtist={onChangeArtist} />
-          <Albums albums={albums} className={'non-artist-page'} />
+          <Albums albums={albums} className={'non-artist-page'} onChangeAlbum={onChangeAlbum} />
           <Tracks 
               tracks={tracks} 
               className={'tracks'} 

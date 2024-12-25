@@ -1,0 +1,50 @@
+.album-container {
+    position: absolute;
+    margin: 0 auto;
+    width: 80%;
+    height: 85%;
+    color: whitesmoke;
+    z-index: 3; /* Контент выше видео и затемнения */
+    left: 10%;
+    right: 10%;
+    top: 4.75%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: gray;
+    border-radius: 25px;
+}
+.header-album-info {
+    display: inline-flex;
+    margin-top: 20px;
+}
+
+.album-article {
+    color: black;
+    margin-top: 50px;
+}
+.album-cover {
+    margin-left: 20px;
+    border-radius: 55%;
+    width: 250px;
+    height: 250px;
+}
+.about-album {
+    display: block;
+    margin-left: 25px;
+    margin-top: -25px;
+}
+
+.results {
+    display: flex;
+    height: 450px;
+}
+ ul {
+    width: 100%;
+    margin-left: -30px;
+ }
+
+ .result-result-tracks-ul {
+    width: 100%;
+    margin-left: 20px;
+    height: 450px;
+ }

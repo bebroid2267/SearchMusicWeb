@@ -2,15 +2,32 @@ import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/artisttpagestyle.css'
 import { IAlbum } from '../../../wwwroot/js/Interfaces/Interfaces';
+import { useNavigate } from 'react-router-dom';
+import { getInfoArtist } from '../services/artistService';
+import { onChangeServer } from '../Pages/MainPage';
 
 interface AlbumsProps {
   albums: any,
-  className: any
+  className: any,
+  onChangeAlbum: any
 }
-export default function Albums({ albums, className }: AlbumsProps) {
+export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps) {
   const divClass = className === 'artistPage' ? 'artist-result-albums' : 'albums';
   const h2Class = className === 'artistPage' ? 'album-article-result' : 'artist-text';
   const ulClass = className === 'artistPage' ? 'result-albums-ul' : 'result_albums';
+  const navigate = useNavigate();
+
+  const handleOpenAlbumPage = async (album: IAlbum) => {
+    const dataTracks = await getInfoArtist('GetTracksAlbum', album.id.toString());
+    const serverResponse: onChangeServer = {
+      tracks: dataTracks,
+      albums: album,
+      artist: album.artistName
+    };
+
+    onChangeAlbum(serverResponse);
+    navigate(`/Album/${album.title}`);
+  };
 
   return (
     <div className={divClass}>
@@ -19,6 +36,7 @@ export default function Albums({ albums, className }: AlbumsProps) {
         {albums && albums.albumList
           ? albums.albumList.map((album: IAlbum) => (
               <li
+                onClick={() => {handleOpenAlbumPage(album)}}
                 key={album.id}
                 className="result_item_album"
                 data-id={album.id}

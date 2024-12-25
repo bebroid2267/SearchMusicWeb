@@ -6,7 +6,7 @@ import Tracks from "../customComponents/tracks";
 import Albums from "../customComponents/albums";
 import { useArtistManager } from "../contexts/TrackManagerContext";
 
-export default function ArtistPage({ result }: any) {
+export default function ArtistPage({ result, onChangeAlbum }: any) {
     const artistManager = useArtistManager();
     const {tracks, albums, artist} = result;
     console.log(albums);
@@ -52,8 +52,9 @@ export default function ArtistPage({ result }: any) {
                             classNameForTrackText={'no-style'} 
                         />
                         <Albums
-                            albums={albums} 
-                            className={'artistPage'}
+                            albums={albums}
+                            className={'artistPage'} 
+                            onChangeAlbum={onChangeAlbum}                        
                          />
                     </div>
                 </div>

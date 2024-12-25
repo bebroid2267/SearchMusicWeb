@@ -66,6 +66,16 @@ namespace search_musics.Controllers
             var albumsList = YandexMusic.GetInfoAlbums(model.Queary);
             return Json(new {  AlbumList = albumsList.ToArray()});
         }
+
+        [HttpPost]
+        public IActionResult GetTracksAlbum([FromBody] QuearyModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var tracksList = YandexMusic.GetTracksAlbum(model.Queary);
+            return Json(new { TrackList = tracksList.ToArray() });
+        }
         [HttpPost]
         public IActionResult GetAlbumsArtist([FromBody] QuearyModel model)
         {
