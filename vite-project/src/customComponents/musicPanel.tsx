@@ -9,6 +9,7 @@ import unlikeTrack from '../../lib/resources/unheartreal.png';
 import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 import imgStop from '../../src/resources/pause.png';
 import { isCurrentTrackLiked, likedTrack } from '../services/musicService';
+import ButtonPanel from './buttonPanel';
 
 export default function MusicPanel() {
   const trackManager = useTrackManager();
@@ -133,35 +134,38 @@ export default function MusicPanel() {
   };
 
   return (
-    <div className="music-panel" ref={gradientDiv} id="gradient-box">
-      <img
-        alt="Обложка песни"
-        ref={img}
-        className="cover-panel"
-        id="img-for-gradient"
-      />
-      <div className="track-info-panel">
-        <h3 className="track-title-panel" ref={trackTitlePanel}></h3>
-        <p className="track-artist-panel" ref={trackArtistPanel}></p>
-      </div>
-      <audio id="track_for_url" ref={trackForUrl}></audio>
-      <div className="music-buttons">
-        <img src={img1} className="prev-track-button" ref={prevTrackBtn} />
+    <>
+      <div className="music-panel" ref={gradientDiv} id="gradient-box">
         <img
-          src={img2}
-          onClick={handlePlayClick}
-          ref={playTrackBtn}
-          className="stop-track-button"
-          id="play-music-btn"
+          alt="Обложка песни"
+          ref={img}
+          className="cover-panel"
+          id="img-for-gradient"
         />
-        <img src={img3} className="next-track-button" ref={nextTrackBtn} />
-      </div>
+        <div className="track-info-panel">
+          <h3 className="track-title-panel" ref={trackTitlePanel}></h3>
+          <p className="track-artist-panel" ref={trackArtistPanel}></p>
+        </div>
+        <audio id="track_for_url" ref={trackForUrl}></audio>
+        <div className="music-buttons">
+          <img src={img1} className="prev-track-button" ref={prevTrackBtn} />
+          <img
+            src={img2}
+            onClick={handlePlayClick}
+            ref={playTrackBtn}
+            className="stop-track-button"
+            id="play-music-btn"
+          />
+          <img src={img3} className="next-track-button" ref={nextTrackBtn} />
+        </div>
 
-      <div className="progress__container" ref={progressContainer}>
-        <div className="progress" id="progress_bar" ref={progressBar}></div>
-      </div>
+        <div className="progress__container" ref={progressContainer}>
+          <div className="progress" id="progress_bar" ref={progressBar}></div>
+        </div>
 
-      <img className="like-track" onClick={handleLike} src={image} />
-    </div>
+        <img className="like-track" onClick={handleLike} src={image} />
+      </div>
+      <ButtonPanel />
+    </>
   );
 }

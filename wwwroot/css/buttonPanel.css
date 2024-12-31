@@ -1,0 +1,49 @@
+.button-panel {
+    position: fixed; /* Оставляем фиксированное позиционирование */
+    margin: 0 auto;
+    width: 80%;
+    bottom: 72px;
+    height: 35px;
+    padding-bottom: 1px; /*/ /* Отступ снизу */
+    display: flex;
+    align-items: center;
+    left: 50%;
+    justify-content: space-around;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+.ul-button-panel {
+    display: flex;
+    position: relative;
+    width: 100% !important;
+    height: 35px !important;
+}
+ul {
+    margin-top: 10px;
+}
+
+.ul-button-panel li {
+    margin-left: 10px;
+    display: inline-flex;
+}
+
+.button-panel-element {
+    width: auto !important;
+    height: 35px;
+}
+.text-btn-element {
+    font-size: auto;
+    margin-top: 4px;
+    margin-left: -5px;
+    margin-right: 7px;
+    width: auto;
+    height: 30px;
+    color: white;
+}
+.img-btn-element {
+    margin-left: -10px;
+    margin-right: 10px;
+    margin-top: 4px;
+    width: 30px;
+    height: 30px;
+}
