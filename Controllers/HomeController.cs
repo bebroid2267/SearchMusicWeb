@@ -64,7 +64,7 @@ namespace search_musics.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var albumsList = YandexMusic.GetInfoAlbums(model.Queary);
-            return Json(new {  AlbumList = albumsList.ToArray()});
+                return Json(new {  AlbumList = albumsList.ToArray()});
         }
 
         [HttpPost]

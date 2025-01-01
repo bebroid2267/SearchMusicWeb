@@ -3,7 +3,7 @@ import '../../wwwroot/css/site.css';
 import MainPage from './Pages/MainPage';
 import { Route, Routes } from 'react-router-dom';
 import ResultPage from './Pages/ResultPage';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import AuthPage from './Pages/AuthPage';
 import FavoriteTracksPage from './Pages/FavoriteTracksPage';
 import { ArtistManagerContext, TrackManagerContext } from './contexts/TrackManagerContext';
@@ -19,12 +19,12 @@ function App() {
   const [artist, setArtist] = useState(null);
   const [album, setAlbum] = useState(null);
 
-  const trackManager = new TrackManager();
-  const artistManger = new ArtistManager();
+  const trackManager = useMemo(() => new TrackManager(), []);
+  const artistManger = useMemo(() => new ArtistManager(), []);
   return (
       <TrackManagerContext.Provider value={trackManager}>
         <ArtistManagerContext.Provider value={artistManger}>
-        <MusicPanel />
+        <MusicPanel onChangeAlbum={setAlbum} onChangeArtist={setArtist}/>
         <MainPanel />
           <Routes>
             <Route path="/" element={<MainPage onChange={setSearchResults} />} />

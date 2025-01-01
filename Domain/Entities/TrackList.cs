@@ -2,10 +2,18 @@
 {
     public class TrackList()
     {
-        public Dictionary<int,Track> _tracks = new Dictionary<int,Track>();
-        public void AddTrack(int trackKey, string trackId, string trackTitle, string artistName, string coverPath)
+        public Dictionary<int, Track> _tracks = new Dictionary<int, Track>();
+        public void AddTrack(int trackKey, string trackId, string trackTitle, string artistName, string coverPath, Artist artist, Album album)
         {
-            _tracks.Add(trackKey, new Track { Title = trackTitle, Artist = artistName, Id = trackId, CoverPath = coverPath });
+            _tracks.Add(trackKey, new Track
+            {
+                Title = trackTitle,
+                Artist = artistName,
+                Id = trackId,
+                CoverPath = coverPath,
+                ArtistEntity = artist,
+                Album = album
+            });
         }
         public Track GetTrackInfo(int trackKey)
         {
@@ -14,6 +22,5 @@
             else
                 return null;
         }
-
     }
 }

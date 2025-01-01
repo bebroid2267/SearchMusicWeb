@@ -25,6 +25,10 @@ ul {
 .ul-button-panel li {
     margin-left: 10px;
     display: inline-flex;
+    background-color: rgba(128, 128, 128, 0.651);
+}
+.ul-button-panel li:hover {
+    background-color: black;
 }
 
 .button-panel-element {
@@ -46,4 +50,5 @@ ul {
     margin-top: 4px;
     width: 30px;
     height: 30px;
+    border-radius: 10px;
 }

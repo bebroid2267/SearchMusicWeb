@@ -26,6 +26,7 @@ export default class TrackManager {
     private ctx: CanvasRenderingContext2D | null;
 
     constructor() {
+        console.log('in const');
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d');
         this.onProgressBarChange;
@@ -64,11 +65,13 @@ export default class TrackManager {
 
         // Пример установки тестового трека
         const track: ITrack = {
-            id: 0,
+            id: '0',
             coverPath: 'test',
             title: 'test',
             artist: 'test',
-            downloadUrl: 'test'
+            downloadUrl: 'test',
+            album: null,
+            artistEntity: null
         };
         this.currentTrack = track;
 
@@ -84,7 +87,7 @@ export default class TrackManager {
 
     setCurrentTrack(newTrack: ITrack) {
         this.currentTrack = newTrack;
-
+        console.log(newTrack.album);
         if (this.onTrackChange) {
             this.onTrackChange(newTrack);
         }
@@ -163,7 +166,7 @@ export default class TrackManager {
             this.playTrack();
         }
     }
-    loadTrack(chooseTrackId: number): Promise<string> {
+    loadTrack(chooseTrackId: string): Promise<string> {
         return new Promise((resolve, reject) => {
 
                 fetch(`https://localhost:44303/Home/GetUrlForTrack?trackId=${chooseTrackId}`, {
@@ -285,5 +288,6 @@ export default class TrackManager {
         }
 
         this.setCurrentTrack(track);
+        console.log(track.album);
     }
 }

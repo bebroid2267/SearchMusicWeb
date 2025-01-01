@@ -11,7 +11,7 @@ import imgStop from '../../src/resources/pause.png';
 import { isCurrentTrackLiked, likedTrack } from '../services/musicService';
 import ButtonPanel from './buttonPanel';
 
-export default function MusicPanel() {
+export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
   const trackManager = useTrackManager();
 
   const [like, setLiked] = useState(false);
@@ -115,16 +115,8 @@ export default function MusicPanel() {
     }
   };
 
-  const handleLike = async () => {
-      const track = {
-        id: String(trackManager.currentTrack!.id),
-        title: trackManager.currentTrack!.title,
-        artist: trackManager.currentTrack?.artist,
-        coverPath: trackManager.currentTrack?.coverPath,
-        downloadUrl: trackManager.currentTrack?.downloadUrl,
-      };
-      
-      await likedTrack(like, track);
+  const handleLike = async () => {      
+      await likedTrack(like, trackManager.currentTrack);
       if (like) {
         setImage(unlikeTrack);
       } else {
@@ -165,7 +157,7 @@ export default function MusicPanel() {
 
         <img className="like-track" onClick={handleLike} src={image} />
       </div>
-      <ButtonPanel />
+      <ButtonPanel onChangeAlbum={onChangeAlbum} onChangeArtist={onChangeArtist}/>
     </>
   );
 }

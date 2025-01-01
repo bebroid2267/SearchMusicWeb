@@ -79,9 +79,12 @@ export const likedTrack = async (shouldLikeTrack: boolean, track: any) => {
     await axios.delete(`${API_URL}/${track.id}/like`, { headers });
   }
   else {
+    console.log(track);
+    console.log(track.album);
+    console.log(track.artistEntity);
     await axios.post(
-      `${API_URL}/${track.id}/like?idTrack=${track.id}&titleTrack=${track.title}&artistTrack=${track.artist}&coverPath=${track.coverPath}&downloadUrl=${track.downloadUrl}`,
-      {},
+      `${API_URL}/${track.id}/like?track=${encodeURIComponent(JSON.stringify(track))}`,
+      null,
       { headers }
     );
   }

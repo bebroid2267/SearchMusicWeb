@@ -14,14 +14,19 @@ interface TracksProps {
 export default function Tracks({ tracks, className, classNameForTrackText }: TracksProps) {
   const trackManager = useTrackManager();
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (tracks && tracks.trackList) {
+  //     trackManager.resultTracks!.length = 0;
+  //     trackManager.resultTracks = [...tracks.trackList];
+  //   }
+  // }, [tracks]);
+
+  const handleClick = (track: ITrack) => {
     if (tracks && tracks.trackList) {
       trackManager.resultTracks!.length = 0;
       trackManager.resultTracks = [...tracks.trackList];
     }
-  }, [tracks]);
 
-  const handleClick = (track: ITrack) => {
     trackManager.changeTrackPanel(track);
   };
   return (

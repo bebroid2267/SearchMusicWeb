@@ -1,26 +1,50 @@
-import yalogo from '../../lib/resources/yalogo.svg'
 import '../../../wwwroot/css/buttonPanel.css'
 import { useTrackManager } from '../contexts/TrackManagerContext';
-import { useEffect } from 'react';
+import { getInfoArtist } from '../services/artistService';
+import { onChangeServer } from '../Pages/MainPage';
+import { useNavigate } from 'react-router-dom';
 
 
-export default function ButtonPanel() {
+export default function ButtonPanel({onChangeAlbum, onChangeArtist}: any) {
     const trackManager = useTrackManager();
-    
-    useEffect(() => {
-        
-    }, [trackManager.currentTrack]);
+    const navigate = useNavigate();
 
+      const handleOpenArtistPage = async () => {
+    
+        const dataTracks = await getInfoArtist('GetTracksArtist', trackManager.currentTrack!.artistEntity!.id);
+        const dataAlbums =  await getInfoArtist('GetAlbumsArtist', trackManager.currentTrack!.artistEntity!.id);
+        const serverResponse: onChangeServer = {
+          tracks: dataTracks,
+          albums: dataAlbums,
+          artist: trackManager.currentTrack?.artistEntity
+        };
+    
+        onChangeArtist(serverResponse);
+        navigate(`/Artist/${trackManager.currentTrack?.artistEntity?.name}`);
+      };
+
+      const handleOpenAlbumPage = async () => {
+          const dataTracks = await getInfoArtist('GetTracksAlbum', trackManager.currentTrack!.album!.id);
+          const serverResponse: onChangeServer = {
+            tracks: dataTracks,
+            albums: trackManager.currentTrack!.album!,
+            artist: trackManager.currentTrack!.artist
+          };
+      
+          onChangeAlbum(serverResponse);
+          navigate(`/Album/${trackManager.currentTrack!.album!.title}`);
+        };
+    
     return (
         <div className='button-panel'>
             <ul className='ul-button-panel'>
-                <li className='button-panel-element'>
-                    <img  className='img-btn-element' src={yalogo} alt="" />
-                    <p className='text-btn-element'>artist</p>
+                <li className='button-panel-element' onClick={handleOpenArtistPage}>
+                    <img  className='img-btn-element' src={trackManager.currentTrack?.artistEntity?.coverPath} alt="" />
+                    <p className='text-btn-element'>{trackManager.currentTrack?.artist}</p>
                 </li>
-                <li className='button-panel-element'>
-                    <img className='img-btn-element' src={yalogo} alt="" />
-                    <p className='text-btn-element'>album</p>
+                <li className='button-panel-element' onClick={handleOpenAlbumPage}>
+                    <img className='img-btn-element' src={trackManager.currentTrack?.album?.coverPath} alt="" />
+                    <p className='text-btn-element'>{trackManager.currentTrack?.album?.title}</p>
                 </li>
                 <li className='button-panel-element'>
                     <p className='text-btn-element'>playlist</p>

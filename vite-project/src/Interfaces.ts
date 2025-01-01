@@ -10,21 +10,23 @@
 }
 
 export interface ITrack {
-    id: number;
+    id: string;
     coverPath: string;
     title: string;
     artist: string;
     downloadUrl: string;
+    artistEntity: IArtist | null;
+    album: IAlbum | null;
 }
 
 export interface IArtist {
-    id: number;
+    id: string;
     coverPath: string;
     name: string;
 }
 
 export interface IAlbum {
-    id: number;
+    id: string;
     coverPath: string;
     title: string;
     year: string;

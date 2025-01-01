@@ -4,10 +4,11 @@ using search_musics.Domain.Entities;
 using search_musics.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace search_musics.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
     public class TracksLikeController : Controller
     {
@@ -21,40 +22,53 @@ namespace search_musics.Controllers
         }
 
         [HttpPost("{trackId}/like")]
-        public async Task<IActionResult> LikeTrack(string idTrack, string titleTrack, string artistTrack, string coverPath, string downloadUrl)
+        public async Task<IActionResult> LikeTrack(string track)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
 
+            string decodedTrack = Uri.UnescapeDataString(track);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            Track deSerializedTrack = System.Text.Json.JsonSerializer.Deserialize<Track>(decodedTrack, options);
+
             // Проверяем, есть ли уже такой трек в базе
             var existingTrack = await _context.Tracks
-                .FirstOrDefaultAsync(x => x.Id == idTrack);
-
-            Track track;
+                .FirstOrDefaultAsync(x => x.Id == deSerializedTrack.Id);
 
             // Если трек не существует, создаем новый
             if (existingTrack == null)
             {
-                track = new Track()
-                {
-                    Id = idTrack,
-                    Title = titleTrack,
-                    Artist = artistTrack,
-                    CoverPath = coverPath,
-                    DonwloadUrl = downloadUrl
-                };
+                // Проверяем, существует ли Artist
+                var existingArtist = await _context.Artists
+                    .FirstOrDefaultAsync(a => a.Id == deSerializedTrack.ArtistEntity.Id);
 
-                _context.Tracks.Add(track);  // Добавляем новый трек в контекст
-                await _context.SaveChangesAsync();  // Сохраняем изменения в базу
+                if (existingArtist != null)
+                {
+                    deSerializedTrack.ArtistEntity = existingArtist; // Привязываем существующего артиста
+                }
+
+                // Проверяем, существует ли Album
+                var existingAlbum = await _context.Albums
+                    .FirstOrDefaultAsync(a => a.id == deSerializedTrack.Album.id);
+
+                if (existingAlbum != null)
+                {
+                    deSerializedTrack.Album = existingAlbum; // Привязываем существующий альбом
+                }
+
+                // Добавляем трек в контекст
+                _context.Tracks.Add(deSerializedTrack);
+                await _context.SaveChangesAsync();
             }
+
             else
             {
-                track = existingTrack;  // Если трек существует, используем его
+                deSerializedTrack = existingTrack;  // Если трек существует, используем его
             }
 
             // Проверяем, не лайкнул ли уже пользователь этот трек
             var existingLike = await _context.TrackLikes
-                .FirstOrDefaultAsync(l => l.TrackId == track.Id && l.UserId == user.Id);
+                .FirstOrDefaultAsync(l => l.TrackId == deSerializedTrack.Id && l.UserId == user.Id);
 
             if (existingLike != null)
             {
@@ -65,9 +79,9 @@ namespace search_musics.Controllers
             var like = new TrackLike
             {
                 Id = Guid.NewGuid().ToString(),
-                Track = track,
+                Track = deSerializedTrack,
                 UserId = user.Id,
-                TrackId = track.Id
+                TrackId = deSerializedTrack.Id
             };
 
             _context.TrackLikes.Add(like);  // Добавляем лайк в контекст
@@ -119,7 +133,7 @@ namespace search_musics.Controllers
                     x.Track.Id,
                     x.Track.Title,
                     x.Track.Artist,
-                    x.Track.DonwloadUrl,
+                    x.Track.DownloadUrl,
                 })
                 .FirstOrDefaultAsync();
             if (likedTracks == null) return NotFound();
@@ -140,12 +154,14 @@ namespace search_musics.Controllers
                     l.Track.Id,
                     l.Track.Title,
                     l.Track.Artist,
-                    l.Track.DonwloadUrl,
+                    l.Track.DownloadUrl,
                     l.Track.CoverPath,
+                    l.Track.Album,
+                    l.Track.ArtistEntity
                 })
                 .ToListAsync();
 
             return Ok(Json(new { TrackList = likedTracks.ToArray() }));
         }
-        }
     }
+}
