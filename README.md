@@ -19,23 +19,23 @@
 
 - Main Page
 <p align="left">
- <img width="500px" src="https://imgur.com/a/UARTPlo" alt="qr"/>
+ <img width="500px" src="https://i.imgur.com/H8DTmzv.png" alt="qr"/>
 </p>
 
 - Answer Search Page
   <p align="left">
- <img width="500px" src="https://imgur.com/a/ZBFHucX" alt="qr"/>
+ <img width="500px" src="https://i.imgur.com/l4uCtvw.png" alt="qr"/>
   </p>
   
 - Artist Page
   <p align="left">
- <img width="500px" src="https://imgur.com/a/FDj54Ve" alt="qr"/>
+ <img width="500px" src="https://i.imgur.com/aNoAbPq.png" alt="qr"/>
   </p>
 
   
 - Album Page
   <p align="left">
- <img width="500px" src="https://imgur.com/a/ps5b93q" alt="qr"/>
+ <img width="500px" src="https://i.imgur.com/X1Qaq9V.png" alt="qr"/>
   </p>
 
 
