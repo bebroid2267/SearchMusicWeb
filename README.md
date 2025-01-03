@@ -12,29 +12,30 @@
 - **Инструменты:**
   - [Pattern MVC](https://dotnet.microsoft.com/en-us/apps/aspnet/mvc)
   - [ORM - Entity Framework Core](https://learn.microsoft.com/ru-ru/ef/core/)
-  - [DB - Sqlite](https://www.microsoft.com/ru-ru/sql-server)
+  - [DB - SQL Server](https://www.microsoft.com/ru-ru/sql-server)
+  - [REACT](https://react.dev)
     
 ## 👀 Look at this - DEMO
 
-- Main Menu
+- Main Page
 <p align="left">
- <img width="500px" src="https://i.imgur.com/IcHmn3c.jpeg" alt="qr"/>
+ <img width="500px" src="https://imgur.com/a/UARTPlo" alt="qr"/>
 </p>
 
-- Work apps
+- Answer Search Page
   <p align="left">
- <img width="500px" src="https://i.imgur.com/CsUdz2l.jpeg" alt="qr"/>
+ <img width="500px" src="https://imgur.com/a/ZBFHucX" alt="qr"/>
   </p>
   
-- All Apps (mini window for info)
+- Artist Page
   <p align="left">
- <img width="500px" src="https://i.imgur.com/EJiSyII.jpeg" alt="qr"/>
+ <img width="500px" src="https://imgur.com/a/FDj54Ve" alt="qr"/>
   </p>
 
   
-- Dashboard
+- Album Page
   <p align="left">
- <img width="500px" src="https://i.imgur.com/7BNyLdm.jpeg" alt="qr"/>
+ <img width="500px" src="https://imgur.com/a/ps5b93q" alt="qr"/>
   </p>
 
 
