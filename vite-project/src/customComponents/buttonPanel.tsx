@@ -28,7 +28,7 @@ export default function ButtonPanel({onChangeAlbum, onChangeArtist}: any) {
           const serverResponse: onChangeServer = {
             tracks: dataTracks,
             albums: trackManager.currentTrack!.album!,
-            artist: trackManager.currentTrack!.artist
+            artist: trackManager.currentTrack!.artistEntity
           };
       
           onChangeAlbum(serverResponse);

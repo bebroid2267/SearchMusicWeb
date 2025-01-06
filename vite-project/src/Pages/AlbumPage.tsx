@@ -3,10 +3,14 @@ import '../../../wwwroot/css/albumpage.css'
 import Tracks from "../customComponents/tracks";
 import { useArtistManager } from "../contexts/TrackManagerContext";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { getInfoArtist } from "../services/artistService";
+import { onChangeServer } from "./MainPage";
 
-export default function AlbumPage( {result }:any ) {
+export default function AlbumPage( {result, onChangeArtist }:any ) {
     const {tracks, albums, artist} = result;
     const albumManager = useArtistManager();
+    const navigate = useNavigate();
 
     const coverAlbum = useRef<HTMLImageElement>(null);
     const panelForChangeColor = useRef<HTMLDivElement>(null);
@@ -17,6 +21,19 @@ export default function AlbumPage( {result }:any ) {
     
         albumManager.changeAlbum(albums);
     });
+
+      const handleOpenArtistPage = async () => {
+        const dataTracks = await getInfoArtist('GetTracksArtist', artist.id.toString());
+        const dataAlbums =  await getInfoArtist('GetAlbumsArtist', artist.id.toString());
+        const serverResponse: onChangeServer = {
+          tracks: dataTracks,
+          albums: dataAlbums,
+          artist: artist
+        };
+    
+        onChangeArtist(serverResponse);
+        navigate(`/Artist/${artist.name}`);
+      };
 
     return (
         <div className="intro">
@@ -31,7 +48,10 @@ export default function AlbumPage( {result }:any ) {
                             ref={coverAlbum} 
                         />
                         <div className="about-album">
-                            <p className="album-article">{artist}</p>
+                            <div className="artist-album-cover" onClick={handleOpenArtistPage}>
+                                <img className="artist-album-cover-img" src={artist.coverPath} alt="" />
+                                <p className="album-article">{artist.name}</p>
+                            </div>
                             <h1>{albums.title}</h1>
                             <div className="count-tracks">
 

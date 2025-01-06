@@ -26,6 +26,7 @@ export default function MainPage({ onChange }: any) {
     const dataArtists = await getDifferentMusicResult('SearchArtists', queary);
     const dataAlbums = await getDifferentMusicResult('SearchAlbums', queary);
 
+    console.log(dataTracks);
     const serverResponse: onChangeServer = {
       tracks: dataTracks,
       artist: dataArtists,

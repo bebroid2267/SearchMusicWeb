@@ -37,12 +37,7 @@ namespace search_musics.Controllers
 
             var trackList = YandexMusic.GetInfoTracks(model.Queary);
 
-
-
-            if (trackList == null)
-            {
-                return BadRequest(ModelState);
-            }
+            if (trackList == null) return NotFound(ModelState);
 
             var tracksArray = trackList._tracks.Select(x => x.Value).ToArray();
             return Json(new { TrackList = tracksArray }); // ���������� TrackList
@@ -54,7 +49,8 @@ namespace search_musics.Controllers
                 return BadRequest(ModelState);
 
             var artistList = YandexMusic.GetInfoArtists(model.Queary);
-            if (artistList == null) return BadRequest();
+            if (artistList == null) return NotFound();
+
             return Json(new { ArtistList = artistList.ToArray()});
         }
 
@@ -63,8 +59,11 @@ namespace search_musics.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             var albumsList = YandexMusic.GetInfoAlbums(model.Queary);
-                return Json(new {  AlbumList = albumsList.ToArray()});
+            if (albumsList == null) return NotFound();
+            
+            return Json(new {  AlbumList = albumsList.ToArray()});
         }
 
         [HttpPost]
@@ -74,6 +73,8 @@ namespace search_musics.Controllers
                 return BadRequest(ModelState);
 
             var tracksList = YandexMusic.GetTracksAlbum(model.Queary);
+            if (tracksList == null) return NotFound();
+
             return Json(new { TrackList = tracksList.ToArray() });
         }
         [HttpPost]
@@ -84,6 +85,8 @@ namespace search_musics.Controllers
                 return BadRequest(ModelState);
             }
             var albumsList = YandexMusic.GetAlbumsArtist(model.Queary);
+            if (albumsList == null) return NotFound();
+
             return Json(new { AlbumList = albumsList.ToArray()});
         }
         [HttpPost]
@@ -94,6 +97,8 @@ namespace search_musics.Controllers
                 return BadRequest(ModelState);
             }
             var trackList = YandexMusic.GetTracksArtist(model.Queary);
+            if (trackList == null) return NotFound();
+
             return Json(new { TrackList = trackList.ToArray() });
         }
         [HttpGet]
@@ -116,6 +121,5 @@ namespace search_musics.Controllers
             ViewData["Model"] = model.Queary;
             return View("ResultSearch"); // ���� ������ ���, �������� ������ ������
         }
-
     }
 }

@@ -15,12 +15,16 @@ export default function ResultPage({ results, onChangeArtist, onChangeAlbum }: a
         <BackgroundVideo />
         <div className="result_content">
           <Artists artists={artist} onChangeArtist={onChangeArtist} />
-          <Albums albums={albums} className={'non-artist-page'} onChangeAlbum={onChangeAlbum} />
+          <Albums 
+              albums={albums} 
+              className={'non-artist-page'} 
+              onChangeAlbum={onChangeAlbum} 
+          />
           <Tracks 
               tracks={tracks} 
               className={'tracks'} 
               classNameForTrackText={'artist-text'} 
-           />
+            />
         </div>
       </div>
     </div>

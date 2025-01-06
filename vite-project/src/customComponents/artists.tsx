@@ -44,7 +44,9 @@ export default function Artists({ artists, onChangeArtist }: any) {
                 <div className="blur_artist_cover"></div>
               </li>
             ))
-          : null}
+          : (
+            <h3 className="no-results" style={{marginLeft: '-20px'}}>Ничего не найдено</h3>
+          )}
       </ul>
     </div>
   );

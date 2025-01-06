@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/favoritespage.css'
@@ -14,13 +13,6 @@ interface TracksProps {
 export default function Tracks({ tracks, className, classNameForTrackText }: TracksProps) {
   const trackManager = useTrackManager();
 
-  // useEffect(() => {
-  //   if (tracks && tracks.trackList) {
-  //     trackManager.resultTracks!.length = 0;
-  //     trackManager.resultTracks = [...tracks.trackList];
-  //   }
-  // }, [tracks]);
-
   const handleClick = (track: ITrack) => {
     if (tracks && tracks.trackList) {
       trackManager.resultTracks!.length = 0;
@@ -29,6 +21,7 @@ export default function Tracks({ tracks, className, classNameForTrackText }: Tra
 
     trackManager.changeTrackPanel(track);
   };
+  
   return (
     <div className={'result-' + className}>
       <h2 id={classNameForTrackText}>Треки</h2>
@@ -55,7 +48,9 @@ export default function Tracks({ tracks, className, classNameForTrackText }: Tra
                 </div>
               </li>
             ))
-          : null}
+          : (
+            <h3 className="no-results" style={{marginLeft: '10px'}}>Ничего не найдено</h3>
+          )}
       </ul>
     </div>
   );

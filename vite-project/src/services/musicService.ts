@@ -26,19 +26,19 @@ export const fetchLikedTracks = async (): Promise<any | undefined> => {
 }
 
 export const getDifferentMusicResult = async (neededThing: string, queary: string) => {
+  var globalResponse;
   try {
-    const response = await fetch(`https://localhost:44303/Home/${neededThing}`, {
+    globalResponse = await fetch(`https://localhost:44303/Home/${neededThing}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ Queary: queary }),
     });
-
-    const data = await response.json();
+    const data = await globalResponse.json();
     return data;
   } catch (error) {
-    console.error(error);
+    return null;
   }
 
 };

@@ -19,10 +19,17 @@ export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps
 
   const handleOpenAlbumPage = async (album: IAlbum) => {
     const dataTracks = await getInfoArtist('GetTracksAlbum', album.id.toString());
+    var artist;
+    for (let index = 0; index < dataTracks.trackList.length; index++) {
+      if (dataTracks.trackList[index].artistEntity.name === album.artistName)
+      {
+        artist = dataTracks.trackList[index].artistEntity;
+      }
+    }
     const serverResponse: onChangeServer = {
       tracks: dataTracks,
       albums: album,
-      artist: album.artistName
+      artist: artist
     };
 
     onChangeAlbum(serverResponse);
@@ -54,7 +61,9 @@ export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps
                 <h4 className="album_year">{album.year}</h4>
               </li>
             ))
-          : null}
+          : (
+            <h3 className="no-results" style={{marginLeft: '10px'}}>Ничего не найдено</h3>
+          )}
       </ul>
     </div>
   );

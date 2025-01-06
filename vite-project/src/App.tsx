@@ -35,7 +35,7 @@ function App() {
             <Route path="Auth" element={<AuthPage />}></Route>
             <Route path="Favorites" element={<FavoriteTracksPage />}></Route>
             <Route path='Artist/:quearySearch' element={<ArtistPage result={artist} onChangeAlbum={setAlbum}/>}></Route>
-            <Route path='Album/:quearySearch' element={<AlbumPage result={album} />}></Route>
+            <Route path='Album/:quearySearch' element={<AlbumPage result={album} onChangeArtist={setArtist} />}></Route>
           </Routes>
           </ArtistManagerContext.Provider>
       </TrackManagerContext.Provider>
