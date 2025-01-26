@@ -11,7 +11,7 @@ import { RootState } from "../store/store";
 
 export default function AlbumPage( {result, onChangeArtist }:any ) {
     const results: any = useSelector<RootState>(state => state.album);
-    const { tracks, albums, artist} = results;
+    const { tracks, albums, artist} = result;
     console.log(tracks);
     console.log(albums);
     console.log(artist);
