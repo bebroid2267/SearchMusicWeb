@@ -5,6 +5,8 @@ import { IAlbum } from '../../../wwwroot/js/Interfaces/Interfaces';
 import { useNavigate } from 'react-router-dom';
 import { getInfoArtist } from '../services/artistService';
 import { onChangeServer } from '../Pages/MainPage';
+import { useDispatch } from 'react-redux';
+import { setAlbumPage } from '../store/albumSlice';
 
 interface AlbumsProps {
   albums: any,
@@ -16,6 +18,7 @@ export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps
   const h2Class = className === 'artistPage' ? 'album-article-result' : 'artist-text';
   const ulClass = className === 'artistPage' ? 'result-albums-ul' : 'result_albums';
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleOpenAlbumPage = async (album: IAlbum) => {
     const dataTracks = await getInfoArtist('GetTracksAlbum', album.id.toString());
@@ -31,7 +34,7 @@ export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps
       albums: album,
       artist: artist
     };
-
+    dispatch(setAlbumPage(serverResponse));
     onChangeAlbum(serverResponse);
     navigate(`/Album/${album.title}`);
   };

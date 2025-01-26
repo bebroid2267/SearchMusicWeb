@@ -14,6 +14,7 @@ export default function Tracks({ tracks, className, classNameForTrackText }: Tra
   const trackManager = useTrackManager();
 
   const handleClick = (track: ITrack) => {
+    console.log(track);
     if (tracks && tracks.trackList) {
       trackManager.resultTracks!.length = 0;
       trackManager.resultTracks = [...tracks.trackList];

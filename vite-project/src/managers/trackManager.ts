@@ -256,6 +256,7 @@ export default class TrackManager {
         this.trackTitlePanel!.textContent = track.title;
         this.imgForGradient!.crossOrigin = 'anonymous';
         this.imgForGradient!.setAttribute('src', track.coverPath + '?t=' + new Date().getTime());
+        let mutableTrack: any;
 
         this.imgForGradient!.onload = () => {
             this.changeBackgroundMusicPanel();
@@ -266,28 +267,35 @@ export default class TrackManager {
             this.playTrack();
             this.trackForUrl!.removeEventListener('loadeddata', playAfterLoad);
         };
-
+        console.log('перед ифом');
+        console.log(track);
         if (!track.downloadUrl) {
+            console.log('запустили промиз епта');
             this.loadTrack(track.id)
                 .then((url: string): void => {
-                    track.downloadUrl = url;
-                    this.trackForUrl!.src = track.downloadUrl;
-
+                    mutableTrack  = track;
+                    console.log('в then ' + url);
+                    mutableTrack.downloadUrl = url;
+                    this.trackForUrl!.src = mutableTrack.downloadUrl;
+                    console.log(this.resultTracks);
+                    console.log(mutableTrack.downloadUrl);
                     for (let i = 0; i < this.resultTracks!.length; i++) {
-                        if (track.id === this.resultTracks![i].id) {
+                        console.log(track.id + ' and ' + this.resultTracks![i].id);
+                        if (mutableTrack.id === this.resultTracks![i].id) {
                             this.resultTracks![i].downloadUrl = url;
+                            console.log(this.resultTracks![i].downloadUrl);
                         }
                     }
 
                     this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);
                 })
-                .catch((error: unknown): void => {error}); // Уточненный тип ошибки
+                .catch((error: unknown): void => {console.log('thrash' + error)}); // Уточненный тип ошибки
         } else {
             this.trackForUrl!.src = track.downloadUrl;
             this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);
         }
 
-        this.setCurrentTrack(track);
-        console.log(track.album);
+        this.setCurrentTrack(mutableTrack);
+        console.log(mutableTrack.album);
     }
 }

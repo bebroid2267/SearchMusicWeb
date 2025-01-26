@@ -6,9 +6,15 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getInfoArtist } from "../services/artistService";
 import { onChangeServer } from "./MainPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 export default function AlbumPage( {result, onChangeArtist }:any ) {
-    const {tracks, albums, artist} = result;
+    const results: any = useSelector<RootState>(state => state.album);
+    const { tracks, albums, artist} = results;
+    console.log(tracks);
+    console.log(albums);
+    console.log(artist);
     const albumManager = useArtistManager();
     const navigate = useNavigate();
 
@@ -30,7 +36,6 @@ export default function AlbumPage( {result, onChangeArtist }:any ) {
           albums: dataAlbums,
           artist: artist
         };
-    
         onChangeArtist(serverResponse);
         navigate(`/Artist/${artist.name}`);
       };

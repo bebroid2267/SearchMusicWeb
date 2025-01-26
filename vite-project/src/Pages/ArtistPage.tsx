@@ -7,6 +7,7 @@ import Albums from "../customComponents/albums";
 import { useArtistManager } from "../contexts/TrackManagerContext";
 
 export default function ArtistPage({ result, onChangeAlbum }: any) {
+    console.log(result);
     const artistManager = useArtistManager();
     const {tracks, albums, artist} = result;
     console.log(albums);
