@@ -6,8 +6,7 @@ import ResultPage from './Pages/ResultPage';
 import { useMemo, useState } from 'react';
 import AuthPage from './Pages/AuthPage';
 import FavoriteTracksPage from './Pages/FavoriteTracksPage';
-import { ArtistManagerContext, TrackManagerContext } from './contexts/TrackManagerContext';
-import TrackManager from '../src/managers/trackManager';
+import { ArtistManagerContext, TrackManagerProvider } from './contexts/TrackManagerContext';
 import MusicPanel from './customComponents/musicPanel';
 import ArtistPage from './Pages/ArtistPage';
 import ArtistManager from './managers/ArtistManager';
@@ -19,10 +18,10 @@ function App() {
   const [artist, setArtist] = useState(null);
   const [album, setAlbum] = useState(null);
 
-  const trackManager = useMemo(() => new TrackManager(), []);
   const artistManger = useMemo(() => new ArtistManager(), []);
+
   return (
-      <TrackManagerContext.Provider value={trackManager}>
+      <TrackManagerProvider>
         <ArtistManagerContext.Provider value={artistManger}>
         <MusicPanel onChangeAlbum={setAlbum} onChangeArtist={setArtist}/>
         <MainPanel />
@@ -38,7 +37,7 @@ function App() {
             <Route path='Album/:quearySearch' element={<AlbumPage result={album} onChangeArtist={setArtist} />}></Route>
           </Routes>
           </ArtistManagerContext.Provider>
-      </TrackManagerContext.Provider>
+      </TrackManagerProvider>
   );
 }
 

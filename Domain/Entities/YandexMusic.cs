@@ -82,7 +82,7 @@ namespace search_musics.Domain.Entities
                 Album album = new Album();
                 album.id = item["albums"][0]["id"].ToString();
                 album.ArtistName = artist.Name;
-                album.CoverPath = GetCoverUri(item["albums"][0]["coverUri"].ToString(), "1000x1000");
+                album.CoverPath = GetCoverUri(item["albums"][0]["coverUri"]?.ToString(), "1000x1000");
                 album.Year = item["albums"][0]["year"] == null ? " " : item["albums"][0]["year"].ToString();
                 album.Title = item["albums"][0]["title"].ToString();
 
@@ -90,7 +90,7 @@ namespace search_musics.Domain.Entities
                     item["id"].ToString(),
                     item["title"].ToString(),
                     artist.Name,
-                    GetCoverUri(item["coverUri"].ToString(), "100x100"), 
+                    GetCoverUri(item["coverUri"]?.ToString(), "100x100"), 
                     artist,
                     album           
                 );
@@ -144,7 +144,7 @@ namespace search_musics.Domain.Entities
                     Album album = new Album();
                     album.id = track["albums"][0]["id"].ToString();
                     album.ArtistName = artist.Name;
-                    album.CoverPath = GetCoverUri(track["albums"][0]["coverUri"].ToString(), "1000x1000");
+                    album.CoverPath = GetCoverUri(track["albums"][0]["coverUri"]?.ToString(), "1000x1000");
                     album.Year = track["albums"][0]["year"] == null ? " " : track["albums"][0]["year"].ToString();
                     album.Title = track["albums"][0]["title"].ToString();
 
@@ -154,7 +154,7 @@ namespace search_musics.Domain.Entities
                         Id = track["id"].ToString(),
                         Title = track["title"].ToString(),
                         Artist = track["artists"][0]["name"].ToString(),
-                        CoverPath = GetCoverUri(track["coverUri"].ToString(),"100x100"),
+                        CoverPath = GetCoverUri(track["coverUri"]?.ToString(),"100x100"),
                         ArtistEntity = artist,
                         Album = album
                     });
@@ -191,7 +191,7 @@ namespace search_musics.Domain.Entities
                 Album album = new Album();
                 album.id = item["albums"][0]["id"].ToString();
                 album.ArtistName = artist.Name;
-                album.CoverPath = GetCoverUri(item["albums"][0]["coverUri"].ToString(), "1000x1000");
+                album.CoverPath = GetCoverUri(item["albums"][0]["coverUri"]?.ToString(), "1000x1000");
                 album.Year = item["albums"][0]["year"] == null ? " " : item["albums"][0]["year"].ToString();
                 album.Title = item["albums"][0]["title"].ToString();
 
@@ -201,7 +201,7 @@ namespace search_musics.Domain.Entities
                     Id = item["id"].ToString(),
                     Title = item["title"].ToString(),
                     Artist = item["artists"][0]["name"].ToString(),
-                    CoverPath = GetCoverUri(item["coverUri"].ToString(), "100x100"),
+                    CoverPath = GetCoverUri(item["coverUri"]?.ToString(), "100x100"),
                     ArtistEntity = artist,
                     Album = album
                 });
@@ -274,7 +274,7 @@ namespace search_musics.Domain.Entities
         }
         private static string GetCoverUri(string coverUri, string px)
         {
-            return coverUri != null ? "https://" + coverUri.Replace("%%", px) : null;
+            return coverUri != null ? "https://" + coverUri.Replace("%%", px) : "";
         }
     }
 }

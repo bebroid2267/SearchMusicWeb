@@ -1,9 +1,17 @@
 import React, { createContext, useContext } from 'react';
 import TrackManager from '../managers/trackManager';
 import ArtistManager from '../managers/ArtistManager';
+import { usePlayerManager } from '../customHooks/usePlayerManager';
+import { ITrack } from '../Interfaces';
 
+interface TrackManagerContextType {
+  trackManager: TrackManager;
+  changeTrackPanel: (track: ITrack) => void;
+  nextTrack: () => void;
+  prevTrack: () => void;
+}
 // Создаем контекст
-export const TrackManagerContext = createContext<TrackManager | null>(null);
+export const TrackManagerContext = createContext<TrackManagerContextType | null>(null);
 
 // Провайдер для контекста
 export const TrackManagerProvider = ({
@@ -12,9 +20,15 @@ export const TrackManagerProvider = ({
   children: React.ReactNode;
 }) => {
   const trackManager = new TrackManager();
+  const playerManager = usePlayerManager();
+
+  const contextValue: TrackManagerContextType = {
+    trackManager,
+    ...playerManager,
+  };
 
   return (
-    <TrackManagerContext.Provider value={trackManager}>
+    <TrackManagerContext.Provider value={contextValue}>
       {children}
     </TrackManagerContext.Provider>
   );

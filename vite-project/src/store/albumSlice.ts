@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IAlbum, IArtist, ITrack } from "../Interfaces";
 
-
+interface Tracks {
+    trackList: ITrack[];
+}
 export interface ResultState {
-    tracks: ITrack[];
-    albums: IAlbum[];
+    tracks: Tracks | null;
+    albums: IAlbum | null;
     artist: IArtist | null;
 }
 
-const initialState: ResultState = {
-    tracks: [],
-    albums: [],
+export const initialState: ResultState = {
+    tracks: null,
+    albums: null,
     artist: null,
 };
 
@@ -23,8 +25,13 @@ const albumSlice = createSlice({
             state.albums = action.payload.albums;
             state.artist = action.payload.artist
         },
+        updateTrackDownloadUrl: (state: any, action: { payload: any}) => {
+            state.tracks = state.tracks.map((t: any) => (t.id === action.payload.id ? 
+                { ...t, downloadUrl: action.payload.downloadUrl }
+                : t));
+        },
     }
 })
 
-export const { setAlbumPage } = albumSlice.actions;
+export const { setAlbumPage, updateTrackDownloadUrl } = albumSlice.actions;
 export default albumSlice.reducer;

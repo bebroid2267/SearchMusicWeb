@@ -360,6 +360,10 @@ li {
     align-items: center;
     color: floralwhite;
 }
+.music-panel canvas {
+    position: absolute;
+    z-index: 1;
+}
 
 .cover-panel {
     margin-top: 5px;

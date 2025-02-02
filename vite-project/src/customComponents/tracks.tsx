@@ -2,7 +2,12 @@ import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/favoritespage.css'
 import { ITrack } from '../Interfaces';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentTrack, selectPlaylist, setActualDownloadUrlPlaylist, setCurrentTrack, setPlaylist } from '../store/playerSlice';
+import { usePlayerManager } from '../customHooks/usePlayerManager';
 import { useTrackManager } from '../contexts/TrackManagerContext';
+import { RootState } from '../store/store';
+import { useEffect } from 'react';
 
 interface TracksProps {
   tracks: any;
@@ -11,17 +16,36 @@ interface TracksProps {
 }
 
 export default function Tracks({ tracks, className, classNameForTrackText }: TracksProps) {
+  const playerManager = usePlayerManager();
   const trackManager = useTrackManager();
+  const dispatch = useDispatch();
+  const { url, loading, error } = useSelector((state: RootState) => state.tracks);
+  const currentTrack = useSelector(selectCurrentTrack);
+  const playlist = useSelector(selectPlaylist);
 
   const handleClick = (track: ITrack) => {
-    console.log(track);
     if (tracks && tracks.trackList) {
-      trackManager.resultTracks!.length = 0;
-      trackManager.resultTracks = [...tracks.trackList];
+      dispatch(setPlaylist(tracks.trackList));
+      //trackManager.resultTracks = [...tracks.trackList];
     }
-
-    trackManager.changeTrackPanel(track);
+    playerManager.changeTrackPanel(track);
+    console.log('between changetracks panels');
+    console.log('after trackManager');
   };
+  useEffect(() => {
+      if (url) {
+        console.log(url);
+          dispatch(setActualDownloadUrlPlaylist({
+              neededTrack: currentTrack,
+                  url: url,
+          }));
+          console.log(currentTrack);
+          trackManager.trackManager.changeTrackPanel({ 
+            ...currentTrack,
+            downloadUrl: url
+          });
+      }
+  }, [url])
   
   return (
     <div className={'result-' + className}>

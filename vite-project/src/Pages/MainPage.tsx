@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import { getDifferentMusicResult } from '../services/musicService';
+import yaLogo from '../resources/ya loho2.jpg'
 
 export type onChangeServer = {
   tracks: any;
@@ -55,11 +56,10 @@ export default function MainPage({ onChange }: any) {
             className="btn_queary"
             id="btn_queary"
             style={{
-              backgroundImage: "url('/assets/yalogo.svg')",
               backgroundSize: 'cover',
               animation: 'pulse 1.5s infinite',
-            }}
-          ></button>
+            }}>
+            </button>
         </form>
       </div>
     </div>

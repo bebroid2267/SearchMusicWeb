@@ -1,12 +1,11 @@
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/artisttpagestyle.css'
-import { IAlbum } from '../../../wwwroot/js/Interfaces/Interfaces';
+import { IAlbum, ITrack } from '../Interfaces'
 import { useNavigate } from 'react-router-dom';
 import { getInfoArtist } from '../services/artistService';
-import { onChangeServer } from '../Pages/MainPage';
 import { useDispatch } from 'react-redux';
-import { setAlbumPage } from '../store/albumSlice';
+import { ResultState, setAlbumPage } from '../store/albumSlice';
 
 interface AlbumsProps {
   albums: any,
@@ -24,17 +23,19 @@ export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps
     const dataTracks = await getInfoArtist('GetTracksAlbum', album.id.toString());
     var artist;
     for (let index = 0; index < dataTracks.trackList.length; index++) {
+      dataTracks.trackList[index].downloadUrl = '';
       if (dataTracks.trackList[index].artistEntity.name === album.artistName)
       {
         artist = dataTracks.trackList[index].artistEntity;
       }
     }
-    const serverResponse: onChangeServer = {
+    const serverResponse: ResultState = {
       tracks: dataTracks,
       albums: album,
       artist: artist
     };
-    dispatch(setAlbumPage(serverResponse));
+    console.log(serverResponse);
+    //dispatch(setAlbumPage(serverResponse));
     onChangeAlbum(serverResponse);
     navigate(`/Album/${album.title}`);
   };
