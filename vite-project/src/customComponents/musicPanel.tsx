@@ -10,17 +10,21 @@ import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 import imgStop from '../../src/resources/pause.png';
 import { isCurrentTrackLiked, likedTrack } from '../services/musicService';
 import ButtonPanel from './buttonPanel';
-import { useSelector } from 'react-redux';
-import { selectCurrentTrack } from '../store/playerSlice';
-import { usePlayerManager } from '../customHooks/usePlayerManager';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentTrack, setActualDownloadUrlPlaylist, setCurrentTrack } from '../store/playerSlice';
+import { ITrack } from '../Interfaces';
+import store, { AppDispatch, RootState } from '../store/store';
+import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 
 export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
+  const dispatch = useDispatch<AppDispatch>();
   const currentReduxTrack = useSelector(selectCurrentTrack);
   const trackManager = useTrackManager();
 
   const [like, setLiked] = useState(false);
   const [image, setImage] = useState<any>(unlikeTrack);
   const [play, setPlay] = useState(false);
+  const { url, loading, error } = useSelector((state: RootState) => state.tracks);
 
   const [currentProgressBar, setCurrentProgressBar] = useState(null);
 
@@ -36,6 +40,14 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
   const nextTrackBtn = useRef<HTMLImageElement>(null);
   const prevTrackBtn = useRef<HTMLImageElement>(null);
 
+  const handleClick = (e: any) => {
+    const width = trackManager.trackManager.progressContainer!.clientWidth;
+    const clickX = e.offsetX;
+    const duration = trackManager.trackManager.trackForUrl!.duration;
+
+    trackManager.trackManager.trackForUrl!.currentTime = (clickX / width) * duration;
+  };
+
   useEffect(() => {
     trackManager.trackManager.trackForUrl = trackForUrl.current;
     trackManager.trackManager.playTrackBtn = playTrackBtn.current;
@@ -46,49 +58,46 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
     trackManager.trackManager.gradientDiv = panelForGradient.current;
     trackManager.trackManager.imgPlay = imgPlay;
     trackManager.trackManager.imgStop = imgStop;
+    trackManager.trackManager.imgForGradient = coverTrack.current;
     currentProgressBar;
   
     const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
 
-    const handleClick = (e: any) => {
-      const width = trackManager.trackManager.progressContainer!.clientWidth;
-      const clickX = e.offsetX;
-      const duration = trackManager.trackManager.trackForUrl!.duration;
-  
-      trackManager.trackManager.trackForUrl!.currentTime = (clickX / width) * duration;
-    };
   
     if (trackManager.trackManager.trackForUrl) {
       trackManager.trackManager.trackForUrl.addEventListener('timeupdate', updateProgress);
-      trackManager.trackManager.trackForUrl.addEventListener('ended', () => {
-        trackManager.nextTrack;
-        trackManager.trackManager.playTrack()
-      });
+      trackManager.trackManager.trackForUrl.addEventListener('ended', nextTrack);
     }
-    trackManager.trackManager.nextTrackBtn!.addEventListener('click', () => {
-      trackManager.nextTrack;
-      trackManager.trackManager.playTrack();
-    });
-    trackManager.trackManager.prevTrackBtn!.addEventListener('click', trackManager.prevTrack);
+    // trackManager.trackManager.nextTrackBtn!.addEventListener('click', () => {
+    //   console.log('произошел нужный клик');
+    //   nextTrack();
+    //   trackManager.trackManager.playTrack();
+    // });
+    // trackManager.trackManager.prevTrackBtn!.addEventListener('click', () => {
+    //   prevTrack();
+    //   trackManager.trackManager.playTrack();
+    // });
     trackManager.trackManager.progressContainer!.addEventListener('click', handleClick);
   
     return () => {
+      // console.log('вернули некст трек и остальные');
       if (trackManager.trackManager.trackForUrl) {
         trackManager.trackManager.trackForUrl.removeEventListener('timeupdate', updateProgress);
       }
-      trackManager.trackManager.nextTrackBtn!.removeEventListener('click', () => {
-        trackManager.nextTrack;
-        trackManager.trackManager.playTrack();
-      });
+      trackManager.trackManager.trackForUrl?.removeEventListener('ended', nextTrack);
+      // trackManager.trackManager.nextTrackBtn!.removeEventListener('click', () => {
+      //   nextTrack();
+      //   trackManager.trackManager.playTrack();
+      // });
 
-      trackManager.trackManager.prevTrackBtn!.removeEventListener('click', () => {
-        trackManager.nextTrack;
-        trackManager.trackManager.playTrack();
-      });
+      // trackManager.trackManager.prevTrackBtn!.removeEventListener('click', () => {
+      //   nextTrack();
+      //   trackManager.trackManager.playTrack();
+      // });
       
       trackManager.trackManager.progressContainer!.removeEventListener('click', handleClick);
     };
-  }, [trackManager.trackManager]);
+  },);
   
 
   useEffect(() => {
@@ -102,7 +111,7 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
       //trackManager.trackManager.setOnTrackChangeListener(null);
       trackManager.trackManager.setOnProgressBarChangeListener(null);
     };
-  }, [trackManager.trackManager]);
+  }, [currentReduxTrack.downloadUrl]);
   
 
   useEffect(() => {
@@ -139,49 +148,95 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
       }
       setLiked(!like);
   };
-
-  const changeBackgroundColorPanel = () => {
-    coverTrack.current!.crossOrigin = 'anonymous';
-    coverTrack.current!.setAttribute('src', currentReduxTrack.coverPath + '?t=' + new Date().getTime());
-    const ctx = canvas.current!.getContext('2d');
-
-    if (ctx && coverTrack.current) {
-      canvas.current!.width = coverTrack.current!.width;
-      canvas.current!.height = coverTrack.current!.height;
-      ctx.drawImage(coverTrack.current!, 0, 0, canvas.current!.width, canvas.current!.height);
-
-      const imageData = ctx.getImageData(0, 0, canvas.current!.width, canvas.current!.height);
-      const data = imageData.data;
-
-      let r = 0, g = 0, b = 0, count = 0;
-
-      for (let i = 0; i < data.length; i += 4) {
-          r += data[i];
-          g += data[i + 1];
-          b += data[i + 2];
-          count++;
-      }
-
-      r = Math.floor(r / count);
-      g = Math.floor(g / count);
-      b = Math.floor(b / count);
-
-      const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
-
-      panelForGradient.current!.style.background = gradient;
+  
+  const getIndexCurrentTrack = (track: ITrack): number => {
+    const playlist = store.getState().player.playlist;
+    if (playlist) {
+        for (let i = 0; i < playlist.length; i++) {
+            if (playlist[i].id === track.id) {
+                return i;
+            }
+        }
     }
+    return -1;
+}
+
+const nextTrack = (): void => {
+  console.log('next tracl');
+    const playlist = store.getState().player.playlist;
+    if (currentReduxTrack !== null) {
+        const indexCurrentTrack = getIndexCurrentTrack(currentReduxTrack);
+        if (playlist !== null) {
+            if (indexCurrentTrack === playlist.length - 1) {
+                changeTrackPanel(playlist[0]);
+            } else {
+                changeTrackPanel(playlist[indexCurrentTrack + 1]);
+            }
+        }
+        trackManager.trackManager.playTrack();
+    }
+};
+
+useEffect(() => {
+  if (url && url != currentReduxTrack.downloadUrl) {
+      dispatch(setActualDownloadUrlPlaylist({
+          neededTrack: currentReduxTrack,
+              url: url,
+      }));
+      console.log('сработал юз эффект на url 1');
+      trackManager.trackManager.changeTrackPanel({ 
+        ...currentReduxTrack,
+        downloadUrl: url
+      });    
   }
+}, [url])
+
+const changeTrackPanelTrackManager = () => {
+  const currentTrack: ITrack = store.getState().player.currentTrack;
+  console.log('метода changeTrackPanelTrackManager');
+  trackManager.trackManager.changeTrackPanel({ 
+    ...currentTrack
+  });    
+}
+
+const prevTrack = (): void => {
+  const playlist = store.getState().player.playlist;
+
+    if (currentReduxTrack !== null) {
+        const indexCurrentTrack = getIndexCurrentTrack(currentReduxTrack);
+        if (playlist !== null) {
+            if (indexCurrentTrack === 0) {
+                changeTrackPanel(playlist[playlist.length - 1]);
+            } else {
+                changeTrackPanel(playlist[indexCurrentTrack - 1]);
+            }
+        }
+        trackManager.trackManager.playTrack();
+    }
+ };
+
+ const changeTrackPanel = (track: ITrack) => {
+  dispatch(setCurrentTrack(track));
+  if (!track.downloadUrl){
+      dispatch(fetchUrl(track.id));
+  }
+  else {
+    changeTrackPanelTrackManager();
+  }
+};
+
+      
 
   return (
     <>
       <div className="music-panel" ref={panelForGradient} id="gradient-box">
         <canvas ref={canvas}></canvas>
         <img
+          src={currentReduxTrack.coverPath}
           alt="Обложка песни"
           ref={coverTrack}
           className="cover-panel"
           id="img-for-gradient"
-          onLoad={changeBackgroundColorPanel}
         />
         <div className="track-info-panel">
           <h3 className="track-title-panel">{currentReduxTrack.title}</h3>
@@ -189,7 +244,12 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
         </div>
         <audio id="track_for_url" ref={trackForUrl}></audio>
         <div className="music-buttons">
-          <img src={img1} className="prev-track-button" ref={prevTrackBtn} />
+          <img 
+            src={img1} 
+            className="prev-track-button"  
+            ref={prevTrackBtn} 
+            onClick={prevTrack}
+          />
           <img
             src={img2}
             onClick={handlePlayClick}
@@ -197,7 +257,12 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
             className="stop-track-button"
             id="play-music-btn"
           />
-          <img src={img3} className="next-track-button" ref={nextTrackBtn} />
+          <img 
+            src={img3} 
+            className="next-track-button" 
+            ref={nextTrackBtn} 
+            onClick={nextTrack}
+          />
         </div>
 
         <div className="progress__container" ref={progressContainer}>

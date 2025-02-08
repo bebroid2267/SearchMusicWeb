@@ -1,13 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentTrack, selectPlaylist, setActualDownloadUrlPlaylist, setCurrentTrack } from "../store/playerSlice";
+import { selectCurrentTrack, selectCurrentTrackMemo, selectPlaylist, selectPlaylistMemo, setActualDownloadUrlPlaylist, setCurrentTrack } from "../store/playerSlice";
 import { ITrack } from "../Interfaces";
 import { fetchUrl } from "../store/Middleware/fetchUrlForTrack";
 import { AppDispatch } from "../store/store";
+import { useEffect, useMemo, useRef } from 'react';
 
 export const usePlayerManager = () => {
     const dispatch = useDispatch<AppDispatch>();
     const playlist = useSelector(selectPlaylist);
     const currentTrack = useSelector(selectCurrentTrack);
+    const dataPlaylistRef = useRef<ITrack[]>(null);
+
 
     const changeTrackPanel = (track: ITrack) => {
         dispatch(setCurrentTrack(track));
@@ -16,10 +19,11 @@ export const usePlayerManager = () => {
         }
     };
 
-     function getIndexCurrentTrack(track: ITrack): number {
-        if (playlist !== null) {
-            for (let i = 0; i < playlist.length; i++) {
-                if (playlist[i].id == track.id) {
+     const getIndexCurrentTrack = (track: ITrack, playlist: ITrack[]): number => {
+        console.log(dataPlaylistRef.current);
+        if (dataPlaylistRef.current) {
+            for (let i = 0; i < dataPlaylistRef.current.length; i++) {
+                if (dataPlaylistRef.current[i].id === track.id) {
                     return i;
                 }
             }
@@ -28,10 +32,11 @@ export const usePlayerManager = () => {
     }
 
     const nextTrack = (): void => {
+        console.log('pered if');
         if (currentTrack !== null) {
-            const indexCurrentTrack = getIndexCurrentTrack(currentTrack);
-
+            const indexCurrentTrack = getIndexCurrentTrack(currentTrack, playlist);
             if (playlist !== null) {
+                console.log(indexCurrentTrack);
                 if (indexCurrentTrack === playlist.length - 1) {
                     changeTrackPanel(playlist[0]);
                 } else {
@@ -42,8 +47,8 @@ export const usePlayerManager = () => {
     };
 
     const prevTrack = (): void => {
-        if (currentTrack != null) {
-            const indexCurrentTrack = getIndexCurrentTrack(currentTrack);
+        if (playlist != null) {
+            const indexCurrentTrack = getIndexCurrentTrack(currentTrack, playlist);
 
             if (playlist !== null) {
                 if (indexCurrentTrack === 0) {

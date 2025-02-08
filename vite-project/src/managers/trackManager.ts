@@ -14,7 +14,6 @@ export default class TrackManager {
     public nextTrackBtn: HTMLImageElement | null = null;
     public prevTrackBtn: HTMLImageElement | null = null;
     public gradientDiv: HTMLDivElement | null = null;
-
     public imgPlay: any | null = null;
     public imgStop: any | null = null;
     public mainPanel: HTMLDivElement | null = null;
@@ -22,14 +21,14 @@ export default class TrackManager {
     private onTrackChange: any | null = null;
     private onProgressBarChange: any | null = null;
 
-    // private canvas: HTMLCanvasElement;
-    // private ctx: CanvasRenderingContext2D | null;
+    private canvas: HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D | null;
 
     constructor() {
 
         console.log('in const');
-        // this.canvas = document.createElement('canvas');
-        // this.ctx = this.canvas.getContext('2d');
+         this.canvas = document.createElement('canvas');
+         this.ctx = this.canvas.getContext('2d');
         this.onProgressBarChange;
 
         // Ищем элементы в DOM, если они уже существуют
@@ -174,91 +173,81 @@ export default class TrackManager {
     //         } 
     // )};
 
-    // changeBackgroundMainPanel() {
-    //     const currentImage = this.imgForGradient;
+    changeBackgroundMainPanel() {
+        const currentImage = this.imgForGradient;
 
-    //     if (this.ctx && currentImage) {
-    //         this.canvas.width = currentImage.width;
-    //         this.canvas.height = currentImage.height;
-    //         this.ctx.drawImage(currentImage, 0, 0, this.canvas.width, this.canvas.height);
+        if (this.ctx && currentImage) {
+            this.canvas.width = currentImage.width;
+            this.canvas.height = currentImage.height;
+            this.ctx.drawImage(currentImage, 0, 0, this.canvas.width, this.canvas.height);
 
-    //         const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    //         const data = imageData.data;
+            const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+            const data = imageData.data;
 
-    //         let r = 0, g = 0, b = 0, count = 0;
+            let r = 0, g = 0, b = 0, count = 0;
 
-    //         for (let i = 0; i < data.length; i += 4) {
-    //             r += data[i];
-    //             g += data[i + 1];
-    //             b += data[i + 2];
-    //             count++;
-    //         }
+            for (let i = 0; i < data.length; i += 4) {
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+                count++;
+            }
 
-    //         r = Math.floor(r / count);
-    //         g = Math.floor(g / count);
-    //         b = Math.floor(b / count);
+            r = Math.floor(r / count);
+            g = Math.floor(g / count);
+            b = Math.floor(b / count);
 
-    //         // Обновление градиента
-    //         const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
-    //         this.mainPanel!.style.background = gradient;
-    //         this.mainPanel!.style.background = gradient;
-    //     }
+            // Обновление градиента
+            const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
+            this.mainPanel!.style.background = gradient;
+            this.mainPanel!.style.background = gradient;
+        }
 
-    // }
-    // changeBackgroundMusicPanel() {
-    //     const currentImage = this.imgForGradient;
+    }
+    changeBackgroundMusicPanel() {
+        const currentImage = this.imgForGradient;
     
-    //         if (this.ctx && currentImage) {
-    //             this.canvas.width = currentImage.width;
-    //             this.canvas.height = currentImage.height;
-    //             this.ctx.drawImage(currentImage, 0, 0, this.canvas.width, this.canvas.height);
+            if (this.ctx && currentImage) {
+                this.canvas.width = currentImage.width;
+                this.canvas.height = currentImage.height;
+                this.ctx.drawImage(currentImage, 0, 0, this.canvas.width, this.canvas.height);
     
-    //             const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    //             const data = imageData.data;
+                const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                const data = imageData.data;
     
-    //             let r = 0, g = 0, b = 0, count = 0;
+                let r = 0, g = 0, b = 0, count = 0;
     
-    //             for (let i = 0; i < data.length; i += 4) {
-    //                 r += data[i];
-    //                 g += data[i + 1];
-    //                 b += data[i + 2];
-    //                 count++;
-    //             }
+                for (let i = 0; i < data.length; i += 4) {
+                    r += data[i];
+                    g += data[i + 1];
+                    b += data[i + 2];
+                    count++;
+                }
     
-    //             r = Math.floor(r / count);
-    //             g = Math.floor(g / count);
-    //             b = Math.floor(b / count);
+                r = Math.floor(r / count);
+                g = Math.floor(g / count);
+                b = Math.floor(b / count);
     
-    //             // Обновление градиента
-    //             const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
-    //             this.gradientDiv!.style.background = gradient;
-    //             this.gradientDiv!.style.background = gradient;
-    //         }
-    // }
+                // Обновление градиента
+                const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
+                this.gradientDiv!.style.background = gradient;
+                this.gradientDiv!.style.background = gradient;
+            }
+    }
     changeTrackPanel(track: ITrack): void {
-        // this.trackArtistPanel!.textContent = track.artist;
-        // this.trackTitlePanel!.textContent = track.title;
-        // this.imgForGradient!.crossOrigin = 'anonymous';
-        // this.imgForGradient!.setAttribute('src', track.coverPath + '?t=' + new Date().getTime());
+        this.imgForGradient!.crossOrigin = 'anonymous';
+        this.imgForGradient!.setAttribute('src', track.coverPath + '?t=' + new Date().getTime());
 
-        // this.imgForGradient!.onload = () => {
-        //     this.changeBackgroundMusicPanel();
-        //     this.changeBackgroundMainPanel();
-        // };
+        this.imgForGradient!.onload = () => {
+            this.changeBackgroundMusicPanel();
+            this.changeBackgroundMainPanel();
+        };
 
         const playAfterLoad = () => {
             this.playTrack();
             this.trackForUrl!.removeEventListener('loadeddata', playAfterLoad);
         };
-        console.log(track);
-        console.log(track.downloadUrl);
         this.trackForUrl!.src = track.downloadUrl;
-        // const dispatch = useDispatch();
-
-                    // dispatch(setActualDownloadUrlPlaylist({
-                    //     neededTrack: track,
-                    //     url: url,
-                    // }));
 
         this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);
         this.setCurrentTrack(track);

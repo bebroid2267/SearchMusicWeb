@@ -11,7 +11,9 @@ const tracksSlice = createSlice({
     name: 'tracks',
     initialState,
     reducers: {
-
+        setCurrentUrlWitoutFetch: (state: any, action: PayloadAction<string>) => {
+            state.url = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUrl.pending, (state) => {
@@ -29,5 +31,5 @@ const tracksSlice = createSlice({
     },
 });
 
-export const { } = tracksSlice.actions;
+export const { setCurrentUrlWitoutFetch } = tracksSlice.actions;
 export default tracksSlice.reducer;

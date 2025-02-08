@@ -3,11 +3,12 @@ import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/favoritespage.css'
 import { ITrack } from '../Interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentTrack, selectPlaylist, setActualDownloadUrlPlaylist, setCurrentTrack, setPlaylist } from '../store/playerSlice';
-import { usePlayerManager } from '../customHooks/usePlayerManager';
+import { setActualDownloadUrlPlaylist, setCurrentTrack, setPlaylist } from '../store/playerSlice';
 import { useTrackManager } from '../contexts/TrackManagerContext';
-import { RootState } from '../store/store';
+import store, { AppDispatch, RootState } from '../store/store';
 import { useEffect } from 'react';
+import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
+import { setCurrentUrlWitoutFetch } from '../store/tracksSlice';
 
 interface TracksProps {
   tracks: any;
@@ -16,30 +17,35 @@ interface TracksProps {
 }
 
 export default function Tracks({ tracks, className, classNameForTrackText }: TracksProps) {
-  const playerManager = usePlayerManager();
   const trackManager = useTrackManager();
-  const dispatch = useDispatch();
-  const { url, loading, error } = useSelector((state: RootState) => state.tracks);
-  const currentTrack = useSelector(selectCurrentTrack);
-  const playlist = useSelector(selectPlaylist);
+  const dispatch = useDispatch<AppDispatch>();
+  const { url } = useSelector((state: RootState) => state.tracks);
 
   const handleClick = (track: ITrack) => {
     if (tracks && tracks.trackList) {
       dispatch(setPlaylist(tracks.trackList));
-      //trackManager.resultTracks = [...tracks.trackList];
     }
-    playerManager.changeTrackPanel(track);
-    console.log('between changetracks panels');
-    console.log('after trackManager');
+    changeTrackPanel(track);
+  };
+
+  const changeTrackPanel = (track: ITrack) => {
+    dispatch(setCurrentTrack(track));
+    if (!track.downloadUrl){
+        dispatch(fetchUrl(track.id));
+    }
   };
   useEffect(() => {
-      if (url) {
-        console.log(url);
+    const currentTrack = store.getState().player.currentTrack;
+    dispatch(setCurrentUrlWitoutFetch(currentTrack.downloadUrl));
+  },);
+
+  useEffect(() => {
+    const currentTrack = store.getState().player.currentTrack;
+      if (url && url != currentTrack.downloadUrl) {
           dispatch(setActualDownloadUrlPlaylist({
               neededTrack: currentTrack,
                   url: url,
           }));
-          console.log(currentTrack);
           trackManager.trackManager.changeTrackPanel({ 
             ...currentTrack,
             downloadUrl: url

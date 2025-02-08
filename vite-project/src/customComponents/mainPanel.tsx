@@ -22,8 +22,8 @@ export default function MainPanel() {
   }, );
 
   useEffect(() => {
-    trackManager.mainPanel = mainPanel.current;
-  }, [trackManager.currentTrack])
+    trackManager.trackManager.mainPanel = mainPanel.current;
+  },)
 
   const handleLogout = () => {
     logout(); // Вызываем метод логаута

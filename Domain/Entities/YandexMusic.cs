@@ -76,7 +76,7 @@ namespace search_musics.Domain.Entities
             {
                 Artist artist = new Artist();
                 artist.Id = item["artists"][0]["id"].ToString();
-                artist.CoverPath = GetCoverUri(item["artists"][0]["cover"]["uri"].ToString(), "1000x1000");
+                artist.CoverPath = GetCoverUri(item["artists"][0]["cover"]?["uri"].ToString(), "1000x1000");
                 artist.Name = item["artists"][0]["name"].ToString();
 
                 Album album = new Album();
