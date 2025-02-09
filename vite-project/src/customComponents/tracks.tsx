@@ -3,12 +3,14 @@ import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/favoritespage.css'
 import { ITrack } from '../Interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActualDownloadUrlPlaylist, setCurrentTrack, setPlaylist } from '../store/playerSlice';
+import { setCurrentTrack, setPlaylist } from '../store/playerSlice';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import store, { AppDispatch, RootState } from '../store/store';
 import { useEffect } from 'react';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 import { setCurrentUrlWitoutFetch } from '../store/tracksSlice';
+import { isLikedTrack } from '../store/Middleware/isLikedTrack';
+import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 
 interface TracksProps {
   tracks: any;
@@ -19,9 +21,9 @@ interface TracksProps {
 export default function Tracks({ tracks, className, classNameForTrackText }: TracksProps) {
   const trackManager = useTrackManager();
   const dispatch = useDispatch<AppDispatch>();
-  const { url } = useSelector((state: RootState) => state.tracks);
 
   const handleClick = (track: ITrack) => {
+    dispatch(isLikedTrack(track));
     if (tracks && tracks.trackList) {
       dispatch(setPlaylist(tracks.trackList));
     }
@@ -33,26 +35,14 @@ export default function Tracks({ tracks, className, classNameForTrackText }: Tra
     if (!track.downloadUrl){
         dispatch(fetchUrl(track.id));
     }
+    trackManager.trackManager.playTrackBtn!.src = imgPlay;
   };
+  
   useEffect(() => {
     const currentTrack = store.getState().player.currentTrack;
     dispatch(setCurrentUrlWitoutFetch(currentTrack.downloadUrl));
   },);
 
-  useEffect(() => {
-    const currentTrack = store.getState().player.currentTrack;
-      if (url && url != currentTrack.downloadUrl) {
-          dispatch(setActualDownloadUrlPlaylist({
-              neededTrack: currentTrack,
-                  url: url,
-          }));
-          trackManager.trackManager.changeTrackPanel({ 
-            ...currentTrack,
-            downloadUrl: url
-          });
-      }
-  }, [url])
-  
   return (
     <div className={'result-' + className}>
       <h2 id={classNameForTrackText}>Треки</h2>

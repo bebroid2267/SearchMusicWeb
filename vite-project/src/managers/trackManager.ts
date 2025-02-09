@@ -83,95 +83,21 @@ export default class TrackManager {
         this.onProgressBarChange = callback;
     }
     
-    playTrackClick(): void {
-        if (!this.playTrackBtn) {
-            return;
-        }
-
-        this.isPlaying = !this.isPlaying;
-
-        if (this.isPlaying) {
-            this.pauseTrack();
-        } else {
-            this.playTrack();
-        }
-    }
-
     playTrack(): void {
         if (this.trackForUrl !== null) {
+            this.playTrackBtn!.src = this.imgStop;
             this.trackForUrl.play();
         }
     }
     pauseTrack(): void {
         if (this.trackForUrl !== null) {
+            this.playTrackBtn!.src = this.imgPlay;
             this.trackForUrl.pause();
         }
     }
-
-    // getIndexCurrentTrack(track: ITrack): number {
-    //     if (this.playlist !== null) {
-    //         for (let i = 0; i < this.playlist.length; i++) {
-    //             if (this.playlist[i].id == track.id) {
-    //                 return i;
-    //             }
-    //         }
-    //     }
-    //     return -1;
-    // }
-
-    // nextTrack(): void {
-    //     if (this.currentTrack !== null) {
-    //         const indexCurrentTrack = this.getIndexCurrentTrack(this.currentTrack);
-
-    //         if (this.playlist !== null) {
-    //             if (indexCurrentTrack === this.playlist.length - 1) {
-    //                 this.changeTrackPanel(this.playlist[0]);
-    //             } else {
-    //                 this.changeTrackPanel(this.playlist[indexCurrentTrack + 1]);
-    //                 console.log(this.playlist[indexCurrentTrack + 1]);
-    //             }
-    //         }
-    //         this.playTrack();
-    //     }
-    // }
-
-    // prevTrack(): void {
-    //     if (this.currentTrack != null) {
-    //         const indexCurrentTrack = this.getIndexCurrentTrack(this.currentTrack);
-
-    //         if (this.playlist !== null) {
-    //             if (indexCurrentTrack === 0) {
-    //                 this.changeTrackPanel(this.playlist[this.playlist.length - 1]);
-    //             } else {
-    //                 this.changeTrackPanel(this.playlist[indexCurrentTrack - 1]);
-    //             }
-    //         }
-    //         this.playTrack();
-    //     }
-    // }
-    // loadTrack(chooseTrackId: string): Promise<string> {
-    //     return new Promise((resolve, reject) => {
-
-    //             fetch(`https://localhost:44303/Home/GetUrlForTrack?trackId=${chooseTrackId}`, {
-    //             method: 'GET',
-    //             })
-    //             .then( response => {
-    //                 if (!response.ok) {
-    //                 }
-    //                 return response.text();
-    //             })
-    //             .then(url => {
-    //                 if (url) {
-    //                     resolve(url);
-    //                 } else {
-    //                     reject('url not found');
-    //                 }
-    //             })
-    //             .catch(error => {
-    //                 reject(error.method);
-    //             })
-    //         } 
-    // )};
+    clearTrack(): void {
+        this.trackForUrl!.src = '';
+    }
 
     changeBackgroundMainPanel() {
         const currentImage = this.imgForGradient;
@@ -247,10 +173,10 @@ export default class TrackManager {
             this.playTrack();
             this.trackForUrl!.removeEventListener('loadeddata', playAfterLoad);
         };
+        console.log(track);
         this.trackForUrl!.src = track.downloadUrl;
 
         this.trackForUrl!.addEventListener('loadeddata', playAfterLoad);
         this.setCurrentTrack(track);
-        
     }
 }

@@ -3,6 +3,7 @@ import { useTrackManager } from '../contexts/TrackManagerContext';
 import { getInfoArtist } from '../services/artistService';
 import { onChangeServer } from '../Pages/MainPage';
 import { useNavigate } from 'react-router-dom';
+import store from '../store/store';
 
 
 export default function ButtonPanel({onChangeAlbum, onChangeArtist}: any) {
@@ -10,13 +11,13 @@ export default function ButtonPanel({onChangeAlbum, onChangeArtist}: any) {
     const navigate = useNavigate();
 
       const handleOpenArtistPage = async () => {
-    
-        const dataTracks = await getInfoArtist('GetTracksArtist', trackManager.currentTrack!.artistEntity!.id);
-        const dataAlbums =  await getInfoArtist('GetAlbumsArtist', trackManager.currentTrack!.artistEntity!.id);
+        const currentTrack = store.getState().player.currentTrack;
+        const dataTracks = await getInfoArtist('GetTracksArtist', currentTrack.artistEntity!.id);
+        const dataAlbums =  await getInfoArtist('GetAlbumsArtist', currentTrack.artistEntity!.id);
         const serverResponse: onChangeServer = {
           tracks: dataTracks,
           albums: dataAlbums,
-          artist: trackManager.currentTrack?.artistEntity
+          artist: currentTrack.artistEntity
         };
     
         onChangeArtist(serverResponse);

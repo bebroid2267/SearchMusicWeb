@@ -20,7 +20,7 @@ export default function ArtistPage({ result, onChangeAlbum }: any) {
         artistManager.gradientDiv = panelForChangeColor.current;
 
         artistManager.changeArtist(artist);
-    })
+    }, )
     return (
         <div className="intro">
             <div className="intro_result">

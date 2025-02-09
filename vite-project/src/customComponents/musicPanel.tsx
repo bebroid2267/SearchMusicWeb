@@ -4,27 +4,28 @@ import img2 from '../../../wwwroot/lib/resources/play (2).jpg';
 import img3 from '../../../wwwroot/lib/resources/gray right.png';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import { useEffect, useRef, useState } from 'react';
-import likeTrack from '../../lib/resources/heartreal.png';
+import likeTrackImg from '../../lib/resources/heartreal.png';
 import unlikeTrack from '../../lib/resources/unheartreal.png';
 import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 import imgStop from '../../src/resources/pause.png';
-import { isCurrentTrackLiked, likedTrack } from '../services/musicService';
 import ButtonPanel from './buttonPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentTrack, setActualDownloadUrlPlaylist, setCurrentTrack } from '../store/playerSlice';
+import { selectCurrentTrack, selectIsPlaying, selectIsTrackLiked, setActualDownloadUrlPlaylist, setCurrentTrack, setIsPlay } from '../store/playerSlice';
 import { ITrack } from '../Interfaces';
 import store, { AppDispatch, RootState } from '../store/store';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
+import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
+import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 
-export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
+export default function MusicPanel(/*{onChangeAlbum, onChangeArtist}: any*/) {
   const dispatch = useDispatch<AppDispatch>();
+  console.log('render music panle');
   const currentReduxTrack = useSelector(selectCurrentTrack);
   const trackManager = useTrackManager();
+  const isTrackLiked = useSelector(selectIsTrackLiked);
 
-  const [like, setLiked] = useState(false);
   const [image, setImage] = useState<any>(unlikeTrack);
-  const [play, setPlay] = useState(false);
-  const { url, loading, error } = useSelector((state: RootState) => state.tracks);
+  const { url } = useSelector((state: RootState) => state.tracks);
 
   const [currentProgressBar, setCurrentProgressBar] = useState(null);
 
@@ -63,37 +64,18 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
   
     const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
 
-  
     if (trackManager.trackManager.trackForUrl) {
       trackManager.trackManager.trackForUrl.addEventListener('timeupdate', updateProgress);
       trackManager.trackManager.trackForUrl.addEventListener('ended', nextTrack);
     }
-    // trackManager.trackManager.nextTrackBtn!.addEventListener('click', () => {
-    //   console.log('произошел нужный клик');
-    //   nextTrack();
-    //   trackManager.trackManager.playTrack();
-    // });
-    // trackManager.trackManager.prevTrackBtn!.addEventListener('click', () => {
-    //   prevTrack();
-    //   trackManager.trackManager.playTrack();
-    // });
     trackManager.trackManager.progressContainer!.addEventListener('click', handleClick);
+    dispatch(setIsPlay(true));
   
     return () => {
-      // console.log('вернули некст трек и остальные');
       if (trackManager.trackManager.trackForUrl) {
         trackManager.trackManager.trackForUrl.removeEventListener('timeupdate', updateProgress);
       }
       trackManager.trackManager.trackForUrl?.removeEventListener('ended', nextTrack);
-      // trackManager.trackManager.nextTrackBtn!.removeEventListener('click', () => {
-      //   nextTrack();
-      //   trackManager.trackManager.playTrack();
-      // });
-
-      // trackManager.trackManager.prevTrackBtn!.removeEventListener('click', () => {
-      //   nextTrack();
-      //   trackManager.trackManager.playTrack();
-      // });
       
       trackManager.trackManager.progressContainer!.removeEventListener('click', handleClick);
     };
@@ -101,52 +83,50 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
   
 
   useEffect(() => {
-    //const handleTrackChange = (newTrack: any) => setCurrentTrack(newTrack);
     const handleProgressBarChange = (newProgressBar: any) => setCurrentProgressBar(newProgressBar);
-  
-    //trackManager.trackManager.setOnTrackChangeListener(handleTrackChange);
     trackManager.trackManager.setOnProgressBarChangeListener(handleProgressBarChange);
   
     return () => {
-      //trackManager.trackManager.setOnTrackChangeListener(null);
       trackManager.trackManager.setOnProgressBarChangeListener(null);
     };
   }, [currentReduxTrack.downloadUrl]);
   
 
+  const setLikeImage = () => {
+    const isLikedTrack = store.getState().player.isCurrentTrackLiked;
+    if (isLikedTrack) {
+      setImage(likeTrackImg)
+    } else {
+      setImage(unlikeTrack);
+    }
+  };
+  
   useEffect(() => {
-    const updateTrackLikedState = async () => {
-      const { isLiked, image } = await isCurrentTrackLiked(trackManager.trackManager, unlikeTrack, likeTrack);
-      setLiked(isLiked);
-      setImage(image);
-    };
-  
-    updateTrackLikedState();
-    trackManager.trackManager.playTrackBtn!.src = imgStop;
-  }, [currentReduxTrack]);
-  
-  
+    console.log('работаем');
+    setLikeImage();
+  }, [currentReduxTrack, isTrackLiked])
 
   const handlePlayClick = () => {
-    if (play) {
-      trackManager.trackManager.playTrackBtn!.src = imgPlay;
-      setPlay(false);
+    const isPlaying = store.getState().player.isPlaying;
+    if (isPlaying) {
+      console.log('нажали паузу');
       trackManager.trackManager.pauseTrack();
     } else {
-      trackManager.trackManager.playTrackBtn!.src = imgStop;
-      setPlay(true);
+      console.log('нажали плей');
       trackManager.trackManager.playTrack();
     }
+    dispatch(setIsPlay(!isPlaying));
   };
 
   const handleLike = async () => {      
-      await likedTrack(like, currentReduxTrack);
-      if (like) {
+    const isLikedTrack = store.getState().player.isCurrentTrackLiked;
+      if (isLikedTrack) {
+        dispatch(dislikeTrack(currentReduxTrack));
         setImage(unlikeTrack);
       } else {
-        setImage(likeTrack);
+        dispatch(likeTrack(currentReduxTrack));
+        setImage(likeTrackImg);
       }
-      setLiked(!like);
   };
   
   const getIndexCurrentTrack = (track: ITrack): number => {
@@ -162,14 +142,16 @@ export default function MusicPanel({onChangeAlbum, onChangeArtist}: any) {
 }
 
 const nextTrack = (): void => {
-  console.log('next tracl');
+  trackManager.trackManager.clearTrack();
     const playlist = store.getState().player.playlist;
     if (currentReduxTrack !== null) {
         const indexCurrentTrack = getIndexCurrentTrack(currentReduxTrack);
         if (playlist !== null) {
             if (indexCurrentTrack === playlist.length - 1) {
-                changeTrackPanel(playlist[0]);
+              dispatch(isLikedTrack(playlist[0]));            
+              changeTrackPanel(playlist[0]);
             } else {
+              dispatch(isLikedTrack(playlist[indexCurrentTrack + 1]));           
                 changeTrackPanel(playlist[indexCurrentTrack + 1]);
             }
         }
@@ -179,36 +161,44 @@ const nextTrack = (): void => {
 
 useEffect(() => {
   if (url && url != currentReduxTrack.downloadUrl) {
+    console.log('делаем раз');
       dispatch(setActualDownloadUrlPlaylist({
           neededTrack: currentReduxTrack,
               url: url,
       }));
-      console.log('сработал юз эффект на url 1');
       trackManager.trackManager.changeTrackPanel({ 
         ...currentReduxTrack,
         downloadUrl: url
       });    
   }
+  else if (url){
+    trackManager.trackManager.changeTrackPanel({ 
+      ...currentReduxTrack,
+    });    
+
+  }
 }, [url])
 
 const changeTrackPanelTrackManager = () => {
   const currentTrack: ITrack = store.getState().player.currentTrack;
-  console.log('метода changeTrackPanelTrackManager');
   trackManager.trackManager.changeTrackPanel({ 
     ...currentTrack
   });    
 }
 
 const prevTrack = (): void => {
+  trackManager.trackManager.clearTrack();
   const playlist = store.getState().player.playlist;
 
     if (currentReduxTrack !== null) {
         const indexCurrentTrack = getIndexCurrentTrack(currentReduxTrack);
         if (playlist !== null) {
             if (indexCurrentTrack === 0) {
-                changeTrackPanel(playlist[playlist.length - 1]);
+              dispatch(isLikedTrack(playlist[playlist.length - 1]));            
+              changeTrackPanel(playlist[playlist.length - 1]);
             } else {
-                changeTrackPanel(playlist[indexCurrentTrack - 1]);
+              dispatch(isLikedTrack(playlist[indexCurrentTrack - 1]));
+              changeTrackPanel(playlist[indexCurrentTrack - 1]);
             }
         }
         trackManager.trackManager.playTrack();
@@ -223,9 +213,8 @@ const prevTrack = (): void => {
   else {
     changeTrackPanelTrackManager();
   }
-};
 
-      
+};
 
   return (
     <>
@@ -271,7 +260,7 @@ const prevTrack = (): void => {
 
         <img className="like-track" onClick={handleLike} src={image} />
       </div>
-      <ButtonPanel onChangeAlbum={onChangeAlbum} onChangeArtist={onChangeArtist}/>
+      {/* <ButtonPanel onChangeAlbum={onChangeAlbum} onChangeArtist={onChangeArtist}/> */}
     </>
   );
 }

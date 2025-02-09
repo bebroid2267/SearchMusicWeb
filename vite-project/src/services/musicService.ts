@@ -40,13 +40,13 @@ export const getDifferentMusicResult = async (neededThing: string, queary: strin
   } catch (error) {
     return null;
   }
-
 };
 
 export const isCurrentTrackLiked = async (trackManager: TrackManager, unLikeTrack: any, likeTrack: any) => {
     const token = localStorage.getItem('token');
 
     if (!token || trackManager.currentTrack?.coverPath === 'test') {
+      console.log('PIDORAS');
       return { isLiked: false, image: unLikeTrack};
     }
 
@@ -56,8 +56,10 @@ export const isCurrentTrackLiked = async (trackManager: TrackManager, unLikeTrac
         'Content-Type': 'application/json',
       };
       await axios.get(`${API_URL}/${trackManager.currentTrack!.id}/likedthis`, { headers });
+      console.log('вернули true');
       return { isLiked: true, image: likeTrack };
     } catch (error) {
+      console.log('вернули false');
       return { isLiked: false, image: unLikeTrack };
     }
   
