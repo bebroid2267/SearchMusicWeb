@@ -5,12 +5,13 @@ import { useEffect, useRef } from "react";
 import Tracks from "../customComponents/tracks";
 import Albums from "../customComponents/albums";
 import { useArtistManager } from "../contexts/TrackManagerContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
-export default function ArtistPage({ result, onChangeAlbum }: any) {
-    console.log(result);
+export default function ArtistPage() {
     const artistManager = useArtistManager();
-    const {tracks, albums, artist} = result;
-    console.log(albums);
+    const results: any = useSelector<RootState>(state => state.artist);
+    const {tracks, albums, artist} = results;
 
     const coverArtist = useRef<HTMLImageElement>(null);
     const panelForChangeColor = useRef<HTMLDivElement>(null);
@@ -54,8 +55,7 @@ export default function ArtistPage({ result, onChangeAlbum }: any) {
                         />
                         <Albums
                             albums={albums}
-                            className={'artistPage'} 
-                            onChangeAlbum={onChangeAlbum}                        
+                            className={'artistPage'}                       
                          />
                     </div>
                 </div>

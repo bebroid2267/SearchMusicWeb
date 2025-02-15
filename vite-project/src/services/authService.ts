@@ -16,18 +16,30 @@ export const login = async (email: string, password: string) => {
   return response.data;
 };
 
-export const getCurrentUser = () => {
-  const token = localStorage.getItem('token');
+export const isUserAuthorised = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/isAuthorised`);
+    if (response) {
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+}
 
+export const getCurrentUser = async () => {
+  const token = localStorage.getItem('token');
   if (!token) {
     return null;
   }
-
-  try {
-    const decodedToken = jwtDecode<JwtPayload & { email: string }>(token);
-    return decodedToken;
-  } catch (error) {
-    return null;
+  const isUserAuth = await isUserAuthorised();
+  if (isUserAuth) {
+    try {
+      const decodedToken = jwtDecode<JwtPayload & { email: string }>(token);
+      return decodedToken;
+    } catch (error) {
+      return null;
+    }
   }
 };
 

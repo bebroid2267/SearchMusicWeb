@@ -4,17 +4,17 @@ import Tracks from "../customComponents/tracks";
 import { useArtistManager } from "../contexts/TrackManagerContext";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getInfoArtist } from "../services/artistService";
-import { onChangeServer } from "./MainPage";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { fetchAlbumsArtist, fetchTracksArtist } from "../store/Middleware/fetchDataPage";
+import { setArtist } from "../store/artistSlice";
 
-export default function AlbumPage( {result, onChangeArtist }:any ) {
+export default function AlbumPage() {
     const results: any = useSelector<RootState>(state => state.album);
-    console.log(result);
-    const { tracks, albums, artist} = result;
+    const { tracks, album, artist} = results;
     const albumManager = useArtistManager();
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
     const coverAlbum = useRef<HTMLImageElement>(null);
     const panelForChangeColor = useRef<HTMLDivElement>(null);
@@ -23,18 +23,14 @@ export default function AlbumPage( {result, onChangeArtist }:any ) {
         albumManager.coverArtist = coverAlbum.current;
         albumManager.gradientDiv = panelForChangeColor.current;
     
-        albumManager.changeAlbum(albums);
-    });
+        albumManager.changeAlbum(album);
+    }, );
 
       const handleOpenArtistPage = async () => {
-        const dataTracks = await getInfoArtist('GetTracksArtist', artist.id.toString());
-        const dataAlbums =  await getInfoArtist('GetAlbumsArtist', artist.id.toString());
-        const serverResponse: onChangeServer = {
-          tracks: dataTracks,
-          albums: dataAlbums,
-          artist: artist
-        };
-        onChangeArtist(serverResponse);
+        dispatch(fetchTracksArtist(artist.id));
+        dispatch(fetchAlbumsArtist(artist.id));
+        dispatch(setArtist(artist));
+
         navigate(`/Artist/${artist.name}`);
       };
 
@@ -46,16 +42,16 @@ export default function AlbumPage( {result, onChangeArtist }:any ) {
                     <div className="header-album-info">
                         <img 
                             className="album-cover"
-                            src={albums.coverPath}
+                            src={album.coverPath}
                             alt="обложка альбома"
                             ref={coverAlbum} 
                         />
                         <div className="about-album">
                             <div className="artist-album-cover" onClick={handleOpenArtistPage}>
-                                <img className="artist-album-cover-img" src={artist.coverPath} alt="" />
-                                <p className="album-article">{artist.name}</p>
+                                <img className="artist-album-cover-img" src={artist?.coverPath} alt="" />
+                                <p className="album-article">{artist?.name}</p>
                             </div>
-                            <h1>{albums.title}</h1>
+                            <h1>{album.title}</h1>
                             <div className="count-tracks">
 
                             </div>

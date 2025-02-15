@@ -36,6 +36,15 @@ namespace search_musics.Services
             return Ok(new { message = "User registered successfully" });
         }
 
+        [HttpGet("isUserAuthorised")]
+        public async Task<IActionResult> IsUserAuthorised()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) 
+                return Unauthorized();
+            return Ok();
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {

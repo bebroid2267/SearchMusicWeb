@@ -1,42 +1,47 @@
 import ImageMainMapel from '../../src/resources/kandinsky-download-1725187229371.jpeg';
 import '../../../wwwroot/css/site.css';
-import { useEffect, useRef, useState } from 'react';
-import { getCurrentUser, logout } from '../services/authService'; // Импортируем методы для работы с авторизацией
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import mainImg from '../../lib/resources/home.png'
 import favImg from '../../lib/resources/favorite.png'
 import exitImg from '../../lib/resources/exit.png'
 import enterImg from '../../lib/resources/user.png'
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../store/store';
+import { selectUserIsAuth, setCurrentUser, setLogoutUser } from '../store/userSlice';
+import { isUserAuth } from '../store/Middleware/isUserAuth';
+import { fetchLikedTracks } from '../store/Middleware/fetchDataPage';
 
 export default function MainPanel() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Состояние для авторизации
   const mainPanel = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const trackManager = useTrackManager();
 
+  const dispatch = useDispatch<AppDispatch>();
+  const isUserAuthorised = useSelector(selectUserIsAuth);
+
   useEffect(() => {
-    // Проверяем, есть ли текущий пользователь
-    const currentUser = getCurrentUser();
-    setIsAuthenticated(currentUser !== null); // Устанавливаем состояние в зависимости от наличия пользователя
+    dispatch(isUserAuth(null));
+    dispatch(setCurrentUser());
+
+    trackManager.trackManager.mainPanel = mainPanel.current;
   }, );
 
-  useEffect(() => {
-    trackManager.trackManager.mainPanel = mainPanel.current;
-  },)
-
   const handleLogout = () => {
-    logout(); // Вызываем метод логаута
-    setIsAuthenticated(false); // Обновляем состояние
+    dispatch(setLogoutUser());
   };
 
   const handleAuth = () => {
+    dispatch(setCurrentUser());
     navigate('/Auth');
   };
 
   const handleFavorites = () => {
+    dispatch(fetchLikedTracks(null));
     navigate('/Favorites');
   };
+  
   return (
     <div className="main-panel" ref={mainPanel}>
       <img src={ImageMainMapel} className="logo-service" alt="Service Logo" />
@@ -51,7 +56,7 @@ export default function MainPanel() {
           Фавориты
         </button>
 
-        {isAuthenticated ? ( <>
+        {isUserAuthorised ? ( <>
           <img src={exitImg} alt="exit" className='exit-img'/>
           <button className="btn-exit" onClick={handleLogout}>
             Выйти

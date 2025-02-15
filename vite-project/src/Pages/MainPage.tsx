@@ -3,8 +3,9 @@ import BackgroundVideo from '../customComponents/backVideo';
 import { useNavigate } from 'react-router-dom';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
-import { getDifferentMusicResult } from '../services/musicService';
-import yaLogo from '../resources/ya loho2.jpg'
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store/store';
+import { searchAlbums, searchArtists, searchTracks } from '../store/Middleware/fetchDataPage';
 
 export type onChangeServer = {
   tracks: any;
@@ -12,8 +13,8 @@ export type onChangeServer = {
   albums: any;
 };
 
-export default function MainPage({ onChange }: any) {
-
+export default function MainPage() {
+  const dispatch = useDispatch<AppDispatch>();
   const [queary, setQueary] = useState('');
   const navigate = useNavigate();
 
@@ -23,17 +24,10 @@ export default function MainPage({ onChange }: any) {
       alert('Введите запрос');
       return;
     }
+    dispatch(searchTracks(queary));
+    dispatch(searchAlbums(queary));
+    dispatch(searchArtists(queary));
 
-    const dataTracks = await getDifferentMusicResult('SearchTracks', queary);
-    const dataArtists = await getDifferentMusicResult('SearchArtists', queary);
-    const dataAlbums = await getDifferentMusicResult('SearchAlbums', queary);
-
-    const serverResponse: onChangeServer = {
-      tracks: dataTracks,
-      artist: dataArtists,
-      albums: dataAlbums,
-    };
-    onChange(serverResponse);
     navigate(`/Result/${queary}`);
   };
 

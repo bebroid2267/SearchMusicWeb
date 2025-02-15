@@ -161,7 +161,7 @@ namespace search_musics.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(Json(new { TrackList = likedTracks.ToArray() }));
+            return Ok(Json(likedTracks.ToArray()));
         }
     }
 }

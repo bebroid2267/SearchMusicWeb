@@ -10,14 +10,14 @@ import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 import imgStop from '../../src/resources/pause.png';
 import ButtonPanel from './buttonPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentTrack, selectIsPlaying, selectIsTrackLiked, setActualDownloadUrlPlaylist, setCurrentTrack, setIsPlay } from '../store/playerSlice';
+import { selectCurrentTrack, selectIsTrackLiked, setActualDownloadUrlPlaylist, setCurrentTrack, setIsPlay } from '../store/playerSlice';
 import { ITrack } from '../Interfaces';
 import store, { AppDispatch, RootState } from '../store/store';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 
-export default function MusicPanel(/*{onChangeAlbum, onChangeArtist}: any*/) {
+export default function MusicPanel() {
   const dispatch = useDispatch<AppDispatch>();
   console.log('render music panle');
   const currentReduxTrack = useSelector(selectCurrentTrack);
@@ -102,23 +102,25 @@ export default function MusicPanel(/*{onChangeAlbum, onChangeArtist}: any*/) {
   };
   
   useEffect(() => {
-    console.log('работаем');
     setLikeImage();
   }, [currentReduxTrack, isTrackLiked])
 
   const handlePlayClick = () => {
     const isPlaying = store.getState().player.isPlaying;
     if (isPlaying) {
-      console.log('нажали паузу');
       trackManager.trackManager.pauseTrack();
     } else {
-      console.log('нажали плей');
       trackManager.trackManager.playTrack();
     }
     dispatch(setIsPlay(!isPlaying));
   };
 
-  const handleLike = async () => {      
+  const handleLike = async () => {   
+    const isAuthUser = store.getState().user.isAuth;
+    if (!isAuthUser) {
+      return;
+    }   
+    
     const isLikedTrack = store.getState().player.isCurrentTrackLiked;
       if (isLikedTrack) {
         dispatch(dislikeTrack(currentReduxTrack));
@@ -161,7 +163,6 @@ const nextTrack = (): void => {
 
 useEffect(() => {
   if (url && url != currentReduxTrack.downloadUrl) {
-    console.log('делаем раз');
       dispatch(setActualDownloadUrlPlaylist({
           neededTrack: currentReduxTrack,
               url: url,
@@ -207,12 +208,12 @@ const prevTrack = (): void => {
 
  const changeTrackPanel = (track: ITrack) => {
   dispatch(setCurrentTrack(track));
-  if (!track.downloadUrl){
+  //if (!track.downloadUrl){
       dispatch(fetchUrl(track.id));
-  }
-  else {
+  //}
+  //else {
     changeTrackPanelTrackManager();
-  }
+  //}
 
 };
 
@@ -260,7 +261,7 @@ const prevTrack = (): void => {
 
         <img className="like-track" onClick={handleLike} src={image} />
       </div>
-      {/* <ButtonPanel onChangeAlbum={onChangeAlbum} onChangeArtist={onChangeArtist}/> */}
+      {<ButtonPanel/>}
     </>
   );
 }

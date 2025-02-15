@@ -104,15 +104,24 @@ namespace search_musics.Domain.Entities
         {
             var downloadInfo = _track.GetDownloadInfoWithToken(trackId).Result;
 
-            if (downloadInfo["result"] != null && downloadInfo["result"][0] != null && downloadInfo["result"][0]["downloadInfoUrl"] != null)
+            try
             {
-                var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString();
-                var directLink = _track.GetDirectLink(downloadInfoUrl).Result;
+                if (downloadInfo["result"] != null && downloadInfo["result"][0] != null && downloadInfo["result"][0]["downloadInfoUrl"] != null)
+                {
+                    var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString();
+                    var directLink = _track.GetDirectLink(downloadInfoUrl).Result;
 
-                return directLink;
+                    return directLink;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch
+            {
                 return null;
+            }
         }
         public static List<Track> GetTracksAlbum(string albumId)
         {

@@ -1,37 +1,56 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAlbum, IArtist, ITrack } from "../Interfaces";
+import { fetchTracksAlbum } from "./Middleware/fetchDataPage";
 
 interface Tracks {
     trackList: ITrack[];
 }
 export interface ResultState {
     tracks: Tracks | null;
-    albums: IAlbum | null;
+    album: IAlbum | null;
     artist: IArtist | null;
 }
 
-export const initialState: ResultState = {
+export interface IAlbumState {
+    tracks: ITrack[] | null;
+    album: IAlbum | null;
+    artist: IArtist | null;
+    artistName: string,
+}
+
+export const initialState: IAlbumState = {
     tracks: null,
-    albums: null,
+    album: null,
     artist: null,
+    artistName: ''
 };
 
 const albumSlice = createSlice({
     name: 'album',
     initialState,
     reducers: {
-        setAlbumPage: (state: ResultState, action: { payload: ResultState}) => {
-            state.tracks = action.payload.tracks;
-            state.albums = action.payload.albums;
-            state.artist = action.payload.artist
+        setArtistName: (state: any, action: PayloadAction<string>) => {
+            state.artistName = action.payload;
         },
-        updateTrackDownloadUrl: (state: any, action: { payload: any}) => {
-            state.tracks = state.tracks.map((t: any) => (t.id === action.payload.id ? 
-                { ...t, downloadUrl: action.payload.downloadUrl }
-                : t));
+        setAlbum: (state: any, action: PayloadAction<IAlbum>) => {
+            state.album = action.payload;
         },
-    }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchTracksAlbum.fulfilled, (state, action: PayloadAction<ITrack[]>) => {
+            state.tracks = action.payload;
+
+            if (state.tracks) {
+                for (const track of state.tracks) {
+                    if (track && track.artistEntity && track.artistEntity.name === state.artistName) {
+                        state.artist = track.artistEntity;
+                        break;
+                    }            
+                }    
+            }
+        });
+    },
 })
 
-export const { setAlbumPage, updateTrackDownloadUrl } = albumSlice.actions;
+export const { setArtistName, setAlbum } = albumSlice.actions;
 export default albumSlice.reducer;

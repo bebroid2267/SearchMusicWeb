@@ -2,29 +2,25 @@ import '../../../wwwroot/css/favoritespage.css'
 import BackgroundVideo from '../customComponents/backVideo';
 import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from 'react';
-import { ITrack } from '../../../wwwroot/js/Interfaces/Interfaces';
-import {fetchLikedTracks} from '../services/musicService.ts'
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLikedTracks } from '../store/searchDataSlice';
+import { selectUserIsAuth, setCurrentUser } from '../store/userSlice';
+import { AppDispatch } from '../store/store';
 
-export default function ResultPage() {
-  const [tracks, setTracks] = useState<ITrack[]>([]); // Состояние для треков
+export default function FavoritePage() {
+  const tracks = useSelector(selectLikedTracks);
+  const isAuth = useSelector(selectUserIsAuth);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const likedTracks = async () => {
-      const tracks = await fetchLikedTracks();
-      if (tracks == null) {
-        navigate('/Auth')
-        return;
+      if (!isAuth) {
+        dispatch(setCurrentUser());
+        navigate('/Auth');
       }
-      if (tracks != undefined) {
-        setTracks(tracks);
-      }
-    };   
-
-    likedTracks();
-  }, []);
+  },);
 
   return (
     <div className="intro">

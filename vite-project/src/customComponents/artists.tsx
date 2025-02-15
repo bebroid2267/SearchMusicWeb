@@ -1,23 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
-import { IArtist } from '../../../wwwroot/js/Interfaces/Interfaces';
-import { getInfoArtist } from '../services/artistService';
-import { onChangeServer } from '../Pages/MainPage';
+import { IArtist } from '../Interfaces';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store/store';
+import { fetchAlbumsArtist, fetchTracksArtist } from '../store/Middleware/fetchDataPage';
+import { setArtist } from '../store/artistSlice';
 
-export default function Artists({ artists, onChangeArtist }: any) {
+export default function Artists({ artists }: any) {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
   const handleOpenArtistPage = async (artist: IArtist) => {
+    dispatch(fetchTracksArtist(artist.id));
+    dispatch(fetchAlbumsArtist(artist.id));
+    dispatch(setArtist(artist));
 
-    const dataTracks = await getInfoArtist('GetTracksArtist', artist.id.toString());
-    const dataAlbums =  await getInfoArtist('GetAlbumsArtist', artist.id.toString());
-    const serverResponse: onChangeServer = {
-      tracks: dataTracks,
-      albums: dataAlbums,
-      artist: artist
-    };
-
-    onChangeArtist(serverResponse);
     navigate(`/Artist/${artist.name}`);
   };
 
@@ -25,8 +23,8 @@ export default function Artists({ artists, onChangeArtist }: any) {
     <div className="artists">
       <h2 id="artist-text">Артисты</h2>
       <ul className="result-artists">
-        {artists && artists.artistList
-          ? artists.artistList.map((artist: IArtist) => (
+        {artists
+          ? artists.map((artist: IArtist) => (
               <li
                 key={artist.id}
                 data-id={artist.id}

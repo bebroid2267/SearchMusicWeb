@@ -1,42 +1,29 @@
 import '../../../wwwroot/css/result.css';
 import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/artisttpagestyle.css'
-import { IAlbum, ITrack } from '../Interfaces'
+import { IAlbum } from '../Interfaces'
 import { useNavigate } from 'react-router-dom';
-import { getInfoArtist } from '../services/artistService';
 import { useDispatch } from 'react-redux';
-import { ResultState, setAlbumPage } from '../store/albumSlice';
+import { setAlbum, setArtistName } from '../store/albumSlice';
+import { AppDispatch } from '../store/store';
+import { fetchTracksAlbum } from '../store/Middleware/fetchDataPage';
 
 interface AlbumsProps {
   albums: any,
   className: any,
-  onChangeAlbum: any
 }
-export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps) {
+export default function Albums({ albums, className }: AlbumsProps) {
   const divClass = className === 'artistPage' ? 'artist-result-albums' : 'albums';
   const h2Class = className === 'artistPage' ? 'album-article-result' : 'artist-text';
   const ulClass = className === 'artistPage' ? 'result-albums-ul' : 'result_albums';
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleOpenAlbumPage = async (album: IAlbum) => {
-    const dataTracks = await getInfoArtist('GetTracksAlbum', album.id.toString());
-    var artist;
-    for (let index = 0; index < dataTracks.trackList.length; index++) {
-      dataTracks.trackList[index].downloadUrl = '';
-      if (dataTracks.trackList[index].artistEntity.name === album.artistName)
-      {
-        artist = dataTracks.trackList[index].artistEntity;
-      }
-    }
-    const serverResponse: ResultState = {
-      tracks: dataTracks,
-      albums: album,
-      artist: artist
-    };
-    console.log(serverResponse);
-    //dispatch(setAlbumPage(serverResponse));
-    onChangeAlbum(serverResponse);
+    dispatch(fetchTracksAlbum(album.id.toString()));
+    dispatch(setArtistName(album.artistName));
+    dispatch(setAlbum(album));
+    
     navigate(`/Album/${album.title}`);
   };
 
@@ -44,8 +31,8 @@ export default function Albums({ albums, className, onChangeAlbum }: AlbumsProps
     <div className={divClass}>
       <h2 id={h2Class}>Альбомы</h2>
       <ul className={ulClass}>
-        {albums && albums.albumList
-          ? albums.albumList.map((album: IAlbum) => (
+        {albums 
+          ? albums.map((album: IAlbum) => (
               <li
                 onClick={() => {handleOpenAlbumPage(album)}}
                 key={album.id}

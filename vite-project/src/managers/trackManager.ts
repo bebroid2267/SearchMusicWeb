@@ -31,18 +31,15 @@ export default class TrackManager {
          this.ctx = this.canvas.getContext('2d');
         this.onProgressBarChange;
 
-        // Ищем элементы в DOM, если они уже существуют
         this.trackForUrl = document.querySelector('#track_for_url') as HTMLAudioElement | null;
         
         this.isPlaying = false;
 
-        // Используем document.createElement для создания новых элементов, если они не существуют в DOM
         this.playTrackBtn = document.querySelector('#play-music-btn') as HTMLImageElement | null;
         this.imgForGradient = document.querySelector('#img-for-gradient') as HTMLImageElement | null;
         this.trackArtistPanel = document.querySelector('.track-artist-panel') as HTMLHeadingElement | null;
         this.trackTitlePanel = document.querySelector('.track-title-panel') as HTMLParagraphElement | null;
 
-        // Если элементы не найдены в DOM, создаем их
         if (!this.trackForUrl) {
             this.trackForUrl = document.createElement('audio');
         }
@@ -123,7 +120,6 @@ export default class TrackManager {
             g = Math.floor(g / count);
             b = Math.floor(b / count);
 
-            // Обновление градиента
             const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
             this.mainPanel!.style.background = gradient;
             this.mainPanel!.style.background = gradient;
@@ -154,7 +150,6 @@ export default class TrackManager {
                 g = Math.floor(g / count);
                 b = Math.floor(b / count);
     
-                // Обновление градиента
                 const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
                 this.gradientDiv!.style.background = gradient;
                 this.gradientDiv!.style.background = gradient;
