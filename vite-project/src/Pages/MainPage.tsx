@@ -6,6 +6,8 @@ import '../../../wwwroot/css/site.css';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
 import { searchAlbums, searchArtists, searchTracks } from '../store/Middleware/fetchDataPage';
+import Input from '../customComponents/mainInput';
+import { setQuearyUser } from '../store/searchDataSlice';
 
 export type onChangeServer = {
   tracks: any;
@@ -24,6 +26,8 @@ export default function MainPage() {
       alert('Введите запрос');
       return;
     }
+    dispatch(setQuearyUser(queary));
+    
     dispatch(searchTracks(queary));
     dispatch(searchAlbums(queary));
     dispatch(searchArtists(queary));
@@ -34,28 +38,13 @@ export default function MainPage() {
   return (
     <div className="intro">
       <BackgroundVideo />
-      <div className="intro__content">
-        <h1 className='intro-text'>Найти трек. Легко.</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            className="text_queary"
-            name="Queary"
-            id="input_queary"
-            placeholder="Ник артиста или название трека"
-            value={queary}
-            onChange={(e) => setQueary(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="btn_queary"
-            id="btn_queary"
-            style={{
-              backgroundSize: 'cover',
-              animation: 'pulse 1.5s infinite',
-            }}>
-            </button>
-        </form>
-      </div>
+        <div className="intro__content">
+        <h1 className='intro-text'>Погрузитесь в звезды</h1>
+          <h2 className='intro-text-h2'>Музыка, способная разбудить галактики!</h2>
+          <form onSubmit={handleSubmit} className='form-container'>
+            <Input id={"input_queary"} value={queary} name={"Queary"} onChange={setQueary}></Input>
+          </form>
+        </div>
     </div>
   );
 }

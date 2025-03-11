@@ -5,7 +5,7 @@ body {
     scrollbar-color: gray;
 }
 .intro {
-    position: fixed;
+    position: block;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,9 +16,30 @@ body {
     display: block;
 }
 
-.intro-text, .text_queary {
+.intro-text {
+    font-weight: 900;
+    font-size: 40px;
+    text-align: center;
     position: relative;
-    left: 9%;
+    width: auto;
+    height: auto;
+}
+.intro-text-h2 {
+    font-size: 21px;
+    text-align: center;
+    position: relative;
+    width: auto;
+    height: auto;   
+    color: gray;
+    font-weight: 700;
+}
+
+.form-container {
+    position: relative;
+    display: flex;
+    min-width: 150px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .intro__media {
@@ -58,8 +79,10 @@ body {
     margin: 0 auto;
     top: 150px;
     z-index: 5;
-    width: 400px;
-    border-radius: 15%;
+    width: 500px;
+    border-radius: 20px;
+    justify-content: center;
+    height: auto;
 } 
 .result-tracks {
     color: whitesmoke;

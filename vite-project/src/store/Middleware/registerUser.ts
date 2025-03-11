@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = 'https://localhost:44303/api/account';
+const API_URL = 'https://a32947-624e.t.d-f.pw/api/account';
 
 export type propForRegister = {
     email: string,
