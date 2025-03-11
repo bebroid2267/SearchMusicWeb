@@ -45,7 +45,7 @@ export default function MainPanel() {
   return (
     <div className="main-panel" ref={mainPanel}>
       <img src={ImageMainMapel} className="logo-service" alt="Service Logo" />
-      <p className="name-service">Mell Music</p>
+      <p className="name-service">Спайси</p>
       <div className="button-container-main-panel">
         <img src={favImg} alt="fav" className='fav-img' />
         <button onClick={() => navigate('/')} className="btn-home">

@@ -12,6 +12,7 @@ import ArtistPage from './Pages/ArtistPage';
 import ArtistManager from './managers/ArtistManager';
 import MainPanel from './customComponents/mainPanel';
 import AlbumPage from './Pages/AlbumPage';
+import { ArtistTracksPage } from './Pages/ArtistTracksPage';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="Favorites" element={<FavoriteTracksPage />}></Route>
             <Route path='Artist/:quearySearch' element={<ArtistPage/>}></Route>
             <Route path='Album/:quearySearch' element={<AlbumPage />}></Route>
+            <Route path='Artist/:querySearch/tracks' element={<ArtistTracksPage/>}></Route>
           </Routes>
           </ArtistManagerContext.Provider>
       </TrackManagerProvider>

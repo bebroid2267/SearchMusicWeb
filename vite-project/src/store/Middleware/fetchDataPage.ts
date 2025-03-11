@@ -2,16 +2,43 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const API_URL = 'https://localhost:44303/Home';
 
+export type artistProps = {
+    artistId: string;
+    pageSize: number;
+    page: number;
+}
+
 export const fetchTracksArtist = createAsyncThunk(
     'artist/fetchTracks',
-    async (artistId: string, { rejectWithValue}) => {
+    async (artistProps: artistProps, { rejectWithValue}) => {
         try {
+            console.log(artistProps);
             const response = await fetch(`${API_URL}/GetTracksArtist`, { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({Queary: artistId}),
+                body: JSON.stringify({Queary: artistProps.artistId, PageSize: artistProps.pageSize, Page: artistProps.page}),
+            });
+            const artists = await response.json();
+            return artists.trackList;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const fetchTracksArtistPage = createAsyncThunk(
+    'artist/fetchTracksPage',
+    async (artistProps: artistProps, { rejectWithValue}) => {
+        try {
+            console.log(artistProps);
+            const response = await fetch(`${API_URL}/GetTracksArtist`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({Queary: artistProps.artistId, PageSize: artistProps.pageSize, Page: artistProps.page}),
             });
             const artists = await response.json();
             return artists.trackList;
@@ -39,6 +66,7 @@ export const fetchAlbumsArtist = createAsyncThunk(
         }
     }
 );
+
 
 export const fetchTracksAlbum = createAsyncThunk(
     'album/fetchTracks',

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { fetchAlbumsArtist, fetchTracksArtist } from "../store/Middleware/fetchDataPage";
 import { setArtist } from "../store/artistSlice";
+import '../../../wwwroot/css/artistTracksPage.css'
 
 export default function AlbumPage() {
     const results: any = useSelector<RootState>(state => state.album);
@@ -23,11 +24,16 @@ export default function AlbumPage() {
         albumManager.coverArtist = coverAlbum.current;
         albumManager.gradientDiv = panelForChangeColor.current;
     
+        console.log(results);
         albumManager.changeAlbum(album);
     }, );
 
       const handleOpenArtistPage = async () => {
-        dispatch(fetchTracksArtist(artist.id));
+        dispatch(fetchTracksArtist({
+            artistId: artist.id,
+            page: 0,
+            pageSize: 10,
+        }));
         dispatch(fetchAlbumsArtist(artist.id));
         dispatch(setArtist(artist));
 
@@ -38,7 +44,42 @@ export default function AlbumPage() {
         <div className="intro">
             <div className="intro_result">
             <BackgroundVideo />
-                <div className="album-container" ref={panelForChangeColor}>
+
+            <div className="artist-page-container">
+                    <div className="header-artist-info" ref={panelForChangeColor}>
+                            <div className="inline-container-tracks">
+                                <div className="info-container">
+                                    <p className="album-article">Альбом</p>
+                                    <p className="all-tracks-article-album">{album?.title}</p>
+                                    <div className="container-cover-artist">
+                                        <img className="cover-artist-album" src={artist?.coverPath} alt="" />
+                                        <h2 className="artist-name-article-album" onClick={handleOpenArtistPage}>{album?.artistName}</h2>
+                                    </div>
+                                </div>
+                                <img 
+                                    className="album-cover-tracks" 
+                                    src={album.coverPath} 
+                                    alt="обложка артиста" 
+                                    ref={coverAlbum}
+                                />
+                            </div>
+                        </div>
+                    <div className="artist-container">
+                        <div className="results">
+                            <Tracks 
+                                handleOpenTracks={null}
+                                tracks={tracks} 
+                                className={'artistTracks-ul'} 
+                                classNameForTrackText={'artist-page-tracks-h2'} 
+                                neededBtn={false}
+                                isArtistTracksPage={false}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* <div className="album-container" ref={panelForChangeColor}>
                     <div className="header-album-info">
                         <img 
                             className="album-cover"
@@ -58,11 +99,12 @@ export default function AlbumPage() {
                         </div>
                     </div>
                     <Tracks 
+                        handleOpenTracks={null}
                         tracks={tracks}
                         className={'result-tracks-ul'}
                         classNameForTrackText={'no-style'}
                     />
-                </div>
+                </div> */}
             </div>
         </div>
     );

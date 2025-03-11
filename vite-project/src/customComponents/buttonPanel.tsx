@@ -16,7 +16,11 @@ export default function ButtonPanel() {
       const handleOpenArtistPage = async () => {
         const currentTrack = store.getState().player.currentTrack;
 
-        dispatch(fetchTracksArtist(currentTrack.artistEntity!.id));
+        dispatch(fetchTracksArtist({
+            artistId: currentTrack.artistEntity!.id,
+            page: 0,
+            pageSize: 10,
+        }));
         dispatch(fetchAlbumsArtist(currentTrack.artistEntity!.id));
         dispatch(setArtist(currentTrack.artistEntity!));
 

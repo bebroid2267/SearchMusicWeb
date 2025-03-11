@@ -3,6 +3,7 @@ import { IAlbum, IArtist } from "../Interfaces";
 export default class ArtistManager {
     public coverArtist: HTMLImageElement | null = null;
     public gradientDiv: HTMLDivElement | null = null;
+    public gradientDivBetweenPanel: HTMLDivElement | null = null;
 
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D | null;
@@ -13,7 +14,7 @@ export default class ArtistManager {
 
     }
 
-    private changeBackgroundArtistPanel() {
+    public changeBackgroundArtistPanel() {
         const currentImage = this.coverArtist;
 
         if (this.ctx && currentImage) {
@@ -38,9 +39,11 @@ export default class ArtistManager {
             b = Math.floor(b / count);
 
             // Обновление градиента
-            const gradient = `linear-gradient(to bottom, rgb(67,67,69), rgb(${r},${g},${b}))`;
+            const gradient = `rgb(${r},${g},${b}, 1)`;
             this.gradientDiv!.style.background = gradient;
-            this.gradientDiv!.style.background = gradient;
+            if (this.gradientDivBetweenPanel) {
+                this.gradientDivBetweenPanel!.style.background = gradient;
+            }
         }
 
     }

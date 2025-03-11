@@ -120,9 +120,10 @@ export default class TrackManager {
             g = Math.floor(g / count);
             b = Math.floor(b / count);
 
-            const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
+            const gradient = `rgb(${0},${0},${0}, 0.3)`;
             this.mainPanel!.style.background = gradient;
-            this.mainPanel!.style.background = gradient;
+            this.mainPanel!.style.backdropFilter = `blur(10px)`;
+            // this.mainPanel!.style.background = gradient;
         }
 
     }
@@ -150,8 +151,9 @@ export default class TrackManager {
                 g = Math.floor(g / count);
                 b = Math.floor(b / count);
     
-                const gradient = `linear-gradient(to left, rgb(67,67,69), rgb(${r},${g},${b}))`;
+                const gradient = `rgb(${r},${g},${b}, 0.4)`;
                 this.gradientDiv!.style.background = gradient;
+                this.gradientDiv!.style.backdropFilter = `blur(10px)`;
                 this.gradientDiv!.style.background = gradient;
             }
     }

@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { setAlbum, setArtistName } from '../store/albumSlice';
 import { AppDispatch } from '../store/store';
 import { fetchTracksAlbum } from '../store/Middleware/fetchDataPage';
+import { useEffect, useRef, useState } from 'react';
+import Button from './buttonScrollAlbums';
 
 interface AlbumsProps {
   albums: any,
@@ -16,8 +18,22 @@ export default function Albums({ albums, className }: AlbumsProps) {
   const divClass = className === 'artistPage' ? 'artist-result-albums' : 'albums';
   const h2Class = className === 'artistPage' ? 'album-article-result' : 'artist-text';
   const ulClass = className === 'artistPage' ? 'result-albums-ul' : 'result_albums';
+  
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
+  const nextAlbumBtn = useRef<HTMLButtonElement>(null);
+  const prevAlbumBtn = useRef<HTMLButtonElement>(null);
+  const albumsList = useRef<HTMLUListElement>(null);
+  const albumElement = useRef<HTMLLIElement>(null);
+
+  const [itemWidth, setItemWidth] = useState(0);
+
+  useEffect(() => {
+    if (albumsList.current && albumsList.current.querySelector('li')) {
+        setItemWidth(albumsList.current!.querySelector('li')!.offsetWidth);
+    }
+}, [albums]);
 
   const handleOpenAlbumPage = async (album: IAlbum) => {
     dispatch(fetchTracksAlbum(album.id.toString()));
@@ -27,13 +43,32 @@ export default function Albums({ albums, className }: AlbumsProps) {
     navigate(`/Album/${album.title}`);
   };
 
+  const handleNextAlbumClick = () => {
+    const itemWidth = albumElement.current!.offsetWidth;
+    albumsList.current!.scrollLeft += itemWidth;
+  };
+
+  const handlePrevAlbumClick = () => {
+    console.log('wtf');
+    const itemWidth = albumElement.current!.offsetWidth;
+    albumsList.current!.scrollLeft -= itemWidth;
+  }
+
+
   return (
     <div className={divClass}>
-      <h2 id={h2Class}>Альбомы</h2>
-      <ul className={ulClass}>
+      <div className='album-div-container'>
+        <h2 id={h2Class}>Альбомы</h2>
+        <div className='btn-albums-container'>
+          <Button rotation={1} className='btn-prev-album' onClick={handlePrevAlbumClick} ref={prevAlbumBtn}></Button>
+          <Button rotation={-1} className='btn-next-album' onClick={handleNextAlbumClick} ref={nextAlbumBtn}></Button>
+        </div>
+      </div>
+      <ul ref={albumsList} className={ulClass}>
         {albums 
           ? albums.map((album: IAlbum) => (
               <li
+                ref={albumElement}
                 onClick={() => {handleOpenAlbumPage(album)}}
                 key={album.id}
                 className="result_item_album"

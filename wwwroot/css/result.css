@@ -157,22 +157,25 @@
     height: 220px;
     text-align: center;
     display: inline-block;
+    border: 1px solid rgb(46, 45, 45); 
 }
 .blur_artist_cover {
     margin-left: 10px;
     border-radius: 55%;
-    margin-top: 81px;
-    background: linear-gradient(to top, black -5%, transparent 150%);
+    margin-top: 101px;
+    background-color: rgba(0, 0, 0, 0.192);
+    backdrop-filter: blur(5px);
     opacity: 1;
     width: 80%;
-    height: 70px;
+    height: 50px;
     position: relative;
 }
+
 .artist_name {
     position: relative;
-    top: 75%;
-    color: white; /* Or any other color to make it visible */
-    font-size: 16px; /* Adjust as needed */
+    top: 135px;
+    color: white;
+    font-size: 16px; 
     line-height: 1.2;
     margin-left: 12px;
     margin-right: 20px;
@@ -180,6 +183,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 800;
 }
 .albums {
     position: relative;
@@ -188,7 +192,7 @@
 
 .cover-album {
     position: absolute;
-    border-radius: 15% /*55% 25% 25%*/;
+    border-radius: 5px /*55% 25% 25%*/;
     width: 170px;
     height: 170px;
     object-fit: cover;
@@ -209,23 +213,27 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 800;
 }
 
 .album_artist {
+    font-weight: 800;
     position: relative;
     z-index: 10;
-    color: darkgray;
+    color: gray;
     font-size: 14px;
     margin-left: -5px;
     margin-top: 3px;
 }
 .blur_album_cover {
-    margin-left: -12px;
-    border-radius: 25% 25% 25px 25px;
-    margin-top: 102px;
-    background: linear-gradient(to top, black -5%, transparent 150%);
+    margin-left: -10px;
+    border-radius: 25% 25% 5px 5px;
+    margin-top: 101px;
+    /* background: linear-gradient(to top, black -5%, transparent 150%); */
+    background-color: rgba(128, 128, 128, 0.192);
+    backdrop-filter: blur(5px);
     opacity: 1;
-    width: 107%;
+    width: 104%;
     height: 50px;
     position: relative;
 }
@@ -237,10 +245,11 @@
 .album_year {
     position: relative;
     z-index: 10;
-    color: darkgray;
+    color: rgba(128, 128, 128, 0.705);
     font-size: 14px;
     margin-left: -5px;
     margin-top: -7px;
+    font-weight: 700;
 }
 
 .result-tracks {
@@ -260,7 +269,7 @@ ul {
 li {
     padding-left: 15px;
     height: 60px;
-    border-radius: 15px;
+    border-radius: 9px;
 }
 
     li:hover {
@@ -269,9 +278,11 @@ li {
     }
 
 .track-item {
+    background-color: rgb(46, 45, 45, 0.7);
     align-items: center;
     width: 100%;
     margin-bottom: -1px;
+    border: 1px solid rgba(255, 255, 255, 0.089); 
 }
 
 .cover {
@@ -349,16 +360,17 @@ li {
     position: fixed; /* Оставляем фиксированное позиционирование */
     bottom: 0; /* Фиксируем панель внизу */
     margin: 0 auto;
-    width: 80%;
+    width: 98%;
     bottom: 0;
     height: 70px;
     background-color: gray; /* Цвет фона */
     padding-bottom: 1px; /*/ /* Отступ снизу */
     z-index: 10; /* Убедитесь, что панель выше других элементов, если это необходимо */
-    border-radius: 13px 13px 0 0 !important;
+    border-radius: 8px !important;
     display: flex;
     align-items: center;
     color: floralwhite;
+    border: 1px solid rgb(46, 45, 45);
 }
 .music-panel canvas {
     position: absolute;
@@ -372,7 +384,7 @@ li {
     width: 58px;
     height: 58px;
     border-radius: 15px;
-    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3);
 }
 
 .track-info-panel {
@@ -486,22 +498,23 @@ li {
 }
 
 .main-panel {
+    top: 0px;
     position: fixed; /* Оставляем фиксированное позиционирование */
-    top: 0; /* Фиксируем панель внизу */
     left: 50%; /* Устанавливаем левый край по центру */
-    height: 50px;
+    height: 60px;
     transform: translateX(-50%); /* Сдвигаем на половину ширины панели для центрирования */
     margin: 0 auto;
-    width: 80%;
-    /* background-color: gray;*/ /* Цвет фона */
+    width: 100%;
     padding-bottom: 1px; /*/ /* Отступ снизу */
     z-index: 10; /* Убедитесь, что панель выше других элементов, если это необходимо */
-    border-radius: 0 0 13px 13px !important;
+    border-radius: 0px !important;
     display: flex;
     align-items: center;
     color: floralwhite;
     text-align: center;
-    background-color: rgba(50, 256, 100, 0.1);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgb(46, 45, 45, 0.2);
 }
 
 .logo-service {
@@ -514,6 +527,7 @@ li {
     margin-top: 15px;
     margin-left: 5px;
     font-size: 20px;
+    font-weight: 700;
 }
 
 @media (max-width: 600px) {
@@ -818,21 +832,6 @@ li {
     cursor: pointer;
 }
 
-/* Псевдоэлемент для черточки, только для кнопок .btn-home и .btn-favorites */
-/* .btn-home::before, .btn-favorites::before {
-    content: '';
-    position: absolute;
-    left: -3px;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 100%;
-    width: 2px;
-    background-color: white;
-}
-
-.btn-home:hover::before, .btn-favorites:hover::before {
-    background-color: #9932CC;
-} */
 .zindexAuth {
     width: 200px;
     margin-bottom: 5px;
@@ -849,16 +848,4 @@ li {
     #tracks-text {
         margin-top: 40px;
     }
-}
-
-.auth-button-container {
-    position: absolute;
-    margin-top: 650px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px; /* Добавляем отступ между кнопками */
 }

@@ -96,7 +96,7 @@ namespace search_musics.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var trackList = YandexMusic.GetTracksArtist(model.Queary);
+            var trackList = YandexMusic.GetTracksArtist(model.Queary, page: model.Page, pageSize: model.PageSize);
             if (trackList == null) return NotFound();
 
             return Json(new { TrackList = trackList.ToArray() });
@@ -119,7 +119,7 @@ namespace search_musics.Controllers
         public IActionResult ResultSearch([FromForm] QuearyModel model)
         {
             ViewData["Model"] = model.Queary;
-            return View("ResultSearch"); // ���� ������ ���, �������� ������ ������
+            return View("ResultSearch");
         }
     }
 }

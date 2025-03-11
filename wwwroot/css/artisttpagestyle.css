@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .intro {
     position: fixed;
     display: flex;
@@ -6,40 +10,66 @@
     width: 100%;
     height: 100vh;
 }
-
+.artist-page-container {
+    position: absolute;
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    top: -65px;
+    left: 0px;
+}
 .artist-container {
     position: absolute;
     margin: 0 auto;
-    width: 80%;
-    height: 85%;
+    width: 100%;
+    height: 100%;
     color: whitesmoke;
-    z-index: 3; /* Контент выше видео и затемнения */
-    left: 10%;
-    right: 10%;
-    top: 4.75%;
+    z-index: 3;
+    left: 1px;
+    right: 8px;
+    top: 350px;
     overflow-y: hidden;
     overflow-x: hidden;
-    background-color: gray;
-    border-radius: 25px;
+    background-color: rgb(0, 0, 0);
+    /* backdrop-filter: blur(16px); */
+    /* border-radius: 13px; */
+     border: 1px solid rgb(46, 45, 45); 
 }
 .header-artist-info {
+    left: 0px;
+    right: 8px;
+    margin: 0 auto;
+    position: absolute;
+    top: 65px;
+    width: 100%;
+    height: 290px;
+    background-color: black;
+    color: whitesmoke;
+    border: 1px solid rgb(46, 45, 45);
+    /* border-radius: px; */
+}
+.inline-container {
+    margin-top: 65px;
     display: inline-flex;
-    margin-top: 20px;
 }
 .artist-article {
-    color: black;
+    font-weight: 850;
+    color: rgba(255, 255, 255, 0.452);
     margin-top: 50px;
 }
 .artist-cover {
     margin-left: 20px;
     border-radius: 55%;
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
+    border: 1px solid rgba(128, 128, 128, 0.568);
 }
 .about-artist {
     display: block;
     margin-left: 25px;
-    margin-top: -25px;
+    margin-top: 25px;
 }
 .count-listeners-yandex {
     display: flex;   
@@ -53,35 +83,121 @@
 }
 
 .results {
-    display: flex;
-    height: 450px;
+    width: 100% !important;
+    display: block !important;
+    height: 1000px !important;
 }
 
-.result-result-artist-ul, .artist-result-albums {
-    margin-left: 20px;
-    width: 50%;
-    height: 450px;
+.result-result-artist-ul {
+    height: auto !important;
+    top: 20px;
+}
+.result-result-artist-ul, .artist-result-albums{
+    position: relative;
+    margin: 0 auto;
+    display: block;
+    width: 100%;
+    height: 400px;
 }
 .artist-result-albums {
-    
+    top: 15px;
+    margin-left: 0px;
+    width: auto !important;
+    height: 450px;
 }
-ul {
+ ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(4, 0fr); /* Четыре строки фиксированной высоты */
+    grid-column-gap: 2%;
+    width: 98% !important;
+    margin: 0 !important;
+    height: auto;
+}
+.track-item {
     width: 100%;
-    margin-left: -30px;
+}
+#artist-page-tracks-h2, #album-article-result {
+    font-weight: 800;
+    width: 100px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+#artist-page-tracks-h2:hover, #album-article-result:hover {
+    cursor: pointer;
+}
+#artist-page-tracks-h2 {
+    margin-right: -5px;
+}
+
+.btn-albums-container {
+    margin-left: 10px;
+    margin-top: -3px;
+    display: flex;
 }
 
 .artist-result-tracks {
     height: 420px;
-    grid-template-columns: repeat(2, 0.1fr);
-    grid-template-rows: repeat(10000, 0.1fr); /* Четыре строки фиксированной высоты */
-    grid-column-gap: 10px;
 }
 .result_item_album {
+    min-width: 180px;
     margin-left: 5px;
 }
 .result-albums-ul {
-    margin-left: 20px;
+    scroll-behavior: smooth;
+    gap: 20px;
+    display: flex;
+    overflow-x: hidden;
 }
-.album-article-result {
-    margin-left: 70px;
+.album-div-container {
+    display: inline-flex;
+}
+
+.btn-next-album {
+    transform: rotate(180deg);
+}
+.artist-name {
+    font-weight: 1000;
+}
+
+.container-article-tracks {
+    display: flex;
+}
+
+#btn-open-tracks-artist{
+    left: 20px;
+}
+.between-panel {
+    margin-top: 50px;
+    width: 100%;
+    height: 120px;
+    background-color: black;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.play-random-track-btn {
+    height: 45px;
+    width: 80px;
+    margin-top: -3px;
+    color: rgba(0, 0, 0, 0.699);
+    backdrop-filter: blur(20px);
+}
+.container-random-track, .container-random-album {
+    margin-top: 5px;
+    position: relative;
+    height: 50px;
+    display: flex;
+}
+.container-random-track {
+    margin-right: 10px; 
+     margin-left: 70px; 
+}
+.article-random-album, .article-random-track {
+    font-size: 25px;
+    font-weight: 800;
+}
+.result-artist-ul {
+    overflow-y: hidden;
 }

@@ -171,11 +171,11 @@ namespace search_musics.Domain.Entities
             }
             return tracks;
         }
-        public static List<Track> GetTracksArtist(string artistId)
+        public static List<Track> GetTracksArtist(string artistId, int page = 0, int pageSize = 10)
         {
             List<Track> tracks = new List<Track>();
 
-            var resultTracks = _artist.GetTracks(int.Parse(artistId),pageSize: 10).Result;
+            var resultTracks = _artist.GetTracks(int.Parse(artistId), page: page, pageSize: pageSize).Result;
 
             var filteredAsnwer = resultTracks["result"]?["tracks"];
 
