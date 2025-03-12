@@ -82,13 +82,13 @@ export default class TrackManager {
     
     playTrack(): void {
         if (this.trackForUrl !== null) {
-            this.playTrackBtn!.src = this.imgStop;
+            // this.playTrackBtn!.src = this.imgStop;
             this.trackForUrl.play();
         }
     }
     pauseTrack(): void {
         if (this.trackForUrl !== null) {
-            this.playTrackBtn!.src = this.imgPlay;
+            // this.playTrackBtn!.src = this.imgPlay;
             this.trackForUrl.pause();
         }
     }
@@ -151,9 +151,9 @@ export default class TrackManager {
                 g = Math.floor(g / count);
                 b = Math.floor(b / count);
     
-                const gradient = `rgb(${r},${g},${b}, 0.4)`;
+                const gradient = `rgb(${r},${g},${b}, 0.8)`;
                 this.gradientDiv!.style.background = gradient;
-                this.gradientDiv!.style.backdropFilter = `blur(10px)`;
+                this.gradientDiv!.style.backdropFilter = `blur(20px)`;
                 this.gradientDiv!.style.background = gradient;
             }
     }

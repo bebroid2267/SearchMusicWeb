@@ -12,6 +12,7 @@ import { AppDispatch } from '../store/store';
 import { selectUserIsAuth, setCurrentUser, setLogoutUser } from '../store/userSlice';
 import { isUserAuth } from '../store/Middleware/isUserAuth';
 import { fetchLikedTracks } from '../store/Middleware/fetchDataPage';
+import MainButtonsMenu from './mainButtonsMenu';
 
 export default function MainPanel() {
   const mainPanel = useRef<HTMLDivElement>(null);
@@ -47,6 +48,7 @@ export default function MainPanel() {
       <img src={ImageMainMapel} className="logo-service" alt="Service Logo" />
       <p className="name-service">Спайси</p>
       <div className="button-container-main-panel">
+        {/* <MainButtonsMenu></MainButtonsMenu> */}
         <img src={favImg} alt="fav" className='fav-img' />
         <button onClick={() => navigate('/')} className="btn-home">
           Главная

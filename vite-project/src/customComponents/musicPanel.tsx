@@ -16,6 +16,8 @@ import store, { AppDispatch, RootState } from '../store/store';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
+import Checkbox from './buttonPlay';
+import Card from './buttonsNextPrev';
 
 export default function MusicPanel() {
   const dispatch = useDispatch<AppDispatch>();
@@ -234,25 +236,26 @@ const prevTrack = (): void => {
         </div>
         <audio id="track_for_url" ref={trackForUrl}></audio>
         <div className="music-buttons">
-          <img 
+          {/* <img 
             src={img1} 
             className="prev-track-button"  
             ref={prevTrackBtn} 
             onClick={prevTrack}
-          />
-          <img
+          /> */}
+          <Card onClickNext={nextTrack} onClickPlay={handlePlayClick} onClickPrev={prevTrack} onClickStop={handlePlayClick}></Card>
+          {/* <img
             src={img2}
             onClick={handlePlayClick}
             ref={playTrackBtn}
             className="stop-track-button"
             id="play-music-btn"
-          />
-          <img 
+          /> */}
+          {/* <img 
             src={img3} 
             className="next-track-button" 
             ref={nextTrackBtn} 
             onClick={nextTrack}
-          />
+          /> */}
         </div>
 
         <div className="progress__container" ref={progressContainer}>
