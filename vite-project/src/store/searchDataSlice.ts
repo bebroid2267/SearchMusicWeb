@@ -23,7 +23,13 @@ const dataSlice = createSlice({
         builder.addCase(searchAlbums.fulfilled, (state, action: PayloadAction<any>) => {
             state.album = action.payload;
         });
+        builder.addCase(searchAlbums.rejected, (state, action: PayloadAction<any>) => {
+            state.album = action.payload;
+        });
         builder.addCase(searchArtists.fulfilled, (state, action: PayloadAction<any>) => {
+            state.artist = action.payload;
+        });
+        builder.addCase(searchArtists.rejected, (state, action: PayloadAction<any>) => {
             state.artist = action.payload;
         });
         builder.addCase(fetchLikedTracks.fulfilled, (state, action: PayloadAction<any>) => {

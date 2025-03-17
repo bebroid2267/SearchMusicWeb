@@ -35,16 +35,19 @@ export default function ResultPage() {
   }
 
     const handleSubmit = async (e: any) => {
+      console.log('chd');
       e.preventDefault();
       if (!queary.trim()) {
         alert('Введите запрос');
         return;
       }
-      dispatch(setQuearyUser(quearyUser));
+      dispatch(setQuearyUser(queary));
       
-      dispatch(searchTracks(quearyUser));
-      dispatch(searchAlbums(quearyUser));
-      dispatch(searchArtists(quearyUser));
+      dispatch(searchTracks(queary));
+      dispatch(searchAlbums(queary));
+      dispatch(searchArtists(queary));
+
+      navigate(`/Result/${queary}`);
     };
   
   return (

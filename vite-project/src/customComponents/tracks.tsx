@@ -74,6 +74,7 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
 
 
   const handleClick = (track: ITrack) => {
+    trackManager.trackManager.isPlaying = true;
     dispatch(isLikedTrack(track));
     if (tracks) {
       dispatch(setPlaylist(tracks));
@@ -84,7 +85,6 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
   const changeTrackPanel = (track: ITrack) => {
     dispatch(setCurrentTrack(track));
         dispatch(fetchUrl(track.id));
-    trackManager.trackManager.playTrackBtn!.src = imgPlay;
   };
   
   useEffect(() => {

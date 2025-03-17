@@ -8,7 +8,7 @@ import { AppDispatch } from '../store/store';
 import { fetchAlbumsArtist, fetchTracksArtist } from '../store/Middleware/fetchDataPage';
 import { setArtist } from '../store/artistSlice';
 import Button from './buttonScrollAlbums';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 export default function Artists({ artists, className }: any) {
   const navigate = useNavigate();

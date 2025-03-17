@@ -183,6 +183,13 @@
     margin-top: -3px;
     color: rgba(0, 0, 0, 0.699);
     backdrop-filter: blur(20px);
+    border-radius: 30px;
+    transition: transform 0.2 ease-in-out;
+}
+.play-random-track-btn:hover {
+    cursor: pointer;
+    background-color: rgba(128, 129, 129, 0.719);
+    transform: scale(1.1);
 }
 .container-random-track, .container-random-album {
     margin-top: 5px;

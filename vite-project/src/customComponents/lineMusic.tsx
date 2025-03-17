@@ -1,53 +1,19 @@
 import styled from 'styled-components';
 
-export const Card = ({onClickPrev, onClickPlay, onClickNext, isPlaying, refProgressBar, refProgressContainer, refCurrentTime, refAllTime}: any) => {
-
-  return (
-    <StyledWrapper>
-        <div className="controls">
-          <svg onClick={onClickPrev} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" height={30} width={30}>
-            <path clipRule="evenodd" d="M12 21.6a9.6 9.6 0 1 0 0-19.2 9.6 9.6 0 0 0 0 19.2Zm.848-12.352a1.2 1.2 0 0 0-1.696-1.696l-3.6 3.6a1.2 1.2 0 0 0 0 1.696l3.6 3.6a1.2 1.2 0 0 0 1.696-1.696L11.297 13.2H15.6a1.2 1.2 0 1 0 0-2.4h-4.303l1.551-1.552Z" fillRule="evenodd" />
-          </svg>
-
-          <div className="container">
-            <label>
-                <input 
-                  className="play-btn" 
-                  type="checkbox" 
-                  checked={isPlaying}
-                />
-                <div 
-                  className="play-icon" 
-                />
-                <div 
-                  className="pause-icon" 
-                  onClick={() => {
-                    onClickPlay();  
-                  }}
-                />
-            </label>
-        </div>
-
-          <svg onClick={onClickNext} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" height={30} width={30}>
-            <path clipRule="evenodd" d="M12 21.6a9.6 9.6 0 1 0 0-19.2 9.6 9.6 0 0 0 0 19.2Zm4.448-10.448-3.6-3.6a1.2 1.2 0 0 0-1.696 1.696l1.551 1.552H8.4a1.2 1.2 0 1 0 0 2.4h4.303l-1.551 1.552a1.2 1.2 0 1 0 1.696 1.696l3.6-3.6a1.2 1.2 0 0 0 0-1.696Z" fillRule="evenodd" />
-          </svg>
-        </div>
-        <div className="song-time">
-            <p ref={refCurrentTime} className="timetext time_now"></p>
-            <div 
-              className="time"
-              ref={refProgressContainer}
-            >
-              <div 
-                className="elapsed"
-                ref={refProgressBar} 
-              >
-              </div>
+export const TimeLine = () => {
+    return (
+        <StyledWrapper>
+            <div className="controls">
+                <div className="song-time">
+                    <p className="timetext time_now">1:31</p>
+                    <div className="time">
+                    <div className="elapsed" />
+                    </div>
+                    <p className="timetext time_full">3:46</p>
+                </div>
             </div>
-            <p ref={refAllTime} className="timetext time_full"></p>
-          </div>
-    </StyledWrapper>
-  );
+        </StyledWrapper>
+    );
 }
 
 const StyledWrapper = styled.div`
@@ -92,7 +58,6 @@ const StyledWrapper = styled.div`
     font-weight: 900;
   }
 
-
   .title-2 {
     color: white;
     font-size: .75rem;
@@ -101,15 +66,12 @@ const StyledWrapper = styled.div`
 
   /* new */
   .song-time {
-    width: 400px;
+    width: 100%;
     margin-inline: auto;
     position: relative;
     display: flex;
     align-items: center;
     gap: .3rem;
-    height: 50px;
-    margin-top: -10px;
-    margin-bottom: 10px;
   }
 
   .time {
@@ -117,28 +79,21 @@ const StyledWrapper = styled.div`
     background-color: #5e5e5e;
     height: .35rem;
     border-radius: 3px;
-    box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.1);
-  }
-  .time:hover {
-  cursor: pointer;
   }
 
   .elapsed {
-    width: 0%;
-    background-color: white;
+    width: 42%;
+    background-color: #1db954;
     height: 100%;
     border-radius: 3px;
-    box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.1);
   }
 
   .controls {
     color: white;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    height: 30px;
-    margin-top: 50px;
   }
 
   .volume {
@@ -176,7 +131,6 @@ const StyledWrapper = styled.div`
     width: 80%;
     border-radius: 2px;
     margin-left: .3rem;
-    background-blend-mode: multiply;
   }
 
   .volume .slider .green {
@@ -207,20 +161,18 @@ const StyledWrapper = styled.div`
 
   .time_now {
     font-size: .8rem;
-    background-color:rgba(0, 0, 0, 0);
+    background-color: #00000060;
     padding: .5rem;
     border-radius: .5rem;
     background-blend-mode: multiply;
-    margin-top: 12px;
   }
 
   .time_full {
     font-size: .8rem;
-    background-color:rgba(0, 0, 0, 0);
+    background-color: #00000060;
     padding: .5rem;
     border-radius: .5rem;
     background-blend-mode: multiply;
-    margin-top: 12px;
   }
 
   .playing {
@@ -287,8 +239,8 @@ const StyledWrapper = styled.div`
     height: 40px;
     position: relative;
     border-radius: 50%;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
     .container:hover {
         background: black;
@@ -405,4 +357,4 @@ const StyledWrapper = styled.div`
     }
   }`;
 
-export default Card;
+export default TimeLine;

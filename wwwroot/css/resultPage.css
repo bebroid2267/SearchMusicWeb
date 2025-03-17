@@ -31,6 +31,10 @@
 .result-tracks-finally li {
     margin-top: 5px;
 }
+.no-results {
+    margin-left: 20px !important;
+    color: gray;
+}
 .result-container {
     position: absolute;
     margin: 0 auto;

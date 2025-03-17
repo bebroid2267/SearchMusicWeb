@@ -4,14 +4,21 @@ import yalogo from '../../lib/resources/yalogo.svg'
 import { useEffect, useRef } from "react";
 import Tracks from "../customComponents/tracks";
 import Albums from "../customComponents/albums";
-import { useArtistManager } from "../contexts/TrackManagerContext";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { useArtistManager, useTrackManager } from "../contexts/TrackManagerContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import clearPlay from '../../lib/resources/clearplay (1) (1).png'
+import { isLikedTrack } from "../store/Middleware/isLikedTrack";
+import { setCurrentTrack, setPlaylist } from "../store/playerSlice";
+import { fetchUrl } from "../store/Middleware/fetchUrlForTrack";
+import { ITrack } from "../Interfaces";
 
 export default function ArtistPage() {
     const artistManager = useArtistManager();
+    const trackManager = useTrackManager();
+    const dispatch = useDispatch<AppDispatch>();
+  
     const results: any = useSelector<RootState>(state => state.artist);
     const {tracks, albums, artist} = results;
     let cutTracks = null;
@@ -29,7 +36,25 @@ export default function ArtistPage() {
 
     const handleOpenTracks = () => {
         navigate(`/Artist/${artist.name}/tracks`);
-    }
+    };
+
+    const handlePlayRandomTrack = () => {
+        const randomTrack = Math.floor(Math.random() * cutTracks.length);
+        trackManager.trackManager.isPlaying = true;
+        dispatch(isLikedTrack(cutTracks[randomTrack]));
+        if (tracks) {
+          dispatch(setPlaylist(tracks));
+        }
+        changeTrackPanel(cutTracks[randomTrack]);
+    };
+
+    
+      const changeTrackPanel = (track: ITrack) => {
+        dispatch(setCurrentTrack(track));
+            dispatch(fetchUrl(track.id));
+      };
+    
+
 
     useEffect(() => {
         artistManager.coverArtist = coverArtist.current;
@@ -78,11 +103,11 @@ export default function ArtistPage() {
                             <div className="between-panel" ref={betweenPanelForChangeColor}>
                                 <div className="container-random-track">
                                     <h2 className="article-random-track" >Случайный трек</h2>
-                                    <img className="play-random-track-btn" src={clearPlay} alt="" />
+                                    <img onClick={handlePlayRandomTrack} className="play-random-track-btn" src={clearPlay} alt="" />
                                 </div>
                                 <div className="container-random-album">
                                     <h2 className="article-random-album">Случайный альбом</h2>
-                                    <img className="play-random-track-btn" src={clearPlay} alt="" />
+                                    <img onClick={handlePlayRandomTrack} className="play-random-track-btn" src={clearPlay} alt="" />
                                 </div>
                             </div>
                             <Albums

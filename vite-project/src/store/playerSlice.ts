@@ -4,11 +4,11 @@ import { dislikeTrack, likeTrack } from "./Middleware/likeTrack";
 import { isLikedTrack } from "./Middleware/isLikedTrack"
 
 const initialTrack: ITrack = {
-    id: '0',
-    coverPath: 'test',
-    title: 'test',
-    artist: 'test',
-    downloadUrl: 'test',
+    id: '',
+    coverPath: '',
+    title: '',
+    artist: '',
+    downloadUrl: '',
     album: null,
     artistEntity: null
 }

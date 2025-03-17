@@ -1,7 +1,4 @@
 import '../../../wwwroot/css/result.css';
-import img1 from '../../../wwwroot/lib/resources/gray left.png';
-import img2 from '../../../wwwroot/lib/resources/play (2).jpg';
-import img3 from '../../../wwwroot/lib/resources/gray right.png';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import { useEffect, useRef, useState } from 'react';
 import likeTrackImg from '../../lib/resources/heartreal.png';
@@ -16,23 +13,22 @@ import store, { AppDispatch, RootState } from '../store/store';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
-import Checkbox from './buttonPlay';
 import Card from './buttonsNextPrev';
 
 export default function MusicPanel() {
   const dispatch = useDispatch<AppDispatch>();
-  console.log('render music panle');
+
   const currentReduxTrack = useSelector(selectCurrentTrack);
   const trackManager = useTrackManager();
   const isTrackLiked = useSelector(selectIsTrackLiked);
-
-  const [image, setImage] = useState<any>(unlikeTrack);
   const { url } = useSelector((state: RootState) => state.tracks);
 
+  const [image, setImage] = useState<any>(unlikeTrack);
   const [currentProgressBar, setCurrentProgressBar] = useState(null);
+  const [imgError, setImgError] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const canvas = useRef<HTMLCanvasElement>(null);
-
   const coverTrack = useRef<HTMLImageElement>(null);
   const panelForGradient = useRef<HTMLDivElement>(null);
   const trackForUrl = useRef<HTMLAudioElement>(null);
@@ -42,6 +38,8 @@ export default function MusicPanel() {
   const progressContainer = useRef<HTMLDivElement>(null);
   const nextTrackBtn = useRef<HTMLImageElement>(null);
   const prevTrackBtn = useRef<HTMLImageElement>(null);
+  const allTimeText = useRef<HTMLParagraphElement>(null);
+  const currentTimeText = useRef<HTMLParagraphElement>(null);
 
   const handleClick = (e: any) => {
     const width = trackManager.trackManager.progressContainer!.clientWidth;
@@ -62,7 +60,8 @@ export default function MusicPanel() {
     trackManager.trackManager.imgPlay = imgPlay;
     trackManager.trackManager.imgStop = imgStop;
     trackManager.trackManager.imgForGradient = coverTrack.current;
-    currentProgressBar;
+    trackManager.trackManager.allTimeTrack = allTimeText.current;
+    trackManager.trackManager.currentTimeTrack = currentTimeText.current;
   
     const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
 
@@ -81,7 +80,7 @@ export default function MusicPanel() {
       
       trackManager.trackManager.progressContainer!.removeEventListener('click', handleClick);
     };
-  },);
+   },);
   
 
   useEffect(() => {
@@ -102,20 +101,28 @@ export default function MusicPanel() {
       setImage(unlikeTrack);
     }
   };
-  
+
+  useEffect(() => {
+    setIsPlaying(trackManager.trackManager.isPlaying);
+  }, [trackManager.trackManager.isPlaying])
+
   useEffect(() => {
     setLikeImage();
   }, [currentReduxTrack, isTrackLiked])
 
   const handlePlayClick = () => {
-    const isPlaying = store.getState().player.isPlaying;
     if (isPlaying) {
-      trackManager.trackManager.pauseTrack();
+      dispatch(setIsPlay(false));
+      setIsPlaying(false);
+      trackManager.trackManager.pauseTrack();  
     } else {
-      trackManager.trackManager.playTrack();
+      dispatch(setIsPlay(true));
+      console.log('suka go');
+      setIsPlaying(true);
+      trackManager.trackManager.playTrack();  
     }
-    dispatch(setIsPlay(!isPlaying));
   };
+
 
   const handleLike = async () => {   
     const isAuthUser = store.getState().user.isAuth;
@@ -150,7 +157,7 @@ const nextTrack = (): void => {
     const playlist = store.getState().player.playlist;
     if (currentReduxTrack !== null) {
         const indexCurrentTrack = getIndexCurrentTrack(currentReduxTrack);
-        if (playlist !== null) {
+        if (playlist !== null && playlist.length > 0) {
             if (indexCurrentTrack === playlist.length - 1) {
               dispatch(isLikedTrack(playlist[0]));            
               changeTrackPanel(playlist[0]);
@@ -158,8 +165,8 @@ const nextTrack = (): void => {
               dispatch(isLikedTrack(playlist[indexCurrentTrack + 1]));           
                 changeTrackPanel(playlist[indexCurrentTrack + 1]);
             }
+            trackManager.trackManager.playTrack();
         }
-        trackManager.trackManager.playTrack();
     }
 };
 
@@ -195,7 +202,7 @@ const prevTrack = (): void => {
 
     if (currentReduxTrack !== null) {
         const indexCurrentTrack = getIndexCurrentTrack(currentReduxTrack);
-        if (playlist !== null) {
+        if (playlist !== null && playlist.length > 0) {
             if (indexCurrentTrack === 0) {
               dispatch(isLikedTrack(playlist[playlist.length - 1]));            
               changeTrackPanel(playlist[playlist.length - 1]);
@@ -203,8 +210,8 @@ const prevTrack = (): void => {
               dispatch(isLikedTrack(playlist[indexCurrentTrack - 1]));
               changeTrackPanel(playlist[indexCurrentTrack - 1]);
             }
+            trackManager.trackManager.playTrack();
         }
-        trackManager.trackManager.playTrack();
     }
  };
 
@@ -225,10 +232,11 @@ const prevTrack = (): void => {
         <canvas ref={canvas}></canvas>
         <img
           src={currentReduxTrack.coverPath}
-          alt="Обложка песни"
           ref={coverTrack}
           className="cover-panel"
           id="img-for-gradient"
+          onError={() => setImgError(true)}
+          style={{ display: currentReduxTrack.coverPath == "" ? 'none' : 'block'}}    
         />
         <div className="track-info-panel">
           <h3 className="track-title-panel">{currentReduxTrack.title}</h3>
@@ -242,7 +250,17 @@ const prevTrack = (): void => {
             ref={prevTrackBtn} 
             onClick={prevTrack}
           /> */}
-          <Card onClickNext={nextTrack} onClickPlay={handlePlayClick} onClickPrev={prevTrack} onClickStop={handlePlayClick}></Card>
+          <Card 
+            onClickNext={nextTrack} 
+            onClickPlay={handlePlayClick} 
+            onClickPrev={prevTrack} 
+            isPlaying={isPlaying}
+            refProgressBar = {progressBar}
+            refProgressContainer={progressContainer}
+            refAllTime={allTimeText}
+            refCurrentTime={currentTimeText}
+          >
+          </Card>
           {/* <img
             src={img2}
             onClick={handlePlayClick}
@@ -257,10 +275,11 @@ const prevTrack = (): void => {
             onClick={nextTrack}
           /> */}
         </div>
-
-        <div className="progress__container" ref={progressContainer}>
+        
+        {/* <div className="progress__container" ref={progressContainer}>
           <div className="progress" id="progress_bar" ref={progressBar}></div>
-        </div>
+        </div> */}
+
 
         <img className="like-track" onClick={handleLike} src={image} />
       </div>

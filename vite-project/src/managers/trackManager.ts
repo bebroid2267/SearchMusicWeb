@@ -1,7 +1,7 @@
 import { ITrack } from "../Interfaces";
 
 export default class TrackManager {
-    public isPlaying: boolean | null = null;
+    public isPlaying: boolean = false;
     public playlist: ITrack[] | null = null;
     public trackForUrl: HTMLAudioElement | null = null;
     public playTrackBtn: HTMLImageElement | null = null;
@@ -17,6 +17,8 @@ export default class TrackManager {
     public imgPlay: any | null = null;
     public imgStop: any | null = null;
     public mainPanel: HTMLDivElement | null = null;
+    public currentTimeTrack: HTMLParagraphElement | null = null;
+    public allTimeTrack: HTMLParagraphElement | null = null;
 
     private onTrackChange: any | null = null;
     private onProgressBarChange: any | null = null;
@@ -26,7 +28,6 @@ export default class TrackManager {
 
     constructor() {
 
-        console.log('in const');
          this.canvas = document.createElement('canvas');
          this.ctx = this.canvas.getContext('2d');
         this.onProgressBarChange;
@@ -64,11 +65,26 @@ export default class TrackManager {
      updateProgressTrack(e: any): void {
         const { duration, currentTime } = e.srcElement;
         const progressPercent = (currentTime / duration) * 100;
+
+        this.allTimeTrack!.textContent = this.secondsToMinutes(duration);
+        this.currentTimeTrack!.textContent = this.secondsToMinutes(currentTime);
         this.progressBar!.style.width = `${progressPercent}%`;
     }
 
+    private secondsToMinutes(seconds: any) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        const finallySeconds = Math.round(remainingSeconds);
+        if (finallySeconds) {
+            return `${minutes}:${finallySeconds > 9 ? finallySeconds : '0' + finallySeconds}`;
+        }
+        else {
+            return '0:00';
+        }
+    }
     setCurrentTrack(newTrack: ITrack) {
         if (this.onTrackChange) {
+            this.isPlaying = true;
             this.onTrackChange(newTrack);
         }
     }
@@ -82,13 +98,13 @@ export default class TrackManager {
     
     playTrack(): void {
         if (this.trackForUrl !== null) {
-            // this.playTrackBtn!.src = this.imgStop;
+            this.isPlaying = true;
             this.trackForUrl.play();
         }
     }
     pauseTrack(): void {
         if (this.trackForUrl !== null) {
-            // this.playTrackBtn!.src = this.imgPlay;
+            this.isPlaying = false;
             this.trackForUrl.pause();
         }
     }

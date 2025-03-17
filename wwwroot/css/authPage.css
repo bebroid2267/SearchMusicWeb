@@ -34,6 +34,12 @@
     border-radius: 5px;
     color: white;
     font-weight: 600;
+    transition: transform 0.3s ease;
+}
+.login-button:hover {
+    transform: scale(1.01);
+    background-color: rgb(199, 197, 197);
+    color: rgb(146, 21, 146);
 }
 
 .error-text {
@@ -45,6 +51,9 @@
     background-color: rgba(0, 0, 0, 0);
     color: rgb(163, 1, 163);
     font-weight: 800;
+}
+.change-state-button:hover {
+    color: rgba(255, 255, 255, 0.774);
 }
 
 .container-auth {

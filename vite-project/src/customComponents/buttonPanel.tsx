@@ -6,12 +6,21 @@ import { fetchAlbumsArtist, fetchTracksAlbum, fetchTracksArtist } from '../store
 import { setArtist } from '../store/artistSlice';
 import { setAlbum, setArtistName} from '../store/albumSlice';
 import { selectCurrentTrack } from '../store/playerSlice';
+import { useEffect, useState } from 'react';
+import { useTrackManager } from '../contexts/TrackManagerContext';
 
 
 export default function ButtonPanel() {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const currentTrack = useSelector(selectCurrentTrack);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const trackMangaer = useTrackManager();
+
+      useEffect(() => {
+        setIsPlaying(trackMangaer.trackManager.isPlaying);
+      }, [trackMangaer.trackManager.isPlaying])
+
 
       const handleOpenArtistPage = async () => {
         const currentTrack = store.getState().player.currentTrack;
@@ -36,32 +45,45 @@ export default function ButtonPanel() {
 
         navigate(`/Album/${currentTrack!.album!.title}`);
         };
-    
+    useEffect(() => {
+
+    },[store.getState().player.currentTrack])
+
     return (
         <div className='button-panel'>
             <ul className='ul-button-panel'>
                 <li className='button-panel-element' onClick={handleOpenArtistPage}>
-                    <img  className='img-btn-element' src={currentTrack?.artistEntity?.coverPath} alt="" />
-                    <p className='text-btn-element'>{currentTrack?.artist}</p>
+                    <img  
+                        className='img-btn-element' 
+                        src={currentTrack?.artistEntity?.coverPath} 
+                        alt=""
+                        style={{ display: currentTrack?.artistEntity?.coverPath == undefined ? 'none' : 'block'}}    
+                    />
+                    <p className='text-btn-element-left'>{currentTrack?.artist}</p>
                 </li>
                 <li className='button-panel-element' onClick={handleOpenAlbumPage}>
-                    <img className='img-btn-element' src={currentTrack?.album?.coverPath} alt="" />
-                    <p className='text-btn-element'>{currentTrack?.album?.title}</p>
+                    <img 
+                        className='img-btn-element' 
+                        src={currentTrack?.album?.coverPath} 
+                        alt=""
+                        style={{ display: currentTrack?.artistEntity?.coverPath == undefined ? 'none' : 'block'}}    
+                        />
+                    <p className='text-btn-element-left'>{currentTrack?.album?.title}</p>
                 </li>
                 <li className='button-panel-element'>
-                    <p className='text-btn-element'>playlist</p>
+                    <p className='text-btn-element'>Плейлист</p>
                 </li>
                 <li className='button-panel-element'>
-                    <p className='text-btn-element'>search remix</p>
+                    <p className='text-btn-element'>Поиск ремикса</p>
                 </li>
                 <li className='button-panel-element'>
-                    <p className='text-btn-element'>search clip</p>
+                    <p className='text-btn-element'>Поиск клипов</p>
                 </li>
                 <li className='button-panel-element'>
-                    <p className='text-btn-element'>download track</p>
+                    <p className='text-btn-element'>Скачать трек</p>
                 </li>
                 <li className='button-panel-element'>
-                    <p className='text-btn-element'>full player</p>
+                    <p className='text-btn-element'>Плеер</p>
                 </li>
 
             </ul>
