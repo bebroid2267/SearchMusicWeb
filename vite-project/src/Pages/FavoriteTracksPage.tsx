@@ -40,7 +40,6 @@ export default function FavoritePage() {
   return (
     <div className="intro">
       <div className="intro_result">
-        <BackgroundVideo />
         <div className="artist-page-container">
                     <div className="header-favorite-tracks" ref={panelForChangeColor}>
                             <div className="inline-container-tracks">

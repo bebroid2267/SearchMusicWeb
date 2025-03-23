@@ -221,11 +221,9 @@ li {
 
 .music-panel {
     position: fixed; /* ��������� ������������� ���������������� */
-    bottom: 0; /* ��������� ������ ����� */
     left: 50%; /* ������������� ����� ���� �� ������ */
     transform: translateX(-50%); /* �������� �� �������� ������ ������ ��� ������������� */
     width: 50%; /* ������ ������ */
-    bottom: 0;
     background-color: gray; /* ���� ���� */
     padding-bottom: 1px; /*/ /* ������ ����� */
     z-index: 10; /* ���������, ��� ������ ���� ������ ���������, ���� ��� ���������� */
@@ -402,7 +400,7 @@ li {
 
 .button-container-main-panel {
     position: absolute;
-    right: 10px;
+    right: 25px;
     top: 50%;
     transform: translateY(-50%);
     display: flex; /* Включаем flexbox для управления кнопками */

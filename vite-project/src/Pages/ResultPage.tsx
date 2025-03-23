@@ -53,7 +53,6 @@ export default function ResultPage() {
   return (
     <div className="intro">
       <div className="intro_result">
-        <BackgroundVideo />
         <div className='result-page-container'>
           <div className='header-result-page'>
             <div className='container-header'>

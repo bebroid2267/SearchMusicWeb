@@ -69,6 +69,8 @@
 }
 
 .artistTracks-ul {
+    margin-left: -10px !important;
+    width: 99% !important;
     height: 600px;
     overflow-y: auto !important;
 }

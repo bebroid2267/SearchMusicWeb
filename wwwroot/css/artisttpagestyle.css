@@ -14,6 +14,7 @@
     position: absolute;
     display: flex;
     min-height: 100vh;
+    height: 100%;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -33,9 +34,9 @@
     overflow-y: hidden;
     overflow-x: hidden;
     background-color: rgb(0, 0, 0);
-    /* backdrop-filter: blur(16px); */
-    /* border-radius: 13px; */
-     border: 1px solid rgb(46, 45, 45); 
+    backdrop-filter: blur(16px); 
+    border-radius: 13px;
+    border: 1px solid rgb(46, 45, 45); 
 }
 .header-artist-info {
     left: 0px;
@@ -158,6 +159,7 @@
 }
 .artist-name {
     font-weight: 1000;
+    text-shadow: 1px 1px 1px black; 
 }
 
 .container-article-tracks {
@@ -207,4 +209,41 @@
 }
 .result-artist-ul {
     overflow-y: hidden;
+    width: 99%  !important;
+    margin-left: -10px !important;
+}
+@media (max-width: 600px) {
+    #album-article-result {
+        margin-top: 7px;
+        font-size: 20px;
+    }
+    .btn-albums-container {
+        margin-left: -38px;
+    }
+    .article-random-album, .article-random-track{
+        width: 120px;
+        font-size: 20px;
+    }
+    .container-random-track {
+        margin-left: 30px
+    }
+}
+@media (max-width: 500px) {
+    .artist-cover {
+        width: 160px;
+        height: 160px;
+        margin-top: -5px;
+    }
+    .about-artist {
+        margin-left: 20px;
+    }
+    .artist-name {
+        font-size: 25px;
+    }
+    .artist-article {
+        font-size: 15px
+    };
+    .result-artist-ul {
+        margin-right: -50px !important;
+    }
 }

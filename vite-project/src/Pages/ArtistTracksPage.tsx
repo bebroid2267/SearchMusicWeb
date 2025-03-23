@@ -32,7 +32,6 @@ export function ArtistTracksPage () {
        return (
         <div className="intro">
             <div className="intro_result">
-                <BackgroundVideo />
                 <div className="artist-page-container" ref={parentScrollDis}>
                     <div className="header-artist-info" ref={panelForChangeColor}>
                             <div className="inline-container-tracks">

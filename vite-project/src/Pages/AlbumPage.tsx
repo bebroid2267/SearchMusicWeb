@@ -43,7 +43,7 @@ export default function AlbumPage() {
     return (
         <div className="intro">
             <div className="intro_result">
-            <BackgroundVideo />
+            {/* <BackgroundVideo /> */}
 
             <div className="artist-page-container">
                     <div className="header-artist-info" ref={panelForChangeColor}>

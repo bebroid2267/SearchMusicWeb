@@ -3,7 +3,7 @@
     margin: 0 auto;
     width: 80%;
     bottom: 80px;
-    height: 40px;
+    height: 35px;
     padding-bottom: 1px; /*/ /* Отступ снизу */
     display: flex;
     align-items: center;
@@ -18,7 +18,7 @@
     display: flex;
     position: relative;
     width: 100% !important;
-    height: 40px !important;
+    height: 35px !important;
     overflow: auto;
     overflow-y: hidden;
     justify-content: space-between;
@@ -36,7 +36,6 @@ ul {
     display: inline-flex;
     background-color: rgba(124, 116, 116, 0.2);
     backdrop-filter: blur(20px);
-    /* width: auto; */
     flex-grow: 1;
     border-radius: 8px;
     border: 1px solid rgb(46, 45, 45);
@@ -48,12 +47,12 @@ ul {
 
 .button-panel-element {
     width: auto !important;
-    height: 40px;
+    height: 35px;
 }
 .text-btn-element {
     text-align: center;
     position: relative;
-    font-size: 18px;
+    font-size: 17px;
     margin-top: 4px;
     margin-left: -5px;
     margin-right: 7px;
@@ -64,7 +63,7 @@ ul {
 }
 .text-btn-element-left {
     position: relative;
-    font-size: 18px;
+    font-size: 17px;
     margin-top: 4px;
     margin-left: -2px;
     margin-right: 7px;
@@ -78,8 +77,8 @@ ul {
 .img-btn-element {
     margin-left: -8px;
     margin-right: 10px;
-    margin-top: 3px;
-    width: 32px;
-    height: 32px;
+    margin-top: 2px;
+    width: 29px;
+    height: 29px;
     border-radius: 5px;
 }

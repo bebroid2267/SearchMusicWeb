@@ -66,7 +66,6 @@ export default function ArtistPage() {
     return (
         <div className="intro">
             <div className="intro_result">
-                <BackgroundVideo />
                 <div className="artist-page-container">
                     <div className="header-artist-info" ref={panelForChangeColor}>
                             <div className="inline-container">

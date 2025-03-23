@@ -49,30 +49,13 @@ export default function MainPanel() {
       <img src={ImageMainMapel} className="logo-service" alt="Service Logo" />
       <p className="name-service">Спайси</p>
       <div className="button-container-main-panel">
-      <MainButtons></MainButtons>
-        {/* <img src={favImg} alt="fav" className='fav-img' />
-        <button onClick={() => navigate('/')} className="btn-home">
-          Главная
-        </button>
-        <img src={mainImg} alt="mainImg" className='main-img'/>
-        <button className="btn-favorites" onClick={handleFavorites}>
-          Фавориты
-        </button>
-
-        {isUserAuthorised ? ( <>
-          <img src={exitImg} alt="exit" className='exit-img'/>
-          <button className="btn-exit" onClick={handleLogout}>
-            Выйти
-          </button>
-          </>
-        ) : (
-          <>
-          <img src={enterImg} alt="enter" className='enter-img'/>
-          <button onClick={handleAuth} className="btn-enter">
-            Войти
-          </button>
-          </>
-        )} */}
+        <MainButtons 
+          onClickFav={handleFavorites}
+          onClickHome={() => navigate('/')}
+          onClickLogin={handleAuth}
+          onClickLogout={handleLogout}
+          isUserAuth={isUserAuthorised}
+        />
       </div>
     </div>
   );
