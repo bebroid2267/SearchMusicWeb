@@ -6,7 +6,6 @@
 
 ## 💻 Технологический Стэк
 - [C# 12](https://learn.microsoft.com/ru-ru/dotnet/csharp/whats-new/csharp-12)
-- [WPF](https://learn.microsoft.com/ru-ru/dotnet/desktop/wpf/overview/?view=netdesktop-8.0)
 - ASP.NET.CORE
 - EF Core
 - Non official Yandex Music Api
@@ -14,7 +13,7 @@
 - **Инструменты:**
   - [Pattern MVC](https://dotnet.microsoft.com/en-us/apps/aspnet/mvc)
   - [ORM - Entity Framework Core](https://learn.microsoft.com/ru-ru/ef/core/)
-  - [DB - SQL Server](https://www.microsoft.com/ru-ru/sql-server)
+  - [DB - MSSQL Server](https://www.microsoft.com/ru-ru/sql-server)
   - [REACT](https://react.dev)
   - Redux Toolkit
     
