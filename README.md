@@ -21,12 +21,12 @@
 
 - Main Page
 <p align="left">
- <img width="500px" src="https://i.imgur.com/kbkq2T5.png" alt="qr"/>
+ <img width="500px" src="https://img.hhcdn.ru/photo/781535490.jpeg?t=1743757461&h=q1J74oNOlUXjXfo4GJdaAg" alt="qr"/>
 </p>
 
 - Answer Search Page
   <p align="left">
- <img width="500px" src="https://i.imgur.com/jpvqaWA.png" alt="qr"/>
+ <img width="500px" src="https://img.hhcdn.ru/photo/781535510.jpeg?t=1743757461&h=D3M7azwytg75w68ypfPqwA" alt="qr"/>
   </p>
   
 - Artist Page
