@@ -50,7 +50,7 @@ export default function Artists({ artists, className }: any) {
     <div className={className}>
       <div className='album-div-container'>
         <h2 id="artist-text">Артисты</h2>
-        <div className='btn-albums-container'>
+        <div className='btn-artist-container'>
               <Button rotation={1} className='btn-prev-album' onClick={handlePrevArtistClick} ref={prevArtistBtn}></Button>
               <Button rotation={-1} className='btn-next-album' onClick={handleNextArtistClick} ref={nextArtistBtn}></Button>
         </div>    

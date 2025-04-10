@@ -28,6 +28,7 @@ export default function Albums({ albums, className }: AlbumsProps) {
   const albumElement = useRef<HTMLLIElement>(null);
 
   const [itemWidth, setItemWidth] = useState(0);
+  itemWidth;
 
   useEffect(() => {
     if (albumsList.current && albumsList.current.querySelector('li')) {

@@ -3,16 +3,11 @@ import '../../../wwwroot/css/site.css';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrackManager } from '../contexts/TrackManagerContext';
-import mainImg from '../../lib/resources/home.png'
-import favImg from '../../lib/resources/favorite.png'
-import exitImg from '../../lib/resources/exit.png'
-import enterImg from '../../lib/resources/user.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store/store';
 import { selectUserIsAuth, setCurrentUser, setLogoutUser } from '../store/userSlice';
 import { isUserAuth } from '../store/Middleware/isUserAuth';
 import { fetchLikedTracks } from '../store/Middleware/fetchDataPage';
-import MainButtonsMenu from './mainButtonsMenu';
 import MainButtons from './mainButtonsMenu';
 
 export default function MainPanel() {

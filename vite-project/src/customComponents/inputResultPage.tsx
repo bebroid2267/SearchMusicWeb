@@ -38,6 +38,22 @@ const StyledWrapper = styled.div`
       0px 40px 100px rgb(194, 56, 199)
     //   0px -20px 60px #19ad88;
   }
+    @media (max-width: 500px) {
+      .container-input {
+        width: 300px !important;
+      }
+    }
+    @media (max-width: 400px) {
+      .container-input {
+        width: 250px !important;
+      }
+        .search_bar {
+          font-size: 12px !important;
+        }
+          .input {
+            font-size: 10px;
+          }
+    }
     .container-input {
         width: 400px;
     }

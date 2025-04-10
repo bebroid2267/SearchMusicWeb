@@ -23,8 +23,13 @@ export const Input = ({id, value, name, onChange}: any) => {
 const StyledWrapper = styled.div`
   .input {
     max-width: 190px;
+    min-width: 100px;
   }
-
+  @media (max-width: 500px) {
+    .container-input {
+      width: 220px !important;
+    }
+  }
   .label {
     position: relative;
     display: block;

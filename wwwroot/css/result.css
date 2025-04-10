@@ -311,6 +311,10 @@ li {
 .track-title {
     margin: 0;
     font-size: 17px;
+    white-space: nowrap;   /* Запрещает перенос строк */
+    overflow: hidden;      /* Обрезает текст, который не помещается */
+    text-overflow: ellipsis; /* Добавляет "..." в конце */
+    width: 200px;
 }
 
 .track-artist {
@@ -496,9 +500,9 @@ li {
         width: 48px;
         height: 48px;
     }
-    .track-info-panel {
+    /* .track-info-panel {
         margin-left: 10px;
-    }
+    } */
 
     .progress__container {
         width: 100px;
@@ -597,10 +601,28 @@ li {
     .result_content  {
         margin-left: -20px;
     }
+    .track-title-panel {
+        font-size: 12px;
+    }
+    .track-artist-panel {
+        font-size: 11px;
+    }
+    .track-info-panel {
+        margin-left: 10px;
+        margin-top: 17px;
+    }
 }
 
+@media (max-width: 550px) {
+    .like-track {
+        width: 30px !important;
+        height: 30px !important;
+        margin-right: 65px;
+        margin-top: -2px;
+    }
+}
 @media (max-width: 450px) {
-    .cover-artist {
+    /* .cover-artist {
         width: 130px;
         height: 130px;
     }
@@ -616,7 +638,7 @@ li {
         width: 140px;
         margin-bottom: 30px;
         margin-left: 25px;
-    }
+    } */
     .result-artists {
         width: 400px !important;
         margin-left: -15px;
@@ -627,12 +649,12 @@ li {
         width: 350px !important;
     }
 
-    .result_item_album {
+    /* .result_item_album {
         width: 140px;
         height: 180px;
         margin-left: 19px;
-    }
-    .cover-album {
+    } */
+    /* .cover-album {
         width: 130px;
         height: 130px;   
     }
@@ -645,7 +667,7 @@ li {
     }
     .album_artist, .album_year {
         font-size: 12px;
-    }
+    } */
 }
 
 @media (max-width: 420px) {

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ITrack } from "../../Interfaces";
 
-const API_URL = 'https://a32947-624e.t.d-f.pw/api/tracksLike';
+const API_URL = 'https://a33164-ad9f.k.d-f.pw/api/tracksLike';
 
 export const likeTrack = createAsyncThunk(
     'player/likeTrack',

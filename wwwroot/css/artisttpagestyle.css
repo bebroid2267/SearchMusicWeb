@@ -115,12 +115,16 @@
     margin: 0 !important;
     height: auto;
 }
+
 .track-item {
     width: 100%;
 }
+#album-article-result {
+    width: 120px !important;
+}
 #artist-page-tracks-h2, #album-article-result {
     font-weight: 800;
-    width: 100px;
+    width: 110px;
     margin-left: 40px;
     margin-right: 40px;
 }
@@ -132,7 +136,7 @@
 }
 
 .btn-albums-container {
-    margin-left: 10px;
+    margin-left: -5px;
     margin-top: -3px;
     display: flex;
 }
@@ -193,6 +197,11 @@
     background-color: rgba(128, 129, 129, 0.719);
     transform: scale(1.1);
 }
+.btn-artist-container {
+    margin-left: -5px;
+    margin-top: -3px;
+    display: flex;
+}
 .container-random-track, .container-random-album {
     margin-top: 5px;
     position: relative;
@@ -218,7 +227,7 @@
         font-size: 20px;
     }
     .btn-albums-container {
-        margin-left: -38px;
+        margin-left: -58px;
     }
     .article-random-album, .article-random-track{
         width: 120px;
@@ -226,6 +235,9 @@
     }
     .container-random-track {
         margin-left: 30px
+    }
+    .track-title {
+        width: 150px;
     }
 }
 @media (max-width: 500px) {
@@ -242,8 +254,56 @@
     }
     .artist-article {
         font-size: 15px
-    };
+    }
+
     .result-artist-ul {
-        margin-right: -50px !important;
+        display: block;
+        height: 245px;
+    }
+    .between-panel {
+        display: block;
+        text-align: center;
+    }
+    .container-random-track, .container-random-album {
+        margin: 0 auto;
+        left: 35%;
+        margin-top: 20px;
+    }
+    .container-random-track {
+        top: 15px !important;
+    }
+    .article-random-album, .article-random-track{
+        width: 120px;
+        font-size: 15px;
+    }
+    .play-random-track-btn {
+        margin-left: -17px;
+        margin-top: 3px;
+        width: 50px;
+        height: 30px;
+    }
+}
+@media (max-height: 800px) {
+    .result-artist-ul {
+        height: 195px;
+    }
+    .between-panel {
+        height: 80px;
+        text-align: left;
+    }
+    .article-random-album, .article-random-track{
+        margin-top: -5px;
+        width: 120px;
+        font-size: 12px;
+    }
+    .container-random-track, .container-random-album {
+        margin: 0 auto;
+       
+    }
+    .play-random-track-btn {
+        margin-left: -17px;
+        margin-top: -2px;
+        width: 35px;
+        height: 20px;
     }
 }

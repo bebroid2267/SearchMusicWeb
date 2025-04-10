@@ -4,7 +4,6 @@ import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/resultPage.css';
 import Albums from '../customComponents/albums';
 import Artists from '../customComponents/artists';
-import BackgroundVideo from '../customComponents/backVideo';
 import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { selectAlbums, selectArtists, selectQuearyUser, selectTracks, setQuearyUser } from '../store/searchDataSlice';

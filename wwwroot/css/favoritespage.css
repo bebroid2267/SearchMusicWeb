@@ -45,98 +45,20 @@ body {
     margin-top: -50px;
     width: 200px;
 }
-@media (max-width: 1700px) {
-    .favorites {
-        width: 800px;
+@media (max-width: 500px) {
+    .heart-img {
+        width: 150px !important;
+        height: 150px !important;
     }
-    #tracks-text {
-        margin-top: -30px;
-    }
-}
-
-@media (max-width: 1600px) {
-    .favorites {
-        width: 700px;
-    }
-    #tracks-text {
-        margin-top: -8px;
-    }
-
-}
-
-@media (max-width: 1400px) {
-    .favorites {
-        width: 600px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .favorites {
-        width: 500px;
-    }
-}
-
-@media (max-width: 1000px) {
-    .favorites {
-        width: 480px;
-    }
-}
-
-@media (max-width: 900px) {
-    .favorites {
-        width: 400px;
-        display: block;
-    }
-}
-@media (max-width: 800px) {
-    .favorites {
-        width: 370px;
-    }
-}
-
-@media (max-width: 700px) {
-    .favorites {
-        margin-left: -50px;
-    }
-}
-
-@media (max-height: 1000px) {
-    .favorites {
-        height: 220%;
-    }
-}
-@media (max-height: 935px) {
-    .favorites {
-        height: 190%;
-    }
-}
-@media (max-height: 800px) {
-    .favorites {
-        height: 160%;
-    }
-}
-@media (max-height: 720px) {
-    .favorites {
-        height: 135%;
-    }
-}
-
-@media (max-height: 600px) {
-    .favorites {
-        height: 110%;
-    }
-}
-
-@media (max-height: 500px) {
-    .favorites {
-        height: 80%;
+    .all-tracks-article {
+        font-size: 25px !important;
     }
 }
 
 .heart-img {
     top: 2px;
     position: absolute;
-    right: 5px;
+    right: 10px;
     border-radius: 10%;
     width: 210px;
     height: 210px;

@@ -1,5 +1,4 @@
 import '../../../wwwroot/css/favoritespage.css'
-import BackgroundVideo from '../customComponents/backVideo';
 import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useRef } from 'react';
@@ -10,7 +9,6 @@ import { selectUserIsAuth, setCurrentUser } from '../store/userSlice';
 import { AppDispatch } from '../store/store';
 import heartImg from '../../lib/resources/kandinsky-download-1741283020133.png'
 import { useArtistManager } from "../contexts/TrackManagerContext";
-import store from "../store/store"
 
 export default function FavoritePage() {
   const tracks = useSelector(selectLikedTracks);

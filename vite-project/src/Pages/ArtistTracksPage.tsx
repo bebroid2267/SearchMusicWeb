@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import BackgroundVideo from "../customComponents/backVideo";
 import Tracks from "../customComponents/tracks";
 import { useSelector } from "react-redux";
 import { useArtistManager } from "../contexts/TrackManagerContext";

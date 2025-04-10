@@ -50,7 +50,7 @@ namespace search_musics
             {
                 options.AddPolicy("AllowAllApps",
                     builder => builder
-                        .WithOrigins("http://mellmusic.infy.uk", "http://localhost:5173") // Разрешаем оба источника
+                        .WithOrigins("https://spaicy.ru", "http://localhost:5173") // Разрешаем оба источника
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });

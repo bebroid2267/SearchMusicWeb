@@ -7,13 +7,14 @@ import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 import imgStop from '../../src/resources/pause.png';
 import ButtonPanel from './buttonPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentTrack, selectIsTrackLiked, setActualDownloadUrlPlaylist, setCurrentTrack, setIsPlay } from '../store/playerSlice';
+import { selectCurrentTrack, selectIsPlaying, selectIsTrackLiked, setActualDownloadUrlPlaylist, setCurrentTrack, setIsPlay } from '../store/playerSlice';
 import { ITrack } from '../Interfaces';
 import store, { AppDispatch, RootState } from '../store/store';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 import Card from './buttonsNextPrev';
+import { Heart } from './heart';
 
 export default function MusicPanel() {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,12 +23,16 @@ export default function MusicPanel() {
   const trackManager = useTrackManager();
   const isTrackLiked = useSelector(selectIsTrackLiked);
   const { url } = useSelector((state: RootState) => state.tracks);
+  const isPlayingSlice = useSelector(selectIsPlaying);
 
   const [image, setImage] = useState<any>(unlikeTrack);
   const [currentProgressBar, setCurrentProgressBar] = useState(null);
   const [imgError, setImgError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  imgError;
+  image;
+  currentProgressBar;
   const canvas = useRef<HTMLCanvasElement>(null);
   const coverTrack = useRef<HTMLImageElement>(null);
   const panelForGradient = useRef<HTMLDivElement>(null);
@@ -70,7 +75,7 @@ export default function MusicPanel() {
       trackManager.trackManager.trackForUrl.addEventListener('ended', nextTrack);
     }
     trackManager.trackManager.progressContainer!.addEventListener('click', handleClick);
-    dispatch(setIsPlay(true));
+    // dispatch(setIsPlay(true));
   
     return () => {
       if (trackManager.trackManager.trackForUrl) {
@@ -103,8 +108,8 @@ export default function MusicPanel() {
   };
 
   useEffect(() => {
-    setIsPlaying(trackManager.trackManager.isPlaying);
-  }, [trackManager.trackManager.isPlaying])
+    setIsPlaying(isPlaying);
+  }, [isPlayingSlice])
 
   useEffect(() => {
     setLikeImage();
@@ -166,6 +171,8 @@ const nextTrack = (): void => {
                 changeTrackPanel(playlist[indexCurrentTrack + 1]);
             }
             trackManager.trackManager.playTrack();
+            // setIsPlaying(true);
+            dispatch(setIsPlay(true));
         }
     }
 };
@@ -211,6 +218,8 @@ const prevTrack = (): void => {
               changeTrackPanel(playlist[indexCurrentTrack - 1]);
             }
             trackManager.trackManager.playTrack();
+            // setIsPlaying(true);
+            dispatch(setIsPlay(true));
         }
     }
  };
@@ -254,13 +263,16 @@ const prevTrack = (): void => {
             onClickNext={nextTrack} 
             onClickPlay={handlePlayClick} 
             onClickPrev={prevTrack} 
-            isPlaying={isPlaying}
             refProgressBar = {progressBar}
             refProgressContainer={progressContainer}
             refAllTime={allTimeText}
             refCurrentTime={currentTimeText}
           >
           </Card>
+          <Heart 
+            isLiked={store.getState().player.isCurrentTrackLiked}
+            handleClick={handleLike}
+          />
           {/* <img
             src={img2}
             onClick={handlePlayClick}
@@ -281,7 +293,7 @@ const prevTrack = (): void => {
         </div> */}
 
 
-        <img className="like-track" onClick={handleLike} src={image} />
+        {/* <img className="like-track" onClick={handleLike} src={image} /> */}
       </div>
       {<ButtonPanel/>}
     </>

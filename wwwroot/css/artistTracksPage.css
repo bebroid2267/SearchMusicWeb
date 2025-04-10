@@ -74,3 +74,69 @@
     height: 600px;
     overflow-y: auto !important;
 }
+@media (max-width: 900px) {
+    .artist-cover-tracks {
+        height: 280px;
+        width: 280px;
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .artist-cover-tracks {
+        height: 250px;
+        width: 250px;
+        margin-top: 50px;
+        margin-right: -10px;
+    }
+    .all-tracks-article {
+        font-size: 30px;
+    }
+    .artist-name-article {
+        font-size: 15px;
+    }
+    .back-btn-text-article {
+        margin-top: 3px;
+        font-size: 15px;
+    }
+}
+@media (max-width: 500px) {
+    .artist-cover-tracks {
+        height: 200px;
+        width: 200px;
+        margin-top: 60px;
+        margin-right: -10px;
+    }
+    .all-tracks-article {
+        font-size: 28px;
+    }
+    .artist-name-article {
+        font-size: 12px;
+    }
+    .back-btn-text-article {
+        margin-top: 3px;
+        font-size: 15px;
+    }
+    .btn-exit-tracks-container {
+        margin-top: 30px;
+    }
+}
+@media (max-width: 400px) {
+    .artist-cover-tracks {
+        height: 150px;
+        width: 150px;
+        margin-top: 80px;
+        margin-right: 5px;
+    }
+    .all-tracks-article {
+        font-size: 25px;
+    }
+    .artist-name-article {
+        font-size: 9px;
+    }
+    .back-btn-text-article {
+        margin-top: 3px;
+        font-size: 12px;
+    }
+
+}

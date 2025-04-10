@@ -6,21 +6,13 @@ import { fetchAlbumsArtist, fetchTracksAlbum, fetchTracksArtist } from '../store
 import { setArtist } from '../store/artistSlice';
 import { setAlbum, setArtistName} from '../store/albumSlice';
 import { selectCurrentTrack } from '../store/playerSlice';
-import { useEffect, useState } from 'react';
-import { useTrackManager } from '../contexts/TrackManagerContext';
+import { useEffect } from 'react';
 
 
 export default function ButtonPanel() {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const currentTrack = useSelector(selectCurrentTrack);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const trackMangaer = useTrackManager();
-
-      useEffect(() => {
-        setIsPlaying(trackMangaer.trackManager.isPlaying);
-      }, [trackMangaer.trackManager.isPlaying])
-
 
       const handleOpenArtistPage = async () => {
         const currentTrack = store.getState().player.currentTrack;

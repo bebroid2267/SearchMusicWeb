@@ -140,9 +140,6 @@
 }
 
 @media (max-width: 600px) {
-   .all-tracks-article-album {
-      font-size: 22px;
-   }
    .container-cover-artist {
       margin-top: 20px;
    }
@@ -172,7 +169,7 @@
       font-size: 12px;
    }
    .all-tracks-article-album {
-      font-size: 17px;
+      font-size: 21px;
    }
    .container-cover-artist {
       margin-top: 40px;
@@ -203,7 +200,7 @@
    }
 
    .all-tracks-article-album {
-      font-size: 15px;
+      font-size: 19px;
    }
    .container-cover-artist {
       margin-top: 20px;
@@ -223,7 +220,7 @@
    }
 
    .all-tracks-article-album {
-      font-size: 12px;
+      font-size: 18px;
    }
    .container-cover-artist {
       margin-top: 20px;
@@ -236,5 +233,10 @@
    }
    .artist-name-article-album {
       font-size: 12px;
+   }
+}
+@media (max-height: 700px) {
+   .artistTracks-ul {
+      padding-bottom: 50px;
    }
 }

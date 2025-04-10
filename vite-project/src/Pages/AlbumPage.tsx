@@ -1,4 +1,3 @@
-import BackgroundVideo from "../customComponents/backVideo";
 import '../../../wwwroot/css/albumpage.css'
 import Tracks from "../customComponents/tracks";
 import { useArtistManager } from "../contexts/TrackManagerContext";
@@ -74,6 +73,7 @@ export default function AlbumPage() {
                                 neededBtn={false}
                                 isArtistTracksPage={false}
                             />
+                            <div className="pusto-div"></div>
                         </div>
                     </div>
                 </div>

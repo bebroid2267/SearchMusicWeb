@@ -3,14 +3,13 @@ import '../../../wwwroot/css/site.css';
 import '../../../wwwroot/css/favoritespage.css'
 import { ITrack } from '../Interfaces';
 import { useDispatch } from 'react-redux';
-import { setCurrentTrack, setPlaylist } from '../store/playerSlice';
+import { setCurrentTrack, setIsPlay, setPlaylist } from '../store/playerSlice';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import store, { AppDispatch } from '../store/store';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 import { setCurrentUrlWitoutFetch } from '../store/tracksSlice';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
-import imgPlay from '../../../wwwroot/lib/resources/play (2).jpg';
 import Track from './track';
 import Button from './buttonScrollAlbums';
 import '../../../wwwroot/css/artistTracksPage.css'
@@ -75,6 +74,7 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
 
   const handleClick = (track: ITrack) => {
     trackManager.trackManager.isPlaying = true;
+    dispatch(setIsPlay(true));
     dispatch(isLikedTrack(track));
     if (tracks) {
       dispatch(setPlaylist(tracks));

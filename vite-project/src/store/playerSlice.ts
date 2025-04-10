@@ -53,8 +53,6 @@ const playerSlice = createSlice({
     },
 });
 
-const selectPlayer = (state: any) => state.player; // Ваш редьюсер player
-
 
 export const selectCurrentTrack = (state: any) => state.player.currentTrack;
 export const selectPlaylist = (state: any) => state.player.playlist;

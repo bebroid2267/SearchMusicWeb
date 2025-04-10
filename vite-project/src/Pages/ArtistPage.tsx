@@ -1,4 +1,3 @@
-import BackgroundVideo from "../customComponents/backVideo";
 import '../../../wwwroot/css/artisttpagestyle.css'
 import yalogo from '../../lib/resources/yalogo.svg'
 import { useEffect, useRef } from "react";
@@ -18,6 +17,8 @@ export default function ArtistPage() {
     const artistManager = useArtistManager();
     const trackManager = useTrackManager();
     const dispatch = useDispatch<AppDispatch>();
+    const artistContainer = useRef<HTMLDivElement>(null);
+
   
     const results: any = useSelector<RootState>(state => state.artist);
     const {tracks, albums, artist} = results;
@@ -54,6 +55,25 @@ export default function ArtistPage() {
             dispatch(fetchUrl(track.id));
       };
     
+      useEffect(() => {
+        const handleScroll = () => {
+            let scrollPosition = window.scrollY;
+        
+            if (scrollPosition > 100) { 
+                console.log('pupu');
+                artistContainer.current!.style.transform = "translateY(-250px)";
+            } else {
+                console.log('p45353');
+                artistContainer.current!.style.transform = "translateY(0)";
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
 
     useEffect(() => {
@@ -89,7 +109,7 @@ export default function ArtistPage() {
                                 </div>
                             </div>
                         </div>
-                    <div className="artist-container">
+                    <div className="artist-container" ref={artistContainer}>
                         <div className="results">
                             <Tracks 
                                 handleOpenTracks={handleOpenTracks}
@@ -114,6 +134,7 @@ export default function ArtistPage() {
                                 className={'artistPage'}                       
                             />
                         </div>
+                        <div className="pustoi-div"></div>
                     </div>
                 </div>
             </div>

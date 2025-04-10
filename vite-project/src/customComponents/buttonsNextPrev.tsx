@@ -1,7 +1,7 @@
 import styled from 'styled-components';
+import store from '../store/store';
 
-export const Card = ({onClickPrev, onClickPlay, onClickNext, isPlaying, refProgressBar, refProgressContainer, refCurrentTime, refAllTime}: any) => {
-
+export const Card = ({onClickPrev, onClickPlay, onClickNext, refProgressBar, refProgressContainer, refCurrentTime, refAllTime}: any) => {
   return (
     <StyledWrapper>
         <div className="controls">
@@ -9,22 +9,19 @@ export const Card = ({onClickPrev, onClickPlay, onClickNext, isPlaying, refProgr
             <path clipRule="evenodd" d="M12 21.6a9.6 9.6 0 1 0 0-19.2 9.6 9.6 0 0 0 0 19.2Zm.848-12.352a1.2 1.2 0 0 0-1.696-1.696l-3.6 3.6a1.2 1.2 0 0 0 0 1.696l3.6 3.6a1.2 1.2 0 0 0 1.696-1.696L11.297 13.2H15.6a1.2 1.2 0 1 0 0-2.4h-4.303l1.551-1.552Z" fillRule="evenodd" />
           </svg>
 
-          <div className="container">
+          <div 
+            className="container" 
+            onClick={onClickPlay}
+          >
             <label>
-                <input 
-                  className="play-btn" 
-                  type="checkbox" 
-                  checked={isPlaying}
-                />
+                {store.getState().player.isPlaying ?
+                  <div 
+                      className="pause-icon" 
+                  /> :
                 <div 
                   className="play-icon" 
                 />
-                <div 
-                  className="pause-icon" 
-                  onClick={() => {
-                    onClickPlay();  
-                  }}
-                />
+                }
             </label>
         </div>
 
@@ -65,6 +62,62 @@ const StyledWrapper = styled.div`
     gap: .5rem;
     box-shadow: 0 10px 40px -25px rgba(100, 100, 100, .5);
   }
+  @media (max-width: 800px) {
+    .song-time {
+      width: 200px !important;
+    }
+  }
+  @media (max-width: 550px) {
+    .song-time {
+      margin-left: 18px !important;
+      width: 400px !important;
+      top: 50px !important;
+    }
+    .time_now, .time_full{
+      font-size: 8px !important;
+      display: none;
+    }
+    .time {
+      height: 2px !important;
+    }
+    .container {
+      width: 30px !important;
+      height: 30px !important;
+    }
+      .controls svg {
+        width: 20px !important;
+        height: 20px !important;
+      }
+    .controls {
+      position: fixed;
+      right: -40%;
+      top: -30px;
+      // margin-top: -60px !important;
+      // margin-left: 160px !important; 
+    }
+  }
+
+    @media (max-width: 490px) {
+      .controls {
+        position: fixed;
+        right: -38%;
+        top: -30px;
+        // margin-top: -60px !important;
+        // margin-left: 160px !important; 
+      }
+
+    }
+    @media (max-width: 400px) {
+      .controls {
+        position: fixed;
+        right: -36%;
+        top: -30px;
+        // margin-top: -60px !important;
+        // margin-left: 160px !important; 
+      }
+
+    }
+
 
   .top {
     position: relative;
@@ -115,7 +168,7 @@ const StyledWrapper = styled.div`
   .time {
     width: 90%;
     background-color: #5e5e5e;
-    height: .35rem;
+    height: .25rem;
     border-radius: 3px;
     box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.1);
   }
@@ -159,9 +212,12 @@ const StyledWrapper = styled.div`
   .controls svg:hover {
     color: gray;
   }
-
+  .heart {
+    margin-right: -50px;
+  }
   .controls .heart:hover {
     color: pink;
+    // background: pink;
   }
 
   .volume {
@@ -289,9 +345,12 @@ const StyledWrapper = styled.div`
     border-radius: 50%;
     margin-left: 10px;
     margin-right: 10px;
+    background: gray;
+        border: 1px solid white;
   }
     .container:hover {
         background: black;
+        cursor: pointer;
     }
     
   .play-btn {
@@ -365,6 +424,9 @@ const StyledWrapper = styled.div`
     top: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
+    background-color:rgb(218, 204, 216);
+    transition: all 400ms ease-in-out;
+
   }
 
   .pause-icon::before {

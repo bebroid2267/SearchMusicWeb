@@ -82,3 +82,27 @@ ul {
     height: 29px;
     border-radius: 5px;
 }
+@media (max-width: 600px) {
+    .button-panel {
+        height: 30px !important;
+    }
+    .ul-button-panel {
+        height: 30px !important;
+
+    }
+    .ul-button-panel li {
+        height: 30px !important;
+    }
+    .button-panel-element {
+        height: 30px !important;
+    }
+    .img-btn-element {
+        width: 20px;
+        height: 20px;
+        margin-top: 5px;
+    }
+    .text-btn-element-left,  .text-btn-element{
+        font-size: 13px;
+    }
+
+}
