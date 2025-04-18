@@ -38,13 +38,31 @@ namespace search_musics.Controllers
             // Если трек не существует, создаем новый
             if (existingTrack == null)
             {
+                var artists = new List<Artist>();
                 // Проверяем, существует ли Artist
-                var existingArtist = await _context.Artists
-                    .FirstOrDefaultAsync(a => a.Id == deSerializedTrack.ArtistEntity.Id);
-
-                if (existingArtist != null)
+                for (int i = 0; i < deSerializedTrack.ArtistsEntity.Count; i++)
                 {
-                    deSerializedTrack.ArtistEntity = existingArtist; // Привязываем существующего артиста
+                    var artistId = deSerializedTrack.ArtistsEntity[i].Id;
+
+                    var existingArtist = await _context.Artists.FirstOrDefaultAsync(a => a.Id == artistId);
+
+                    if (existingArtist == null)
+                    {
+                        // Добавляем нового артиста
+                        _context.Artists.Add(deSerializedTrack.ArtistsEntity[i]);
+                        artists.Add(deSerializedTrack.ArtistsEntity[i]);
+                    }
+                    else
+                    {
+                        // Используем уже отслеживаемого артиста
+                        artists.Add(existingArtist);
+                    }
+                }
+                deSerializedTrack.ArtistsEntity = artists;
+
+                if (artists.Count != 0)
+                {
+                    deSerializedTrack.ArtistsEntity = artists; // Привязываем существующего артиста
                 }
 
                 // Проверяем, существует ли Album
@@ -132,7 +150,7 @@ namespace search_musics.Controllers
                 {
                     x.Track.Id,
                     x.Track.Title,
-                    x.Track.Artist,
+                    x.Track.Artists,
                     x.Track.DownloadUrl,
                 })
                 .FirstOrDefaultAsync();
@@ -153,11 +171,11 @@ namespace search_musics.Controllers
                 {
                     l.Track.Id,
                     l.Track.Title,
-                    l.Track.Artist,
+                    l.Track.Artists,
                     l.Track.DownloadUrl,
                     l.Track.CoverPath,
                     l.Track.Album,
-                    l.Track.ArtistEntity
+                    l.Track.ArtistsEntity
                 })
                 .ToListAsync();
 

@@ -21,6 +21,7 @@ const StyledWrapper = styled.div`
         width: 35px;
         height: 35px;
         cursor: pointer; 
+        transition: color 0.3s;
     }
     .heartLiked {
         position: absolute; /* Абсолютное позиционирование */
@@ -29,20 +30,28 @@ const StyledWrapper = styled.div`
         width: 35px;
         height: 35px;
         cursor: pointer; 
-        color: rgb(250, 6, 250);
+        color: rgb(255, 0, 255);
+        transition: color 0.1s;
     }
+    .heartLiked:active, .heart:active {
+        color: gray !important;
+    }
+        @media (min-width: 551px) {
+            .heart:hover {
+                color: pink;
+            }
+            .heartLiked:hover {
+                color: pink;
+            }
+        }
         @media (max-width: 550px) {
             .heart, .heartLiked {
                 right: 120px;
                 width: 28px;
                 height: 28px;
-
             }
         }
 
-     .heart:hover {
-        color: pink;
-    }
 
 
 `;

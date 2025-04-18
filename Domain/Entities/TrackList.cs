@@ -3,15 +3,15 @@
     public class TrackList()
     {
         public Dictionary<int, Track> _tracks = new Dictionary<int, Track>();
-        public void AddTrack(int trackKey, string trackId, string trackTitle, string artistName, string coverPath, Artist artist, Album album)
+        public void AddTrack(int trackKey, string trackId, string trackTitle, string[] artistNames, string coverPath, List<Artist> artists, Album album)
         {
             _tracks.Add(trackKey, new Track
             {
                 Title = trackTitle,
-                Artist = artistName,
+                Artists = artistNames,
                 Id = trackId,
                 CoverPath = coverPath,
-                ArtistEntity = artist,
+                ArtistsEntity = artists,
                 Album = album
             });
         }

@@ -14,23 +14,25 @@ export interface ResultState {
 export interface IAlbumState {
     tracks: ITrack[] | null;
     album: IAlbum | null;
-    artist: IArtist | null;
-    artistName: string,
+    artists: IArtist[] | null;
+    artistsName: string[],
+    isPending: boolean,
 }
 
 export const initialState: IAlbumState = {
     tracks: null,
     album: null,
-    artist: null,
-    artistName: ''
+    artists: [],
+    artistsName: [],
+    isPending: false,
 };
 
 const albumSlice = createSlice({
     name: 'album',
     initialState,
     reducers: {
-        setArtistName: (state: any, action: PayloadAction<string>) => {
-            state.artistName = action.payload;
+        setArtistName: (state: any, action: PayloadAction<string[]>) => {
+            state.artistsName = action.payload;
         },
         setAlbum: (state: any, action: PayloadAction<IAlbum>) => {
             state.album = action.payload;
@@ -39,16 +41,31 @@ const albumSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchTracksAlbum.fulfilled, (state, action: PayloadAction<ITrack[]>) => {
             state.tracks = action.payload;
+            state.isPending = false;
 
             if (state.tracks) {
+                let foundArtist: IArtist[] | null = [];
                 for (const track of state.tracks) {
-                    if (track && track.artistEntity && track.artistEntity.name === state.artistName) {
-                        state.artist = track.artistEntity;
-                        break;
-                    }            
-                }    
+                    console.log(track?.artistsEntity);
+                    if (track?.artistsEntity) {
+                        var artist = track.artistsEntity.find(artist =>
+                            state.artistsName.includes(artist.name)
+                        );
+                        console.log(artist);
+                        if (artist)
+                        foundArtist.push(artist);
+
+                        if (foundArtist) break;
+                    }
+                }
+                state.artists = foundArtist;
             }
-        });
+    });
+        
+    builder.addCase(fetchTracksAlbum.pending, (state) => {
+        state.isPending = true;
+    });
+
     },
 })
 

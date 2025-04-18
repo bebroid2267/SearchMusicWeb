@@ -9,6 +9,7 @@ import { selectUser, selectUserIsAuthInProcess, selectUserIsRegisteredInProcess,
 import { registerUser } from '../store/Middleware/registerUser';
 import { loginUser } from '../store/Middleware/loginUser';
 import Loader from '../customComponents/loader';
+import {motion} from "framer-motion"
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -86,6 +87,11 @@ const AuthPage = () => {
     <div className="intro">
       <BackgroundVideo />
       <div className='container-auth'>
+      <motion.div 
+          initial={{opacity: 0}}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.2 }}
+        >
           <div className="auth-content">
             <div className='header-text-auth'>
               <h1 className="welcome-test">{isRegistering ? 'Присоединитесь к Спайси!' : 'Приветствуем в Спайси!'}</h1>{' '}
@@ -140,6 +146,7 @@ const AuthPage = () => {
               )}
             </div>
           </div>
+          </motion.div>
       </div>
     </div>
   );

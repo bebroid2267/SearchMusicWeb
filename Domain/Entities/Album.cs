@@ -6,6 +6,6 @@
         public string CoverPath { get; set; }
         public string Year { get; set; }
         public string id { get; set; }
-        public string ArtistName { get; set; }
+        public string[] ArtistsName { get; set; }
     }
 }

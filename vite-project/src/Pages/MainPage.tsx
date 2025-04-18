@@ -28,7 +28,7 @@ export default function MainPage() {
     }
     dispatch(setQuearyUser(queary));
     
-    dispatch(searchTracks(queary));
+    dispatch(searchTracks({queary, page: 0, pageSize: 16}));
     dispatch(searchAlbums(queary));
     dispatch(searchArtists(queary));
 
@@ -39,11 +39,11 @@ export default function MainPage() {
     <div className="intro">
       <BackgroundVideo />
         <div className="intro__content">
-        <h1 className='intro-text'>Погрузитесь в звезды</h1>
-          <h2 className='intro-text-h2'>Музыка, способная разбудить галактики!</h2>
-          <form onSubmit={handleSubmit} className='form-container'>
-            <Input id={"input_queary"} value={queary} name={"Queary"} onChange={setQueary}></Input>
-          </form>
+          <h1 className='intro-text'>Погрузитесь в звезды</h1>
+            <h2 className='intro-text-h2'>Музыка, способная разбудить галактики!</h2>
+            <form onSubmit={handleSubmit} className='form-container'>
+              <Input id={"input_queary"} value={queary} name={"Queary"} onChange={setQueary}></Input>
+            </form>
         </div>
     </div>
   );

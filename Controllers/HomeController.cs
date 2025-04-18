@@ -35,7 +35,7 @@ namespace search_musics.Controllers
             if (!ModelState.IsValid) // �������� �� "!" ��� ���������� ��������
                 return BadRequest(ModelState);
 
-            var trackList = YandexMusic.GetInfoTracks(model.Queary);
+            var trackList = YandexMusic.GetInfoTracks(model.Queary, model.Page, model.PageSize);
 
             if (trackList == null) return NotFound(ModelState);
 

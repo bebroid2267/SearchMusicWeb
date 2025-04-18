@@ -1,9 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_URL = 'https://a33164-ad9f.k.d-f.pw/Home';
+const API_URL = 'https://localhost:44303/Home';
 
 export type artistProps = {
     artistId: string;
+    pageSize: number;
+    page: number;
+}
+export type quearyProps = {
+    queary: string;
     pageSize: number;
     page: number;
 }
@@ -89,20 +94,39 @@ export const fetchTracksAlbum = createAsyncThunk(
 
 export const searchTracks = createAsyncThunk(
     'data/searchTracks',
-    async(queary: string, { rejectWithValue }) => {
+    async(queary: quearyProps, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_URL}/SearchTracks/${queary}`, {
+            const response = await fetch(`${API_URL}/SearchTracks/${queary.queary}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ Queary: queary }),
+                  body: JSON.stringify({Queary: queary.queary, PageSize: queary.pageSize, Page: queary.page}),
             });    
             const tracks = await response.json();
             return tracks.trackList;
         } catch (error) {
             return rejectWithValue(null);
         }
+    }
+);
+export const searchTrackPage = createAsyncThunk(
+    'data/searchTracksPage',
+    async(quearyProps: quearyProps, {rejectWithValue}) => {
+        try {
+            const response = await fetch(`${API_URL}/SearchTracks/${quearyProps.queary}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({Queary: quearyProps.queary, PageSize: quearyProps.pageSize, Page: quearyProps.page}),
+                });    
+            const tracks = await response.json();
+            return tracks.trackList;
+        } catch (error) {
+            return rejectWithValue(null);
+        }
+
     }
 );
 
@@ -160,7 +184,7 @@ export const fetchLikedTracks = createAsyncThunk(
         };
     
         try {
-            const response: any = await fetch(`https://a33164-ad9f.k.d-f.pw/api/tracksLike/liked`, { 
+            const response: any = await fetch(`https://localhost:44303/api/tracksLike/liked`, { 
                 method: 'GET',
                 headers });
             const answer = await response.json();

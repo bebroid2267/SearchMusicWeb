@@ -9,20 +9,25 @@ export const Card = ({onClickPrev, onClickPlay, onClickNext, refProgressBar, ref
             <path clipRule="evenodd" d="M12 21.6a9.6 9.6 0 1 0 0-19.2 9.6 9.6 0 0 0 0 19.2Zm.848-12.352a1.2 1.2 0 0 0-1.696-1.696l-3.6 3.6a1.2 1.2 0 0 0 0 1.696l3.6 3.6a1.2 1.2 0 0 0 1.696-1.696L11.297 13.2H15.6a1.2 1.2 0 1 0 0-2.4h-4.303l1.551-1.552Z" fillRule="evenodd" />
           </svg>
 
-          <div 
-            className="container" 
-            onClick={onClickPlay}
+          <div className='container-high'
+          onClick={onClickPlay}
           >
-            <label>
-                {store.getState().player.isPlaying ?
+
+          
+            <div 
+              className="container" 
+            >
+              <label>
+                  {store.getState().player.isPlaying ?
+                    <div 
+                        className="pause-icon" 
+                    /> :
                   <div 
-                      className="pause-icon" 
-                  /> :
-                <div 
-                  className="play-icon" 
-                />
-                }
-            </label>
+                    className="play-icon" 
+                  />
+                  }
+              </label>
+          </div>
         </div>
 
           <svg onClick={onClickNext} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" height={30} width={30}>
@@ -80,30 +85,46 @@ const StyledWrapper = styled.div`
     .time {
       height: 2px !important;
     }
+    
     .container {
       width: 30px !important;
       height: 30px !important;
     }
-      .controls svg {
-        width: 20px !important;
-        height: 20px !important;
-      }
+    .controls svg {
+      width: 20px !important;
+      height: 20px !important;
+      transition: background-color 0.2s;
+    }
+
     .controls {
       position: fixed;
       right: -40%;
       top: -30px;
-      // margin-top: -60px !important;
-      // margin-left: 160px !important; 
     }
   }
 
+    @media (min-width: 551px) {
+        .container {
+          margin-top: 5px !important;
+        }
+        .song-time {
+          margin-bottom: 20px !important;
+        }
+        .controls {
+          margin-bottom: 20px !important;
+        }
+
+        .container-high:hover .container {
+          background: black;
+          cursor: pointer;
+        }
+    }
+        
     @media (max-width: 490px) {
       .controls {
         position: fixed;
         right: -38%;
         top: -30px;
-        // margin-top: -60px !important;
-        // margin-left: 160px !important; 
       }
 
     }
@@ -112,12 +133,8 @@ const StyledWrapper = styled.div`
         position: fixed;
         right: -36%;
         top: -30px;
-        // margin-top: -60px !important;
-        // margin-left: 160px !important; 
       }
-
     }
-
 
   .top {
     position: relative;
@@ -160,7 +177,7 @@ const StyledWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: .3rem;
-    height: 50px;
+    height: 20px;
     margin-top: -10px;
     margin-bottom: 10px;
   }
@@ -212,6 +229,11 @@ const StyledWrapper = styled.div`
   .controls svg:hover {
     color: gray;
   }
+  
+  .controls svg:active {
+    color: black;
+  }
+
   .heart {
     margin-right: -50px;
   }
@@ -338,20 +360,29 @@ const StyledWrapper = styled.div`
       transform: scaleY(0.1);
     }
   }
-    .container {
+  .container-high {
+    height: 50px;
+
+  }
+  .container {
     width: 40px;
     height: 40px;
     position: relative;
     border-radius: 50%;
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 10px;
     background: gray;
-        border: 1px solid white;
+    border: 1px solid white;
+    transition: background-color 0.3s;
   }
-    .container:hover {
-        background: black;
-        cursor: pointer;
-    }
+
+  .container-high:hover .container {
+      cursor: pointer;
+  }
+  .container-high:active .container {
+    background-color: white;
+  }
     
   .play-btn {
     position: absolute;

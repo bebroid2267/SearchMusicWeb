@@ -35,7 +35,7 @@ namespace search_musics.Domain.Entities
             foreach (var item in albumResults)
             {
                 var coverUri = string.Empty;
-                var artistName = string.Empty;
+                var artists = new List<string>();
 
                 if ( item["coverUri"] != null)
                 {
@@ -43,8 +43,16 @@ namespace search_musics.Domain.Entities
                 }
                 if (item["artists"] is JArray artistsArray && artistsArray.Count > 0)
                 {
-                    artistName = artistsArray[0]["name"]?.ToString() ?? "Unknown Artist";
+                    for (int i = 0; i < item["artists"]?.Count(); i++)
+                    {
+                        artists.Add(item["artists"][i]["name"].ToString() ?? "Unknown Artist");
+                    }
                 }
+                else
+                {
+                    artists.Add("Unkown Artist");
+                }
+
 
                 albums.Add(new Album()
                 {
@@ -52,18 +60,18 @@ namespace search_musics.Domain.Entities
                     CoverPath = coverUri,
                     Title = item["title"].ToString(),
                     Year = item["year"] == null ? " " : item["year"].ToString(),
-                    ArtistName = artistName,
+                    ArtistsName = artists.ToArray(),
                 });
             }
 
             return albums;
         }
-        public static TrackList GetInfoTracks(string queary)
+        public static TrackList GetInfoTracks(string queary, int page = 0, int pageSize = 10)
         {
             TrackList tracks = new();
             int countTracks = 0;
 
-            var searchResult = defApi.Search(queary, typeSearch: "track", pageSize:16).Result;
+            var searchResult = defApi.Search(queary, page, typeSearch: "track", pageSize:pageSize).Result;
 
             var tracksResults = searchResult?["result"]?["tracks"]?["results"];
 
@@ -74,14 +82,21 @@ namespace search_musics.Domain.Entities
 
             foreach (var item in tracksResults)
             {
-                Artist artist = new Artist();
-                artist.Id = item["artists"][0]["id"].ToString();
-                artist.CoverPath = GetCoverUri(item["artists"][0]["cover"]?["uri"].ToString(), "1000x1000");
-                artist.Name = item["artists"][0]["name"].ToString();
+                List<Artist> artists = new List<Artist>();
+
+                for (int i = 0; i < item["artists"].Count(); i++)
+                {
+                    artists.Add(new Artist()
+                    {
+                        Id = item["artists"][i]["id"].ToString(),
+                        CoverPath = GetCoverUri(item["artists"][i]["cover"]?["uri"].ToString(), "1000x1000"),
+                        Name = item["artists"][i]["name"].ToString(),
+                    });
+                }
 
                 Album album = new Album();
                 album.id = item["albums"][0]["id"].ToString();
-                album.ArtistName = artist.Name;
+                album.ArtistsName = artists.Select(x =>  x.Name).ToArray();
                 album.CoverPath = GetCoverUri(item["albums"][0]["coverUri"]?.ToString(), "1000x1000");
                 album.Year = item["albums"][0]["year"] == null ? " " : item["albums"][0]["year"].ToString();
                 album.Title = item["albums"][0]["title"].ToString();
@@ -89,9 +104,9 @@ namespace search_musics.Domain.Entities
                 tracks.AddTrack(countTracks,
                     item["id"].ToString(),
                     item["title"].ToString(),
-                    artist.Name,
+                    artists.Select(x => x.Name).ToArray(),
                     GetCoverUri(item["coverUri"]?.ToString(), "100x100"), 
-                    artist,
+                    artists,
                     album           
                 );
 
@@ -140,19 +155,23 @@ namespace search_musics.Domain.Entities
                 foreach (var track in items)
                 {
                     var coverUri = string.Empty;
-                    if (track["artists"][0]["cover"] != null)
+                    List<Artist> artists = new List<Artist>();
+
+                    for (int i = 0; i < track["artists"].Count(); i++)
                     {
-                        coverUri = GetCoverUri(track["artists"][0]["cover"]["uri"].ToString(), "1000x1000");
+                        artists.Add(new Artist()
+                        {
+                            Id = track["artists"][i]["id"].ToString(),
+                            CoverPath = track["artists"][i]["cover"] != null ? GetCoverUri(track["artists"][i]["cover"]["uri"].ToString(), "1000x1000") : coverUri,
+                            Name = track["artists"][i]["name"].ToString(),
+                        });
                     }
 
-                    Artist artist = new Artist();
-                    artist.Id = track["artists"][0]["id"].ToString();
-                    artist.CoverPath = coverUri;
-                    artist.Name = track["artists"][0]["name"].ToString();
 
                     Album album = new Album();
+
                     album.id = track["albums"][0]["id"].ToString();
-                    album.ArtistName = artist.Name;
+                    album.ArtistsName = artists.Select(x => x.Name).ToArray();
                     album.CoverPath = GetCoverUri(track["albums"][0]["coverUri"]?.ToString(), "1000x1000");
                     album.Year = track["albums"][0]["year"] == null ? " " : track["albums"][0]["year"].ToString();
                     album.Title = track["albums"][0]["title"].ToString();
@@ -162,9 +181,9 @@ namespace search_musics.Domain.Entities
                     {
                         Id = track["id"].ToString(),
                         Title = track["title"].ToString(),
-                        Artist = track["artists"][0]["name"].ToString(),
+                        Artists = artists.Select(x => x.Name).ToArray(),
                         CoverPath = GetCoverUri(track["coverUri"]?.ToString(),"100x100"),
-                        ArtistEntity = artist,
+                        ArtistsEntity = artists,
                         Album = album
                     });
                 }
@@ -187,19 +206,23 @@ namespace search_musics.Domain.Entities
             foreach (var item in filteredAsnwer)
             {
                 var coverUri = string.Empty;
-                if (item["artists"][0]["cover"] != null)
+
+                List<Artist> artists = new List<Artist>();
+
+                for (int i = 0; i < item["artists"].Count(); i++)
                 {
-                    coverUri = GetCoverUri(item["artists"][0]["cover"]["uri"].ToString(), "1000x1000");
+                    artists.Add(new Artist()
+                    {
+                        Id = item["artists"][i]["id"].ToString(),
+                        CoverPath = item["artists"][i]["cover"] != null ? GetCoverUri(item["artists"][i]["cover"]["uri"].ToString(), "1000x1000") : coverUri,
+                        Name = item["artists"][i]["name"].ToString(),
+                    });
                 }
 
-                Artist artist = new Artist();
-                artist.Id = item["artists"][0]["id"].ToString();
-                artist.CoverPath = coverUri;
-                artist.Name = item["artists"][0]["name"].ToString();
-
                 Album album = new Album();
+
                 album.id = item["albums"][0]["id"].ToString();
-                album.ArtistName = artist.Name;
+                album.ArtistsName = artists.Select(x => x.Name).ToArray();
                 album.CoverPath = GetCoverUri(item["albums"][0]["coverUri"]?.ToString(), "1000x1000");
                 album.Year = item["albums"][0]["year"] == null ? " " : item["albums"][0]["year"].ToString();
                 album.Title = item["albums"][0]["title"].ToString();
@@ -209,14 +232,15 @@ namespace search_musics.Domain.Entities
                 {
                     Id = item["id"].ToString(),
                     Title = item["title"].ToString(),
-                    Artist = item["artists"][0]["name"].ToString(),
+                    Artists = artists.Select(x => x.Name).ToArray(),
                     CoverPath = GetCoverUri(item["coverUri"]?.ToString(), "100x100"),
-                    ArtistEntity = artist,
+                    ArtistsEntity = artists,
                     Album = album
                 });
             }
             return tracks;
         }
+
         public static List<Album> GetAlbumsArtist(string artistId)
         {
             List<Album> albums = new List<Album>();
@@ -232,9 +256,16 @@ namespace search_musics.Domain.Entities
             foreach (var item in filteredAnswer)
             {
                 var coverUri = string.Empty;
+                var artists = new List<string>();
+
                 if (item["coverUri"] != null)
                 {
                     coverUri = GetCoverUri(item["coverUri"].ToString(), "1000x1000");
+                }
+
+                for (int i = 0; i < item["artists"].Count(); i++)
+                {
+                    artists.Add(item["artists"][i]["name"].ToString());
                 }
 
                 albums.Add(new Album()
@@ -243,7 +274,7 @@ namespace search_musics.Domain.Entities
                     CoverPath = coverUri,
                     Title = item["title"].ToString(),
                     Year = item["year"] == null ? " " : item["year"].ToString(),
-                    ArtistName = item["artists"][0]["name"].ToString(),
+                    ArtistsName = artists.ToArray(),
                 });
             }
             return albums;

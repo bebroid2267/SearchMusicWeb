@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchLikedTracks, searchAlbums, searchArtists, searchTracks } from "./Middleware/fetchDataPage";
+import { fetchLikedTracks, searchAlbums, searchArtists, searchTrackPage, searchTracks } from "./Middleware/fetchDataPage";
+import { ITrack } from "../Interfaces";
 
 const initialState = {
-    tracks: [],
+    tracks: [] as ITrack[],
     album: [],
     artist: [],
     likedTracks: [],
     queary: '',
+    isLastTracksScroll: false,
+    isPending: false
 }
 const dataSlice = createSlice({
     name: 'data',
@@ -19,7 +22,30 @@ const dataSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(searchTracks.fulfilled, (state, action: PayloadAction<any>) => {
             state.tracks = action.payload;
+            state.isLastTracksScroll = false;
+            state.isPending = false;
         });
+        builder.addCase(searchTracks.pending, (state) => {
+            state.isPending = true;
+        });
+
+        builder.addCase(searchTrackPage.fulfilled, (state, action: PayloadAction<any>) => {
+            const newTracks = action.payload;
+        
+            // Удаление дубликатов
+            const uniqueTracks = [...state.tracks, ...newTracks].filter((track, index, self) =>
+                index === self.findIndex((t) => (
+                t.id === track.id
+                ))
+            );
+              
+            state.tracks = uniqueTracks;
+        });
+        builder.addCase(searchTrackPage.rejected, (state) => {
+            state.isLastTracksScroll = true;
+            state.isPending = false;
+        });
+        
         builder.addCase(searchAlbums.fulfilled, (state, action: PayloadAction<any>) => {
             state.album = action.payload;
         });

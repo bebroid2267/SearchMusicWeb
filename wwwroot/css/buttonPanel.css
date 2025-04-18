@@ -40,10 +40,12 @@ ul {
     border-radius: 8px;
     border: 1px solid rgb(46, 45, 45);
     box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
 }
-.ul-button-panel li:hover {
-    background-color: rgb(105, 97, 97);
-}
+
+.ul-button-panel li:active {
+    background-color: rgba(255, 255, 255, 0.76) !important;
+}    
 
 .button-panel-element {
     width: auto !important;
@@ -81,6 +83,13 @@ ul {
     width: 29px;
     height: 29px;
     border-radius: 5px;
+}
+
+@media (min-width: 600px) {
+    .ul-button-panel li:hover {
+        background-color: rgb(105, 97, 97);
+        cursor: pointer;
+    }    
 }
 @media (max-width: 600px) {
     .button-panel {

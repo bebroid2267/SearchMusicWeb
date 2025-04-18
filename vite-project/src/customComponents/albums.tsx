@@ -38,7 +38,7 @@ export default function Albums({ albums, className }: AlbumsProps) {
 
   const handleOpenAlbumPage = async (album: IAlbum) => {
     dispatch(fetchTracksAlbum(album.id.toString()));
-    dispatch(setArtistName(album.artistName));
+    dispatch(setArtistName(album.artistsName));
     dispatch(setAlbum(album));
     
     navigate(`/Album/${album.title}`);
@@ -84,7 +84,7 @@ export default function Albums({ albums, className }: AlbumsProps) {
                 />
                 <h3 className="album_name">{album.title}</h3>
                 <div className="blur_album_cover"></div>
-                <h4 className="album_artist">{album.artistName}</h4>
+                <h4 className="album_artist">{album.artistsName[0]}</h4>
                 <h4 className="album_year">{album.year}</h4>
               </li>
             ))

@@ -7,10 +7,10 @@ const initialTrack: ITrack = {
     id: '',
     coverPath: '',
     title: '',
-    artist: '',
+    artists: [],
     downloadUrl: '',
     album: null,
-    artistEntity: null
+    artistsEntity: []
 }
 const playerSlice = createSlice({
     name: 'player',

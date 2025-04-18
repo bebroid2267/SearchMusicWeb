@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = 'https://a33164-ad9f.k.d-f.pw/api/account';
+const API_URL = 'https://localhost:44303/api/account';
 
 export const isUserAuth = createAsyncThunk(
     'user/isUSerAuth',

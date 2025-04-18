@@ -91,8 +91,9 @@ const StyledWrapper = styled.div`
     opacity: 80%;
     cursor: pointer;
     padding: 13px 20px;
-    transition: 0.2s;
+    transition: 0.3s;
     color: rgb(255, 255, 255);
+    border-radius: 15px;
   }
 
   .svg-exit {
@@ -122,6 +123,8 @@ const StyledWrapper = styled.div`
     background-color: rgb(0,0,0,0);
   }
 
+
+
   .ul .li .svg:hover  {
     transition: 0.1s;
     color: rgb(219, 40, 235);
@@ -129,6 +132,9 @@ const StyledWrapper = styled.div`
     margin-top: -4px;
     opacity: 100%;
   }
+    .ul .li .svg:active {
+        background-color: gray;
+    }
 
   .radio:checked + label .li .svg .svg-exit {
     color: rgb(219, 40, 235);

@@ -13,9 +13,9 @@ export interface ITrack {
     id: string;
     coverPath: string;
     title: string;
-    artist: string;
+    artists: string[];
     downloadUrl: string;
-    artistEntity: IArtist | null;
+    artistsEntity: IArtist[] | null;
     album: IAlbum | null;
 }
 
@@ -30,5 +30,5 @@ export interface IAlbum {
     coverPath: string;
     title: string;
     year: string;
-    artistName: string;
+    artistsName: string[];
 }

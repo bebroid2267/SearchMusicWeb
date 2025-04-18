@@ -12,6 +12,7 @@ const initialState = {
     albums: [] as IAlbum[],
     artist: initialArtist,
     isLastTracksScroll: false,
+    isPending: false
 }
 
 const artistSlice = createSlice({
@@ -29,6 +30,11 @@ const artistSlice = createSlice({
         builder.addCase(fetchTracksArtist.fulfilled, (state, action: PayloadAction<any>) => {
             state.tracks = action.payload;
             state.isLastTracksScroll = false;
+            state.isPending = false;
+        });
+
+        builder.addCase(fetchTracksArtist.pending, (state) => {
+            state.isPending = true;
         });
 
         builder.addCase(fetchTracksArtistPage.fulfilled, (state, action: PayloadAction<any>) => {
@@ -45,10 +51,12 @@ const artistSlice = createSlice({
         });
         builder.addCase(fetchTracksArtistPage.rejected, (state) => {
             state.isLastTracksScroll = true;
+            state.isPending = false;
         });
 
     }
 })
+export const selectIsPendingTracksArtist = (state: any) => state.artist.isPending;
 export const selectCurrentArtist = (state: any) => state.artist.artist;
 export const { setArtist } = artistSlice.actions;
 export default artistSlice.reducer;

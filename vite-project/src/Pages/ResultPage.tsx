@@ -8,16 +8,18 @@ import Tracks from '../customComponents/tracks';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { selectAlbums, selectArtists, selectQuearyUser, selectTracks, setQuearyUser } from '../store/searchDataSlice';
 import InputResult from '../customComponents/inputResultPage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchAlbums, searchArtists, searchTracks } from '../store/Middleware/fetchDataPage';
 import { AppDispatch } from '../store/store';
+import Loader from '../customComponents/loader';
 
 export default function ResultPage() {
   const tracks = useSelector(selectTracks);
   const artists = useSelector(selectArtists);
   const albums = useSelector(selectAlbums);
   const quearyUser = useSelector(selectQuearyUser);
+  const [delayerRender, setDelayerRender] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const [queary, setQueary] = useState('');
@@ -33,6 +35,33 @@ export default function ResultPage() {
     }
   }
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDelayerRender(true);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if (!delayerRender) {
+    return (
+    <>
+      <div className="intro">
+        </div>
+      <div className="intro_result">
+        <div className='loader-container'>
+            <Loader></Loader>
+          </div>
+      </div>
+    </>
+
+    );
+  }
+
+    const handleOpenAllTracksPage = () => {
+      navigate(`/Result/${quearyUser}/tracks`);
+    };
+
     const handleSubmit = async (e: any) => {
       console.log('chd');
       e.preventDefault();
@@ -42,7 +71,7 @@ export default function ResultPage() {
       }
       dispatch(setQuearyUser(queary));
       
-      dispatch(searchTracks(queary));
+      dispatch(searchTracks({queary, page: 0, pageSize: 16}));
       dispatch(searchAlbums(queary));
       dispatch(searchArtists(queary));
 
@@ -73,9 +102,9 @@ export default function ResultPage() {
                     tracks={cutTracks}
                     className={'tracks-finally'}
                     classNameForTrackText={'artist-text'} 
-                    handleOpenTracks={null} 
-                    neededBtn={false} 
-                    isArtistTracksPage={false}            
+                    handleOpenTracks={handleOpenAllTracksPage} 
+                    neededBtn={true} 
+                    currentPage={'none'}            
                 />
                 <Artists 
                   artists={artists}

@@ -179,15 +179,20 @@ li {
     border-radius: 15px;
 }
 
-    li:hover {
-        background-color: rgb(48, 47, 47);
-        cursor: pointer;
-    }
+.track-item:hover {
+    background-color: rgb(48, 47, 47);
+    cursor: pointer;
+}
+
+.track-item:active {
+    background-color: rgba(255, 255, 255, 0.767);
+}
 
 .track-item {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    transition: background-color 0.4s;
 }
 
 .cover {

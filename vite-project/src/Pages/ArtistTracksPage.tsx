@@ -58,7 +58,7 @@ export function ArtistTracksPage () {
                                 className={'artistTracks-ul'} 
                                 classNameForTrackText={'artist-page-tracks-h2'} 
                                 neededBtn={false}
-                                isArtistTracksPage={true}
+                                currentPage={'artist'}
                             />
                         </div>
                     </div>

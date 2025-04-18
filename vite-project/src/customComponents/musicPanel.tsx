@@ -34,6 +34,7 @@ export default function MusicPanel() {
   image;
   currentProgressBar;
   const canvas = useRef<HTMLCanvasElement>(null);
+
   const coverTrack = useRef<HTMLImageElement>(null);
   const panelForGradient = useRef<HTMLDivElement>(null);
   const trackForUrl = useRef<HTMLAudioElement>(null);
@@ -68,6 +69,8 @@ export default function MusicPanel() {
     trackManager.trackManager.allTimeTrack = allTimeText.current;
     trackManager.trackManager.currentTimeTrack = currentTimeText.current;
   
+    canvas.current!.width = 50;
+    canvas.current!.height = 50;  
     const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
 
     if (trackManager.trackManager.trackForUrl) {
@@ -249,16 +252,13 @@ const prevTrack = (): void => {
         />
         <div className="track-info-panel">
           <h3 className="track-title-panel">{currentReduxTrack.title}</h3>
-          <p className="track-artist-panel">{currentReduxTrack.artistEntity?.name}</p>
+          <p className="track-artist-panel">{currentReduxTrack.artists?.map((element: string, index: any) => (
+            `${element}${index < currentReduxTrack.artists.length -1 ? ', ' : ''}`
+          ))}
+          </p>
         </div>
         <audio id="track_for_url" ref={trackForUrl}></audio>
         <div className="music-buttons">
-          {/* <img 
-            src={img1} 
-            className="prev-track-button"  
-            ref={prevTrackBtn} 
-            onClick={prevTrack}
-          /> */}
           <Card 
             onClickNext={nextTrack} 
             onClickPlay={handlePlayClick} 
@@ -273,27 +273,7 @@ const prevTrack = (): void => {
             isLiked={store.getState().player.isCurrentTrackLiked}
             handleClick={handleLike}
           />
-          {/* <img
-            src={img2}
-            onClick={handlePlayClick}
-            ref={playTrackBtn}
-            className="stop-track-button"
-            id="play-music-btn"
-          /> */}
-          {/* <img 
-            src={img3} 
-            className="next-track-button" 
-            ref={nextTrackBtn} 
-            onClick={nextTrack}
-          /> */}
         </div>
-        
-        {/* <div className="progress__container" ref={progressContainer}>
-          <div className="progress" id="progress_bar" ref={progressBar}></div>
-        </div> */}
-
-
-        {/* <img className="like-track" onClick={handleLike} src={image} /> */}
       </div>
       {<ButtonPanel/>}
     </>

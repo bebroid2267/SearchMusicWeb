@@ -13,7 +13,7 @@ export default function Track ({track, handleClick}: TrackProps) {
             data-id={track.id}
             data-cover-path={track.coverPath}
             data-title={track.title}
-            data-artist={track.artist}
+            data-artist={track.artists}
             onClick={() => handleClick(track)}
         >
         <img
@@ -23,7 +23,11 @@ export default function Track ({track, handleClick}: TrackProps) {
         />
         <div className="track-info">
             <h3 className="track-title">{track.title}</h3>
-            <p className="track-artist">{track.artist}</p>
+            <p className="track-artist">
+                {track.artists?.map((element, index) => (
+                    <span>{`${element}${index < track.artists.length -1 ? ', ' : ''}`}</span>
+                ))}
+            </p>        
         </div>
       </li>
     );

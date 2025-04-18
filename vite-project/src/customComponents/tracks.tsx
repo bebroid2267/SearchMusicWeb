@@ -8,12 +8,14 @@ import { useTrackManager } from '../contexts/TrackManagerContext';
 import store, { AppDispatch } from '../store/store';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
-import { setCurrentUrlWitoutFetch } from '../store/tracksSlice';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 import Track from './track';
 import Button from './buttonScrollAlbums';
 import '../../../wwwroot/css/artistTracksPage.css'
-import { fetchTracksArtistPage } from '../store/Middleware/fetchDataPage';
+import { fetchTracksArtistPage, searchTrackPage } from '../store/Middleware/fetchDataPage';
+
+
+type Page =  'artist' | 'result' | 'none';
 
 interface TracksProps {
   tracks: any;
@@ -21,10 +23,10 @@ interface TracksProps {
   classNameForTrackText: string;
   handleOpenTracks: any;
   neededBtn: boolean;
-  isArtistTracksPage: boolean;
+  currentPage: Page;
 }
 
-export default function Tracks({ tracks, className, classNameForTrackText, handleOpenTracks, neededBtn, isArtistTracksPage }: TracksProps) {
+export default function Tracks({ tracks, className, classNameForTrackText, handleOpenTracks, neededBtn, currentPage }: TracksProps) {
   const trackManager = useTrackManager();
   const dispatch = useDispatch<AppDispatch>();
   const artistId = store.getState().artist.artist.id;
@@ -34,9 +36,9 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
   const ulRef = useRef<HTMLUListElement>(null); // Ссылка на элемент ul
 
 
-  const loadMoreTracks = useCallback(() => {
+  const loadMoreTracksArtist = useCallback(() => {
     const neededFinishDownload = store.getState().artist.isLastTracksScroll;
-    if (loading || neededFinishDownload || !artistId) return;
+    if (loading || neededFinishDownload || !artistId || page > 20) return;
     setLoading(true);
     dispatch(fetchTracksArtistPage({ artistId, page, pageSize: 10 }))
       .then(() => {
@@ -45,20 +47,44 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
       .finally(() => setLoading(false));
   }, [dispatch, artistId, page, loading]);
 
+  const loadMoreTracksResult = useCallback(() => {
+    const neededFinishDownload = store.getState().data.isLastTracksScroll;
+    const queary = store.getState().data.queary;
+    if (loading || neededFinishDownload || !artistId || page > 20) return;
+    setLoading(true);
+    dispatch(searchTrackPage({ queary, page, pageSize: 10 }))
+      .then(() => {
+        setPage(prevPage => prevPage + 1);
+      })
+      .finally(() => setLoading(false));
+  }, [dispatch, page, loading]);
+
+
   const handleScroll = useCallback(() => {
     if (!ulRef.current) return;
     const ulElement = ulRef.current;
     // Проверяем, находится ли пользователь внизу элемента ul
     if (ulElement.scrollTop + ulElement.clientHeight >= ulElement.scrollHeight - 200) {
-      loadMoreTracks();
+      if (currentPage == 'artist') {
+        loadMoreTracksArtist();
+      }
+      else {
+        loadMoreTracksResult();
+      }
     }
-  }, [loadMoreTracks]);
+  }, [loadMoreTracksArtist, loadMoreTracksResult]);
 
 
   useEffect(() => {
     const neededFinishDownload = store.getState().artist.isLastTracksScroll;
-    if (!isArtistTracksPage || !artistId || neededFinishDownload) return;
-    loadMoreTracks();
+    if (currentPage == 'none' || !artistId || neededFinishDownload) return;
+
+    if (currentPage == 'artist') {
+      loadMoreTracksArtist();
+    }
+    else {
+      loadMoreTracksResult();
+    }
 
     if (ulRef.current) {
       ulRef.current.addEventListener('scroll', handleScroll);
@@ -69,7 +95,7 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
         ulRef.current.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [isArtistTracksPage, artistId, loadMoreTracks, handleScroll]);
+  }, [currentPage, artistId, loadMoreTracksArtist, loadMoreTracksResult, handleScroll]);
 
 
   const handleClick = (track: ITrack) => {
@@ -84,14 +110,9 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
 
   const changeTrackPanel = (track: ITrack) => {
     dispatch(setCurrentTrack(track));
-        dispatch(fetchUrl(track.id));
+    dispatch(fetchUrl(track.id));
   };
   
-  useEffect(() => {
-    const currentTrack = store.getState().player.currentTrack;
-    dispatch(setCurrentUrlWitoutFetch(currentTrack.downloadUrl));
-  },);
-
   return (
     <div className={'result-' + className}>
       <div className='container-article-tracks'>
