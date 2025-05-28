@@ -5,7 +5,7 @@ export const fetchUrl = createAsyncThunk(
     async (chooseTrackId: string, { rejectWithValue }) => {
         try {
             const response = await fetch(`https://localhost:44303/Home/GetUrlForTrack?trackId=${chooseTrackId}`,
-             {method: 'GET'});
+             {method: 'POST'});
             const data = await response.text();
             console.log(data);
             return data;

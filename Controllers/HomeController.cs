@@ -18,7 +18,7 @@ namespace search_musics.Controllers
         {
             return View();
         }
-        
+
         public IActionResult Privacy()
         {
             return View();
@@ -29,92 +29,89 @@ namespace search_musics.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        [HttpPost]
-        public IActionResult SearchTracks([FromBody] QuearyModel model)
-        {
-            if (!ModelState.IsValid) // �������� �� "!" ��� ���������� ��������
-                return BadRequest(ModelState);
-
-            var trackList = YandexMusic.GetInfoTracks(model.Queary, model.Page, model.PageSize);
-
-            if (trackList == null) return NotFound(ModelState);
-
-            var tracksArray = trackList._tracks.Select(x => x.Value).ToArray();
-            return Json(new { TrackList = tracksArray }); // ���������� TrackList
-        }
-        [HttpPost]
-        public IActionResult SearchArtists([FromBody] QuearyModel model)
-        {
-            if (!ModelState.IsValid) // �������� �� "!" ��� ���������� ��������
-                return BadRequest(ModelState);
-
-            var artistList = YandexMusic.GetInfoArtists(model.Queary);
-            if (artistList == null) return NotFound();
-
-            return Json(new { ArtistList = artistList.ToArray()});
-        }
 
         [HttpPost]
-        public IActionResult SearchAlbums([FromBody] QuearyModel model)
+        public async Task<IActionResult> SearchTracks([FromBody] QuearyModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var albumsList = YandexMusic.GetInfoAlbums(model.Queary);
-            if (albumsList == null) return NotFound();
-            
-            return Json(new {  AlbumList = albumsList.ToArray()});
+            var trackList = await SpotifyScrapper.GetTracksAsync(model.Queary, model.Page, model.PageSize);
+
+            if (trackList == null)
+                return NotFound(ModelState);
+
+            return Json(new { TrackList = trackList });
         }
 
         [HttpPost]
-        public IActionResult GetTracksAlbum([FromBody] QuearyModel model)
+        public async Task<IActionResult> SearchArtists([FromBody] QuearyModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var tracksList = YandexMusic.GetTracksAlbum(model.Queary);
-            if (tracksList == null) return NotFound();
+            var artistList = await SpotifyScrapper.GetArtistsAsync(model.Queary);
+            if (artistList == null)
+                return NotFound();
 
-            return Json(new { TrackList = tracksList.ToArray() });
+            return Json(new { ArtistList = artistList.ToArray() });
         }
+
         [HttpPost]
-        public IActionResult GetAlbumsArtist([FromBody] QuearyModel model)
+        public async Task<IActionResult> SearchAlbums([FromBody] QuearyModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-            var albumsList = YandexMusic.GetAlbumsArtist(model.Queary);
-            if (albumsList == null) return NotFound();
 
-            return Json(new { AlbumList = albumsList.ToArray()});
+            var albumsList = await SpotifyScrapper.GetAlbumsAsync(model.Queary);
+            if (albumsList == null)
+                return NotFound();
+
+            return Json(new { AlbumList = albumsList.ToArray() });
         }
         [HttpPost]
-        public IActionResult GetTracksArtist([FromBody] QuearyModel model)
+        public async Task<IActionResult> GetUrlForTrack(string trackId)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-            var trackList = YandexMusic.GetTracksArtist(model.Queary, page: model.Page, pageSize: model.PageSize);
-            if (trackList == null) return NotFound();
+
+            var downloadUrl = await SpotifyScrapper.GetTrackDownloadUrlAsync(trackId);
+
+            if (string.IsNullOrEmpty(downloadUrl))
+                return NotFound(new { message = "Download URL not found for the track." });
+
+            return Json(new { DownloadUrl = downloadUrl });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAlbumsArtist([FromBody] QuearyModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var albumsList = await SpotifyScrapper.GetAlbumsArtist(model.Queary);
+
+            if (albumsList == null || albumsList.Count == 0)
+                return NotFound(new { message = "No albums found for the artist." });
+
+            return Json(new { AlbumList = albumsList.ToArray() });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetTracksArtist([FromBody] QuearyModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var trackList = await SpotifyScrapper.GetTracksArtist(model.Queary, model.Page, model.PageSize);
+
+            if (trackList == null || trackList.Count == 0)
+                return NotFound(new { message = "No tracks found for the artist." });
 
             return Json(new { TrackList = trackList.ToArray() });
         }
-        [HttpGet]
-        public IActionResult GetUrlForTrack(string trackId)
-        {
-            string url =  YandexMusic.GetUrlForDownloadTrack(trackId);
 
-            if (url == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(url);
-            }
-        }
+
         [HttpPost]
         public IActionResult ResultSearch([FromForm] QuearyModel model)
         {

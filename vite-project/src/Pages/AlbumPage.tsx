@@ -27,7 +27,7 @@ export default function AlbumPage() {
         if (tracks == null && !store.getState().album.isPending && quearySearch) {
             dispatch(setQuearyUser(quearySearch));
             
-            dispatch(searchTracks(quearySearch));
+            dispatch(searchTracks({queary: quearySearch, pageSize: 10, page: 0}));
             dispatch(searchAlbums(quearySearch));
             dispatch(searchArtists(quearySearch));
         

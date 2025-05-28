@@ -32,10 +32,10 @@ export default function ArtistPage() {
     
     let cutTracks = null;
 
-    if (tracks.length > 10) {
+    if (tracks?.length > 10) {
         cutTracks = tracks.slice(0, 10);
     } else {
-        cutTracks = tracks.slice(0, tracks.length);
+        cutTracks = tracks?.slice(0, tracks?.length);
     }
 
     const coverArtist = useRef<HTMLImageElement>(null);
@@ -77,7 +77,7 @@ export default function ArtistPage() {
 
         window.addEventListener("scroll", handleScroll);
 
-        if (tracks.length == 0 && !store.getState().artist.isPending) {
+        if (tracks?.length == 0 && !store.getState().artist.isPending) {
             // if (artistId && querySearch)
             //     const artist: IArtist = {
     
@@ -93,7 +93,7 @@ export default function ArtistPage() {
             if (quearySearch) {
                 dispatch(setQuearyUser(quearySearch));
                 
-                dispatch(searchTracks(quearySearch));
+                dispatch(searchTracks({queary: quearySearch, pageSize: 10, page: 0}));
                 dispatch(searchAlbums(quearySearch));
                 dispatch(searchArtists(quearySearch));
             
