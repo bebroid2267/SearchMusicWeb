@@ -109,6 +109,7 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
   };
 
   const changeTrackPanel = (track: ITrack) => {
+    console.log(track);
     dispatch(setCurrentTrack(track));
     dispatch(fetchUrl(track.id));
   };

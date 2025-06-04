@@ -60,8 +60,8 @@ export default function ButtonPanel() {
     }
 
     useEffect(() => {
-        console.log(store.getState().player.currentTrack);
-    },[store.getState().player.currentTrack])
+        console.log(currentTrack);
+    },[currentTrack])
 
     return (
         <>
@@ -85,7 +85,7 @@ export default function ButtonPanel() {
                             className='img-btn-element' 
                             src={currentTrack?.album?.coverPath} 
                             alt=""
-                            style={{ display: currentTrack?.artistsEntity[0]?.coverPath == undefined  ? 'none' : 'block'}}    
+                            style={{ display: currentTrack?.artistsEntity[0]?.coverPath == undefined || currentTrack?.artistsEntity[0]?.coverPath == null? 'none' : 'block'}}    
                         />
                         <p className='text-btn-element-left'>{currentTrack?.album?.title}</p>
                     </li>

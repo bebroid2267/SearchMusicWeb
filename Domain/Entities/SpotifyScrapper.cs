@@ -35,14 +35,22 @@ using System.Net;
 
                 foreach (var item in results)
                 {
-                    var artists = item["artists"]?.Select(artist => artist["name"]?.ToString()).ToArray();
+                    var artistEntities = item["artists"]?
+                        .Select(artist => new Artist
+                        {
+                            Id = artist["id"]?.ToString(),
+                            Name = artist["name"]?.ToString(),
+                            CoverPath = "" // если не нужен, можно оставить пустым
+                        }).ToList() ?? new List<Artist>();
+
+                    var artists = artistEntities.Select(a => a.Name).ToArray();
 
                     var track = new Track
                     {
                         Id = item["id"]?.ToString(),
                         Title = item["name"]?.ToString(),
                         CoverPath = item["album"]?["cover"]?[2]?["url"]?.ToString() ?? "",
-                        Artists = artists ?? Array.Empty<string>(),
+                        Artists = artists,
                         DownloadUrl = item["preview_url"]?.ToString(),
                         Album = new Album
                         {
@@ -51,7 +59,9 @@ using System.Net;
                             Year = item["album"]?["release_date"]?.ToString()?.Substring(0, 4),
                             CoverPath = item["album"]?["images"]?[0]?["url"]?.ToString() ?? ""
                         },
+                        ArtistsEntity = artistEntities
                     };
+
                     tracks.Add(track);
                 }
 
@@ -71,7 +81,6 @@ using System.Net;
                 req.AddHeader("X-RapidAPI-Key", apiKey);
                 req.AddHeader("X-RapidAPI-Host", host);
 
-
                 var url = $"{searchBaseUrl}?term={query}&type=artist&page={page}&limit={pageSize}";
                 var response = req.Get(url).ToString();
                 var json = JObject.Parse(response);
@@ -84,7 +93,7 @@ using System.Net;
                     {
                         Id = item["id"]?.ToString(),
                         Name = item["name"]?.ToString(),
-                        CoverPath = item["images"]?[0]?["url"]?.ToString() ?? ""
+                        CoverPath = item["visuals"]?["avatar"]?[2]?["url"]?.ToString() ?? ""
                     };
                     artists.Add(artist);
                 }
@@ -145,7 +154,12 @@ using System.Net;
                     return null;
 
                 var json = JObject.Parse(response);
-                return json["soundcloudTrack"]?["audio"]?[0]?["url"]?.ToString();
+                var audioArray = json["soundcloudTrack"]?["audio"] as JArray;
+
+                var mp3 = audioArray?
+                    .FirstOrDefault(a => a?["format"]?.ToString() == "mp3");
+
+                return mp3?["url"]?.ToString()?.Replace("\\u0026", "&");
             }
         }
 

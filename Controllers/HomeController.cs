@@ -80,7 +80,7 @@ namespace search_musics.Controllers
             if (string.IsNullOrEmpty(downloadUrl))
                 return NotFound(new { message = "Download URL not found for the track." });
 
-            return Json(new { DownloadUrl = downloadUrl });
+            return Json(downloadUrl);
         }
 
         [HttpPost]
