@@ -8,7 +8,7 @@ using System.Net;
         {
             private static readonly string searchBaseUrl = "https://spotify-scraper.p.rapidapi.com/v1/search";
             private static readonly string downloadBaseUrl = "https://spotify-scraper.p.rapidapi.com/v1/track/download/soundcloud";
-            private static readonly string apiKey = "8ae7076bc4msh53dfbdaf964f91fp1f28b4jsnc6f06992ef3f";
+            private static readonly string apiKey = "1074d13dbamshd99457b2c223110p1bed1fjsnb9b85f1cb0e2";
             private static readonly string host = "spotify-scraper.p.rapidapi.com";
 
 
@@ -156,10 +156,18 @@ using System.Net;
                 var json = JObject.Parse(response);
                 var audioArray = json["soundcloudTrack"]?["audio"] as JArray;
 
-                var mp3 = audioArray?
-                    .FirstOrDefault(a => a?["format"]?.ToString() == "mp3");
+                var mp3Object = audioArray?
+                .FirstOrDefault(a =>
+                    a?["mimeType"]?.ToString() == "audio/mpeg" &&
+                    a?["format"]?.ToString() == "mp3");
 
-                return mp3?["url"]?.ToString()?.Replace("\\u0026", "&");
+                var rawUrl = audioArray?.FirstOrDefault()?["url"]?.ToString();
+                var fixedUrl = rawUrl?
+                    .Replace("\\u0026", "&")                  // unicode в строке
+                    .Replace("%5Cu0026", "&")                 // вдруг пришло уже как url-encoded
+                    .Replace("\\", "");
+
+                return fixedUrl;
             }
         }
 

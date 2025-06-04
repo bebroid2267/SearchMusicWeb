@@ -6,7 +6,8 @@ export const fetchUrl = createAsyncThunk(
         try {
             const response = await fetch(`https://localhost:44303/Home/GetUrlForTrack?trackId=${chooseTrackId}`,
              {method: 'POST'});
-            const data = await response.text();
+            const data = await response.json();
+                        console.log("EBLAN");
             console.log(data);
             return data;
         } catch (error: any) {
