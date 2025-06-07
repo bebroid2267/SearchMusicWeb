@@ -12,7 +12,7 @@ namespace search_musics
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            //шься
             // Add services to the container.
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
