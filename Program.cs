@@ -50,7 +50,7 @@ namespace search_musics
             {
                 options.AddPolicy("AllowAllApps",
                     builder => builder
-                        .WithOrigins("https://spaicy.ru", "http://localhost:5173") // Разрешаем оба источника
+                        .WithOrigins("https://spaicy.ru", "http://localhost:5173", "https://localhost:7285") // Разрешаем оба источника
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
@@ -74,7 +74,63 @@ namespace search_musics
             app.UseStaticFiles();
 
             app.UseCors("AllowAllApps");
+
+
+            app.Use(async (context, next) =>
+            {
+                var logger = context.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("ProxyMiddleware");
+
+                var path = context.Request.Path;
+                logger.LogInformation($"Request path: {path}");
+
+                if (path.StartsWithSegments("/v1", out var remainingPath))
+                {
+                    logger.LogInformation($"Proxying to localhost:7285 path: {remainingPath}");
+
+                    var query = context.Request.QueryString.HasValue ? context.Request.QueryString.Value : "";
+                    var targetUrl = $"https://localhost:7285/v1{remainingPath}{query}";
+
+                    var handler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+
+                    using var client = new HttpClient(handler);
+                    var requestMessage = new HttpRequestMessage(new HttpMethod(context.Request.Method), targetUrl);
+
+                    foreach (var header in context.Request.Headers)
+                    {
+                        if (!requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray()))
+                        {
+                            requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                        }
+                    }
+
+                    var response = await client.SendAsync(requestMessage);
+
+                    context.Response.StatusCode = (int)response.StatusCode;
+
+                    foreach (var header in response.Headers)
+                    {
+                        context.Response.Headers[header.Key] = header.Value.ToArray();
+                    }
+                    foreach (var header in response.Content.Headers)
+                    {
+                        context.Response.Headers[header.Key] = header.Value.ToArray();
+                    }
+
+                    var body = await response.Content.ReadAsStringAsync();
+                    await context.Response.WriteAsync(body);
+
+                    return;
+                }
+
+                await next();
+            });
+
+
             app.UseRouting();
+
 
             app.UseAuthorization();
             app.UseAuthentication();

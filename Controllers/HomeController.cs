@@ -1,6 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using search_musics.Domain.Entities;
 using search_musics.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Diagnostics;
+using System.Web.WebPages.Html;
+
+using Microsoft.AspNetCore.Mvc;
+using search_musics.Domain.Entities;
+using search_musics.Models;
 using System.Diagnostics;
 
 namespace search_musics.Controllers
@@ -104,6 +111,20 @@ namespace search_musics.Controllers
                 return BadRequest(ModelState);
 
             var trackList = await SpotifyScrapper.GetTracksArtist(model.Queary, model.Page, model.PageSize);
+
+            if (trackList == null || trackList.Count == 0)
+                return NotFound(new { message = "No tracks found for the artist." });
+
+            return Json(new { TrackList = trackList.ToArray() });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetTracksAlbum([FromBody] QuearyModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var trackList = await SpotifyScrapper.GetTracksAlbum(model.Queary);
 
             if (trackList == null || trackList.Count == 0)
                 return NotFound(new { message = "No tracks found for the artist." });
