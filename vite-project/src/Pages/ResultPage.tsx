@@ -28,6 +28,7 @@ export default function ResultPage() {
   let cutTracks = null;
 
   if (tracks !== undefined) {
+    console.log(tracks);
       if (tracks.length > 10) {
         cutTracks = tracks.slice(0, 10);
     } else {

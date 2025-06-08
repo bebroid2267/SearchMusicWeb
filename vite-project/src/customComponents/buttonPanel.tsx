@@ -9,6 +9,7 @@ import { selectCurrentTrack } from '../store/playerSlice';
 import { useEffect, useRef, useState } from 'react';
 import { IArtist } from '../Interfaces';
 import Playlist from './playlist';
+import FullScreenPlayer from './fullScreenPlayer';
 
 
 export default function ButtonPanel() {
@@ -17,6 +18,7 @@ export default function ButtonPanel() {
     const currentTrack = useSelector(selectCurrentTrack);
     const playlist = useRef<HTMLDivElement>(null);
     const [isOpenPlaylist, setIsOpenPlaylist] = useState(false);
+    const [isFullScreenPlayerOpen, setIsFullScreenPlayerOpen] = useState(false);
 
       const handleOpenArtistPage = async (artist: IArtist) => {
         dispatch(fetchTracksArtist({
@@ -59,9 +61,20 @@ export default function ButtonPanel() {
         setIsOpenPlaylist(!isOpenPlaylist);
     }
 
+    const handleOpenFullScreenPlayer = () => {
+        setIsFullScreenPlayerOpen(true);
+    };
+
     useEffect(() => {
         console.log(currentTrack);
     },[currentTrack])
+
+    useEffect(() => {
+        // Скрываем плейлист по умолчанию при загрузке компонента
+        if (playlist.current) {
+            playlist.current.style.display = 'none';
+        }
+    }, []);
 
     return (
         <>
@@ -98,16 +111,15 @@ export default function ButtonPanel() {
                     <li className='button-panel-element' onClick={handleOpenClipGooglePage}>
                         <p className='text-btn-element'>Поиск клипов</p>
                     </li>
-                    <li className='button-panel-element'>
-                        <p className='text-btn-element'>Скачать трек</p>
-                    </li>
-                    <li className='button-panel-element'>
+                    <li className='button-panel-element' onClick={handleOpenFullScreenPlayer}>
                         <p className='text-btn-element'>Плеер</p>
                     </li>
-
                 </ul>
             </div>
             <Playlist ref={playlist}/>
+            {isFullScreenPlayerOpen && (
+                <FullScreenPlayer onClose={() => setIsFullScreenPlayerOpen(false)} />
+            )}
         </>
     );
 }

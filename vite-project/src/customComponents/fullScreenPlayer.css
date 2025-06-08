@@ -1,0 +1,129 @@
+.fullscreen-player {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.fullscreen-player-content {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.fullscreen-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+}
+
+.fullscreen-cover-container {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1;
+    margin: 0 auto;
+}
+
+.fullscreen-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.fullscreen-track-info {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.fullscreen-track-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.fullscreen-track-artist {
+    font-size: 24px;
+    color: #aaa;
+}
+
+.fullscreen-controls {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fullscreen-controls-main {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+}
+
+.fullscreen-like-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.fullscreen-like-button .heart-button {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.fullscreen-like-button .heart-button:hover {
+    transform: scale(1.1);
+}
+
+.fullscreen-heart-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 20px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.fullscreen-heart-container:hover svg {
+    stroke: #ff4081;
+}
+
+.fullscreen-heart-button {
+    width: 24px;
+    height: 24px;
+    transition: all 0.2s ease;
+}
+
+.fullscreen-heart-container:active {
+    transform: scale(0.9);
+} 

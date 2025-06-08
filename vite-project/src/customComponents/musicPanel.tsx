@@ -15,6 +15,7 @@ import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 import Card from './buttonsNextPrev';
 import { Heart } from './heart';
+import { PlayerControls } from './playerControls';
 
 export default function MusicPanel() {
   const dispatch = useDispatch<AppDispatch>();
@@ -55,7 +56,7 @@ export default function MusicPanel() {
     trackManager.trackManager.trackForUrl!.currentTime = (clickX / width) * duration;
   };
 
-  useEffect(() => {
+  const setupTrackManagerElements = () => {
     trackManager.trackManager.trackForUrl = trackForUrl.current;
     trackManager.trackManager.playTrackBtn = playTrackBtn.current;
     trackManager.trackManager.progressBar = progressBar.current;
@@ -68,28 +69,58 @@ export default function MusicPanel() {
     trackManager.trackManager.imgForGradient = coverTrack.current;
     trackManager.trackManager.allTimeTrack = allTimeText.current;
     trackManager.trackManager.currentTimeTrack = currentTimeText.current;
-  
-    canvas.current!.width = 50;
-    canvas.current!.height = 50;  
-    const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
+  };
 
+  const setupEventListeners = () => {
+    const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
+    
     if (trackManager.trackManager.trackForUrl) {
       trackManager.trackManager.trackForUrl.addEventListener('timeupdate', updateProgress);
       trackManager.trackManager.trackForUrl.addEventListener('ended', nextTrack);
     }
-    trackManager.trackManager.progressContainer!.addEventListener('click', handleClick);
-    // dispatch(setIsPlay(true));
-  
+    
+    if (trackManager.trackManager.progressContainer) {
+      trackManager.trackManager.progressContainer.addEventListener('click', handleClick);
+    }
+
     return () => {
       if (trackManager.trackManager.trackForUrl) {
         trackManager.trackManager.trackForUrl.removeEventListener('timeupdate', updateProgress);
+        trackManager.trackManager.trackForUrl.removeEventListener('ended', nextTrack);
       }
-      trackManager.trackManager.trackForUrl?.removeEventListener('ended', nextTrack);
-      
-      trackManager.trackManager.progressContainer!.removeEventListener('click', handleClick);
+      if (trackManager.trackManager.progressContainer) {
+        trackManager.trackManager.progressContainer.removeEventListener('click', handleClick);
+      }
     };
-   },);
-  
+  };
+
+  useEffect(() => {
+    setupTrackManagerElements();
+    canvas.current!.width = 50;
+    canvas.current!.height = 50;  
+    
+    return setupEventListeners();
+  }, []);
+
+  useEffect(() => {
+    if (!currentReduxTrack.downloadUrl) return;
+    
+    setupTrackManagerElements();
+    
+    // Trigger background update
+    if (coverTrack.current) {
+      coverTrack.current.crossOrigin = 'anonymous';
+      if (coverTrack.current.complete) {
+        trackManager.trackManager.changeBackgroundMusicPanel();
+      } else {
+        coverTrack.current.onload = () => {
+          trackManager.trackManager.changeBackgroundMusicPanel();
+        };
+      }
+    }
+    
+    return setupEventListeners();
+  }, [currentReduxTrack.downloadUrl]);
 
   useEffect(() => {
     const handleProgressBarChange = (newProgressBar: any) => setCurrentProgressBar(newProgressBar);
@@ -229,13 +260,9 @@ const prevTrack = (): void => {
 
  const changeTrackPanel = (track: ITrack) => {
   dispatch(setCurrentTrack(track));
-  //if (!track.downloadUrl){
-      dispatch(fetchUrl(track.id));
-  //}
-  //else {
-    changeTrackPanelTrackManager();
-  //}
-
+  setupTrackManagerElements();
+  dispatch(fetchUrl(track.id));
+  changeTrackPanelTrackManager();
 };
 
   return (
@@ -263,12 +290,11 @@ const prevTrack = (): void => {
             onClickNext={nextTrack} 
             onClickPlay={handlePlayClick} 
             onClickPrev={prevTrack} 
-            refProgressBar = {progressBar}
+            refProgressBar={progressBar}
             refProgressContainer={progressContainer}
             refAllTime={allTimeText}
             refCurrentTime={currentTimeText}
-          >
-          </Card>
+          />
           <Heart 
             isLiked={store.getState().player.isCurrentTrackLiked}
             handleClick={handleLike}

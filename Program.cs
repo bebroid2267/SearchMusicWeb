@@ -4,6 +4,7 @@ using search_musics.Domain;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using search_musics.Domain.Entities;
 
 namespace search_musics
 {
@@ -23,6 +24,8 @@ namespace search_musics
             builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            builder.Services.AddHttpClient();
 
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
             var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
@@ -75,58 +78,9 @@ namespace search_musics
 
             app.UseCors("AllowAllApps");
 
+            app.UseMiddleware<ProxyMiddleware>();
 
-            app.Use(async (context, next) =>
-            {
-                var logger = context.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("ProxyMiddleware");
 
-                var path = context.Request.Path;
-                logger.LogInformation($"Request path: {path}");
-
-                if (path.StartsWithSegments("/v1", out var remainingPath))
-                {
-                    logger.LogInformation($"Proxying to localhost:7285 path: {remainingPath}");
-
-                    var query = context.Request.QueryString.HasValue ? context.Request.QueryString.Value : "";
-                    var targetUrl = $"https://localhost:7285/v1{remainingPath}{query}";
-
-                    var handler = new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    };
-
-                    using var client = new HttpClient(handler);
-                    var requestMessage = new HttpRequestMessage(new HttpMethod(context.Request.Method), targetUrl);
-
-                    foreach (var header in context.Request.Headers)
-                    {
-                        if (!requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray()))
-                        {
-                            requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
-                        }
-                    }
-
-                    var response = await client.SendAsync(requestMessage);
-
-                    context.Response.StatusCode = (int)response.StatusCode;
-
-                    foreach (var header in response.Headers)
-                    {
-                        context.Response.Headers[header.Key] = header.Value.ToArray();
-                    }
-                    foreach (var header in response.Content.Headers)
-                    {
-                        context.Response.Headers[header.Key] = header.Value.ToArray();
-                    }
-
-                    var body = await response.Content.ReadAsStringAsync();
-                    await context.Response.WriteAsync(body);
-
-                    return;
-                }
-
-                await next();
-            });
 
 
             app.UseRouting();

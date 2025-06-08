@@ -96,7 +96,7 @@ export const searchTracks = createAsyncThunk(
     'data/searchTracks',
     async(queary: quearyProps, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_URL}/SearchTracks/${queary.queary}`, {
+            const response = await fetch(`${API_URL}/SearchTracks/${queary}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,6 +104,7 @@ export const searchTracks = createAsyncThunk(
                   body: JSON.stringify({Queary: queary.queary, PageSize: queary.pageSize, Page: queary.page}),
             });    
             const tracks = await response.json();
+            console.log(tracks);
             return tracks.trackList;
         } catch (error) {
             return rejectWithValue(null);

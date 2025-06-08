@@ -1,13 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using search_musics.Domain.Entities;
 using search_musics.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Diagnostics;
-using System.Web.WebPages.Html;
-
-using Microsoft.AspNetCore.Mvc;
-using search_musics.Domain.Entities;
-using search_musics.Models;
 using System.Diagnostics;
 
 namespace search_musics.Controllers

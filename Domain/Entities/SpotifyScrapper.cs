@@ -12,7 +12,6 @@ using System.Net.Http;
         private static readonly string apiKey = "596814e52cmsh7995181d9581fe2p13d6dejsn66a884e161f0";
         private static readonly string host = "spotify-scraper.p.rapidapi.com";
 
-
         private static readonly HttpClient httpClient;
 
         static SpotifyScrapper()
