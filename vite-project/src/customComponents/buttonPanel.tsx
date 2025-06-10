@@ -26,7 +26,11 @@ export default function ButtonPanel() {
             page: 0,
             pageSize: 10,
         }));
-        dispatch(fetchAlbumsArtist(artist.id));
+        dispatch(fetchAlbumsArtist({
+            artistId: artist.id,
+            page: 0,
+            pageSize: 10,
+        }));
         dispatch(setArtist(artist));
 
         navigate(`/Artist/${artist.name}`);

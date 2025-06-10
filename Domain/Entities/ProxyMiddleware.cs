@@ -1,4 +1,6 @@
-﻿namespace search_musics.Domain.Entities
+﻿using System.Net.Http.Headers;
+
+namespace search_musics.Domain.Entities
 {
     public class ProxyMiddleware
     {
@@ -9,8 +11,11 @@
         public ProxyMiddleware(RequestDelegate next, IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _next = next;
-            _httpClient = httpClientFactory.CreateClient();
-            _targetBaseUrl = "http://localhost:5206"; // например: http://external-server.local
+            _httpClient = new HttpClient(new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            });
+            _targetBaseUrl = "https://a34294-a507.w.d-f.pw";
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -18,7 +23,7 @@
             var targetUri = BuildTargetUri(context.Request);
             if (targetUri == null || !context.Request.Path.StartsWithSegments("/Home"))
             {
-                await _next(context); // если не проксировать — передай дальше
+                await _next(context);
                 return;
             }
             var requestMessage = CreateTargetMessage(context, targetUri);
@@ -58,7 +63,6 @@
                 RequestUri = targetUri,
             };
 
-            // Копируем тело запроса
             if (!HttpMethods.IsGet(context.Request.Method) &&
                 !HttpMethods.IsHead(context.Request.Method) &&
                 !HttpMethods.IsDelete(context.Request.Method) &&
@@ -69,9 +73,18 @@
                 requestMessage.Content = new StreamContent(context.Request.Body);
             }
 
-            // Копируем заголовки
+            // Очищаем Accept и явно указываем тип
+            requestMessage.Headers.Accept.Clear();
+            requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // Копируем безопасные заголовки
             foreach (var header in context.Request.Headers)
             {
+                if (header.Key.Equals("Host", StringComparison.OrdinalIgnoreCase) ||
+                    header.Key.Equals("Accept-Encoding", StringComparison.OrdinalIgnoreCase) ||
+                    header.Key.Equals("Connection", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 if (!requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray()))
                 {
                     requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());

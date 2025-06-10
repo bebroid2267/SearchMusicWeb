@@ -7,7 +7,6 @@ import { useTrackManager } from '../contexts/TrackManagerContext';
 import { PlayerControls } from './playerControls';
 import { FullscreenHeart } from './fullscreenHeart';
 import { AppDispatch } from '../store/store';
-import { setIsPlay } from '../store/playerSlice';
 import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 import store from '../store/store';
@@ -180,12 +179,35 @@ export default function FullScreenPlayer({ onClose }: FullScreenPlayerProps) {
                 trackManager.trackManager.changeBackgroundMusicPanel();
             }
 
-            // Принудительно обновляем прогресс
+            // Восстанавливаем слушатели и состояние
             if (currentAudio) {
-                const fakeEvent = {
-                    srcElement: currentAudio
-                };
-                trackManager.trackManager.updateProgressTrack(fakeEvent);
+                // Переподключаем слушатель обновления прогресса
+                const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
+                currentAudio.addEventListener('timeupdate', updateProgress);
+
+                // Восстанавливаем текущее состояние прогресса
+                const { duration, currentTime } = currentAudio;
+                if (!isNaN(duration) && !isNaN(currentTime)) {
+                    const progressPercent = (currentTime / duration) * 100;
+                    trackManager.trackManager.progressBar!.style.width = `${progressPercent}%`;
+                    
+                    if (trackManager.trackManager.currentTimeTrack && trackManager.trackManager.allTimeTrack) {
+                        trackManager.trackManager.currentTimeTrack.textContent = trackManager.trackManager.secondsToMinutes(currentTime);
+                        trackManager.trackManager.allTimeTrack.textContent = trackManager.trackManager.secondsToMinutes(duration);
+                    }
+                }
+
+                // Добавляем обработчик клика на прогресс-бар
+                if (trackManager.trackManager.progressContainer) {
+                    const handleClick = (e: any) => {
+                        const width = trackManager.trackManager.progressContainer!.clientWidth;
+                        const clickX = e.offsetX;
+                        const duration = currentAudio.duration;
+                        currentAudio.currentTime = (clickX / width) * duration;
+                    };
+
+                    trackManager.trackManager.progressContainer.addEventListener('click', handleClick);
+                }
             }
         }
 
@@ -309,6 +331,7 @@ export default function FullScreenPlayer({ onClose }: FullScreenPlayerProps) {
                             refAllTime={allTimeText}
                             refCurrentTime={currentTimeText}
                             isFullscreen={true}
+                            isPlaying={isPlaying}
                         />
                         <div className="fullscreen-like-button">
                             <FullscreenHeart

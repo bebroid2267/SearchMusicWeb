@@ -112,7 +112,12 @@
    color: rgba(228, 228, 228, 0.852);
    margin-top: 23px;
    margin-left: 10px;
-   text-shadow: 1px 1px 1px black; 
+   text-shadow: 1px 1px 1px black;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   max-width: 200px;
+   display: block;
 }
 .artist-name-article-album:hover {
    cursor: pointer;

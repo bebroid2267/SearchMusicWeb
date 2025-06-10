@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { selectAlbums, selectArtists, selectQuearyUser, selectTracks, setQuearyUser } from '../store/searchDataSlice';
 import InputResult from '../customComponents/inputResultPage';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { searchAlbums, searchArtists, searchTracks } from '../store/Middleware/fetchDataPage';
 import { AppDispatch } from '../store/store';
 import Loader from '../customComponents/loader';
@@ -24,6 +24,7 @@ export default function ResultPage() {
   const dispatch = useDispatch<AppDispatch>();
   const [queary, setQueary] = useState('');
   const navigate = useNavigate();
+  const { quearySearch } = useParams();
 
   let cutTracks = null;
 
@@ -35,6 +36,18 @@ export default function ResultPage() {
         cutTracks = tracks.slice(0, tracks.length);
     }
   }
+
+  // Обработка параметра URL при монтировании компонента
+  useEffect(() => {
+    if (quearySearch && quearySearch.trim()) {
+      dispatch(setQuearyUser(quearySearch));
+      setQueary(quearySearch);
+      
+      dispatch(searchTracks({queary: quearySearch, page: 0, pageSize: 16}));
+      dispatch(searchAlbums({queary: quearySearch, page: 0, pageSize: 10}));
+      dispatch(searchArtists({queary: quearySearch, page: 0, pageSize: 10}));
+    }
+  }, [dispatch, quearySearch]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -55,29 +68,27 @@ export default function ResultPage() {
           </div>
       </div>
     </>
-
     );
   }
 
-    const handleOpenAllTracksPage = () => {
-      navigate(`/Result/${quearyUser}/tracks`);
-    };
+  const handleOpenAllTracksPage = () => {
+    navigate(`/Result/${quearyUser}/tracks`);
+  };
 
-    const handleSubmit = async (e: any) => {
-      console.log('chd');
-      e.preventDefault();
-      if (!queary.trim()) {
-        alert('Введите запрос');
-        return;
-      }
-      dispatch(setQuearyUser(queary));
-      
-      dispatch(searchTracks({queary, page: 0, pageSize: 16}));
-      dispatch(searchAlbums(queary));
-      dispatch(searchArtists(queary));
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (!queary.trim()) {
+      alert('Введите запрос');
+      return;
+    }
+    dispatch(setQuearyUser(queary));
+    
+    dispatch(searchTracks({queary, page: 0, pageSize: 16}));
+    dispatch(searchAlbums({queary, page: 0, pageSize: 10}));
+    dispatch(searchArtists({queary, page: 0, pageSize: 10}));
 
-      navigate(`/Result/${queary}`);
-    };
+    navigate(`/Result/${queary}`);
+  };
   
   return (
     <div className="intro">
@@ -96,7 +107,6 @@ export default function ResultPage() {
           </div>
           <div className="result-container">
             <div className='light-container'>
-
             </div>
             <div className='result-main-container'>
                 <Tracks 
@@ -110,14 +120,15 @@ export default function ResultPage() {
                 <Artists 
                   artists={artists}
                   className={'artist-result-container'} 
+                  currentPage={'result'}
                 />
                 <Albums 
                     albums={albums} 
                     className={'artistPage'}  
+                    currentPage={'result'}
                 />
             </div>
           </div>
-
         </div>
       </div>
     </div>

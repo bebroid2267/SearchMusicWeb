@@ -23,16 +23,14 @@ export default function AlbumPage() {
     const panelForChangeColor = useRef<HTMLDivElement>(null);
     
     useEffect(() => {
-
         if (tracks == null && !store.getState().album.isPending && quearySearch) {
             dispatch(setQuearyUser(quearySearch));
             
             dispatch(searchTracks({queary: quearySearch, pageSize: 10, page: 0}));
-            dispatch(searchAlbums(quearySearch));
-            dispatch(searchArtists(quearySearch));
+            dispatch(searchAlbums({queary: quearySearch, pageSize: 10, page: 0}));
+            dispatch(searchArtists({queary: quearySearch, pageSize: 10, page: 0}));
         
             navigate(`/Result/${quearySearch}`);
-
         } else {
             albumManager.coverArtist = coverAlbum.current;
             albumManager.gradientDiv = panelForChangeColor.current;
@@ -48,7 +46,11 @@ export default function AlbumPage() {
             page: 0,
             pageSize: 10,
         }));
-        dispatch(fetchAlbumsArtist(artists[0].id));
+        dispatch(fetchAlbumsArtist({
+            artistId: artists[0].id,
+            page: 0,
+            pageSize: 10
+        }));
         dispatch(setArtist(artists[0]));
 
         navigate(`/Artist/${artists[0].name}`);

@@ -4,18 +4,15 @@ import Tracks from "../customComponents/tracks";
 import Albums from "../customComponents/albums";
 import { useArtistManager, useTrackManager } from "../contexts/TrackManagerContext";
 import { useDispatch, useSelector } from "react-redux";
-import store, { AppDispatch, RootState } from "../store/store";
-import { useNavigate, useParams } from "react-router-dom";
-import clearPlay from '../../lib/resources/clearplay (1) (1).png'
+import { AppDispatch, RootState } from "../store/store";
+import { useNavigate } from "react-router-dom";
+import playIcon from '../../lib/resources/play (2).jpg'
 import { isLikedTrack } from "../store/Middleware/isLikedTrack";
-import { setCurrentTrack, setPlaylist } from "../store/playerSlice";
+import { setCurrentTrack, setIsPlay, setPlaylist } from "../store/playerSlice";
 import { fetchUrl } from "../store/Middleware/fetchUrlForTrack";
 import { ITrack } from "../Interfaces";
 import { motion } from "framer-motion"
-import { setQuearyUser } from '../store/searchDataSlice';
-import { searchAlbums, searchArtists, searchTracks } from '../store/Middleware/fetchDataPage';
-// import { fetchAlbumsArtist, fetchTracksArtist } from '../store/Middleware/fetchDataPage';
-// import { setArtist } from '../store/artistSlice';
+import { fetchAlbumsArtist, fetchTracksAlbum } from "../store/Middleware/fetchDataPage";
 
 export default function ArtistPage() {
     const artistManager = useArtistManager();
@@ -23,12 +20,9 @@ export default function ArtistPage() {
     const dispatch = useDispatch<AppDispatch>();
     const artistContainer = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
-
-    const { quearySearch } = useParams();
   
     const results: any = useSelector<RootState>(state => state.artist);
     const {tracks, albums, artist} = results;
-
     
     let cutTracks = null;
 
@@ -42,13 +36,27 @@ export default function ArtistPage() {
     const panelForChangeColor = useRef<HTMLDivElement>(null);
     const betweenPanelForChangeColor = useRef<HTMLDivElement>(null);
 
+    // Инициализация загрузки альбомов при первом рендере
+    useEffect(() => {
+        if (artist?.id) {
+            dispatch(fetchAlbumsArtist({
+                artistId: artist.id,
+                page: 0,
+                pageSize: 10
+            }));
+        }
+    }, [artist?.id, dispatch]);
+
     const handleOpenTracks = () => {
         navigate(`/Artist/${artist.name}/tracks`);
     };
 
     const handlePlayRandomTrack = () => {
+        if (!cutTracks || cutTracks.length === 0) return;
+
         const randomTrack = Math.floor(Math.random() * cutTracks.length);
         trackManager.trackManager.isPlaying = true;
+        dispatch(setIsPlay(true));
         dispatch(isLikedTrack(cutTracks[randomTrack]));
         if (tracks) {
           dispatch(setPlaylist(tracks));
@@ -56,65 +64,56 @@ export default function ArtistPage() {
         changeTrackPanel(cutTracks[randomTrack]);
     };
 
+    const handlePlayRandomAlbum = () => {
+        if (!albums || albums.length === 0) return;
+
+        const randomAlbum = Math.floor(Math.random() * albums.length);
+        const album = albums[randomAlbum];
+        
+        // Загружаем треки альбома и воспроизводим первый трек
+        dispatch(fetchTracksAlbum(album.id.toString()))
+          .unwrap()
+          .then((albumTracks: ITrack[]) => {
+            if (albumTracks && albumTracks.length > 0) {
+              trackManager.trackManager.isPlaying = true;
+              dispatch(setIsPlay(true));
+              dispatch(isLikedTrack(albumTracks[0]));
+              dispatch(setPlaylist(albumTracks));
+              changeTrackPanel(albumTracks[0]);
+            }
+          });
+    };
     
-      const changeTrackPanel = (track: ITrack) => {
+    const changeTrackPanel = (track: ITrack) => {
         dispatch(setCurrentTrack(track));
-            dispatch(fetchUrl(track.id));
-      };
+        dispatch(fetchUrl(track.id));
+    };
     
-      useEffect(() => {
+    useEffect(() => {
         const handleScroll = () => {
             let scrollPosition = window.scrollY;
         
             if (scrollPosition > 100) { 
-                console.log('pupu');
                 artistContainer.current!.style.transform = "translateY(-250px)";
             } else {
-                console.log('p45353');
                 artistContainer.current!.style.transform = "translateY(0)";
             }
         };
 
         window.addEventListener("scroll", handleScroll);
 
-        if (tracks?.length == 0 && !store.getState().artist.isPending) {
-            // if (artistId && querySearch)
-            //     const artist: IArtist = {
-    
-            // }
-            //     dispatch(fetchTracksArtist({
-            //       artistId: artistId,
-            //       page: 0,
-            //       pageSize: 10,
-            //     }));
-            //     dispatch(fetchAlbumsArtist(artist.id));
-            //     dispatch(setArtist(artist));
-            console.log(quearySearch);
-            if (quearySearch) {
-                dispatch(setQuearyUser(quearySearch));
-                
-                dispatch(searchTracks({queary: quearySearch, pageSize: 10, page: 0}));
-                dispatch(searchAlbums(quearySearch));
-                dispatch(searchArtists(quearySearch));
-            
-                navigate(`/Result/${quearySearch}`);
-            }
-        }
-    
-
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
 
-
     useEffect(() => {
         artistManager.coverArtist = coverArtist.current;
         artistManager.gradientDiv = panelForChangeColor.current;
         artistManager.gradientDivBetweenPanel = betweenPanelForChangeColor.current;
-
+        
         artistManager.changeArtist(artist);
-    }, )
+    }, [artist]);
 
     return (
         <div className="intro">
@@ -136,14 +135,6 @@ export default function ArtistPage() {
                                 <div className="about-artist">
                                     <p className="artist-article">Артист</p>
                                     <h1 className="artist-name">{artist.name}</h1>
-                                    {/* <div className="count-listeners-yandex">
-                                        <img 
-                                            className="img-ya-logo"
-                                            src={yalogo} 
-                                            alt="yalogo" 
-                                        />
-                                        <p className="count-listeners-p">Слушателей на Яндексе: 5.542</p>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -159,17 +150,18 @@ export default function ArtistPage() {
                                 />
                                 <div className="between-panel" ref={betweenPanelForChangeColor}>
                                     <div className="container-random-track">
-                                        <h2 className="article-random-track" >Случайный трек</h2>
-                                        <img onClick={handlePlayRandomTrack} className="play-random-track-btn" src={clearPlay} alt="" />
+                                        <h2 className="article-random-track">Случайный трек</h2>
+                                        <img onClick={handlePlayRandomTrack} className="play-random-track-btn" src={playIcon} alt="Play" />
                                     </div>
                                     <div className="container-random-album">
                                         <h2 className="article-random-album">Случайный альбом</h2>
-                                        <img onClick={handlePlayRandomTrack} className="play-random-track-btn" src={clearPlay} alt="" />
+                                        <img onClick={handlePlayRandomAlbum} className="play-random-track-btn" src={playIcon} alt="Play" />
                                     </div>
                                 </div>
                                 <Albums
                                     albums={albums}
-                                    className={'artistPage'}                       
+                                    className={'artistPage'}
+                                    currentPage={'artist'}                       
                                 />
                             </div>
                             <div className="pustoi-div"></div>

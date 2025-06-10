@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import store from '../store/store';
 
 interface PlayerControlsProps {
     onClickPrev: () => void;
@@ -10,6 +9,7 @@ interface PlayerControlsProps {
     refAllTime: any;
     refCurrentTime: any;
     isFullscreen?: boolean;
+    isPlaying: boolean;
 }
 
 export const PlayerControls = ({
@@ -20,7 +20,8 @@ export const PlayerControls = ({
     refProgressContainer,
     refAllTime,
     refCurrentTime,
-    isFullscreen = false
+    isFullscreen = false,
+    isPlaying
 }: PlayerControlsProps) => {
     return (
         <StyledWrapper $isFullscreen={isFullscreen}>
@@ -32,7 +33,7 @@ export const PlayerControls = ({
                 <div className='container-high' onClick={onClickPlay}>
                     <div className="container">
                         <label>
-                            {store.getState().player.isPlaying ?
+                            {isPlaying ?
                                 <div className="pause-icon" /> :
                                 <div className="play-icon" />
                             }
@@ -131,7 +132,7 @@ const StyledWrapper = styled.div<{ $isFullscreen: boolean }>`
         top: 50%;
         transform: translate(-50%, -50%);
         cursor: pointer;
-        background-color: ${props => props.$isFullscreen ? 'rgb(218, 204, 216)' : 'gray'};
+        background-color: transparent;
         transition: all 0.2s ease;
 
         &:hover {

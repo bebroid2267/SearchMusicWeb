@@ -15,7 +15,16 @@ import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 import Card from './buttonsNextPrev';
 import { Heart } from './heart';
-import { PlayerControls } from './playerControls';
+import { VolumeControl } from './volumeControl';
+import styled from 'styled-components';
+
+const StyledMusicPanel = styled.div`
+  .volume-control-container {
+    @media (max-width: 550px) {
+      display: none;
+    }
+  }
+`;
 
 export default function MusicPanel() {
   const dispatch = useDispatch<AppDispatch>();
@@ -70,19 +79,21 @@ export default function MusicPanel() {
     trackManager.trackManager.allTimeTrack = allTimeText.current;
     trackManager.trackManager.currentTimeTrack = currentTimeText.current;
   };
-
+  
   const setupEventListeners = () => {
     const updateProgress = trackManager.trackManager.updateProgressTrack.bind(trackManager.trackManager);
-    
+
     if (trackManager.trackManager.trackForUrl) {
+      trackManager.trackManager.trackForUrl.removeEventListener('timeupdate', updateProgress);
       trackManager.trackManager.trackForUrl.addEventListener('timeupdate', updateProgress);
       trackManager.trackManager.trackForUrl.addEventListener('ended', nextTrack);
     }
     
     if (trackManager.trackManager.progressContainer) {
+      trackManager.trackManager.progressContainer.removeEventListener('click', handleClick);
       trackManager.trackManager.progressContainer.addEventListener('click', handleClick);
     }
-
+  
     return () => {
       if (trackManager.trackManager.trackForUrl) {
         trackManager.trackManager.trackForUrl.removeEventListener('timeupdate', updateProgress);
@@ -99,15 +110,15 @@ export default function MusicPanel() {
     canvas.current!.width = 50;
     canvas.current!.height = 50;  
     
-    return setupEventListeners();
+    const cleanup = setupEventListeners();
+    return cleanup;
   }, []);
-
+  
   useEffect(() => {
     if (!currentReduxTrack.downloadUrl) return;
     
     setupTrackManagerElements();
     
-    // Trigger background update
     if (coverTrack.current) {
       coverTrack.current.crossOrigin = 'anonymous';
       if (coverTrack.current.complete) {
@@ -119,7 +130,8 @@ export default function MusicPanel() {
       }
     }
     
-    return setupEventListeners();
+    const cleanup = setupEventListeners();
+    return cleanup;
   }, [currentReduxTrack.downloadUrl]);
 
   useEffect(() => {
@@ -142,8 +154,8 @@ export default function MusicPanel() {
   };
 
   useEffect(() => {
-    setIsPlaying(isPlaying);
-  }, [isPlayingSlice])
+    setIsPlaying(isPlayingSlice);
+  }, [isPlayingSlice]);
 
   useEffect(() => {
     setLikeImage();
@@ -205,7 +217,6 @@ const nextTrack = (): void => {
                 changeTrackPanel(playlist[indexCurrentTrack + 1]);
             }
             trackManager.trackManager.playTrack();
-            // setIsPlaying(true);
             dispatch(setIsPlay(true));
         }
     }
@@ -252,7 +263,6 @@ const prevTrack = (): void => {
               changeTrackPanel(playlist[indexCurrentTrack - 1]);
             }
             trackManager.trackManager.playTrack();
-            // setIsPlaying(true);
             dispatch(setIsPlay(true));
         }
     }
@@ -261,12 +271,12 @@ const prevTrack = (): void => {
  const changeTrackPanel = (track: ITrack) => {
   dispatch(setCurrentTrack(track));
   setupTrackManagerElements();
-  dispatch(fetchUrl(track.id));
-  changeTrackPanelTrackManager();
+      dispatch(fetchUrl(track.id));
+    changeTrackPanelTrackManager();
 };
 
   return (
-    <>
+    <StyledMusicPanel>
       <div className="music-panel" ref={panelForGradient} id="gradient-box">
         <canvas ref={canvas}></canvas>
         <img
@@ -294,7 +304,11 @@ const prevTrack = (): void => {
             refProgressContainer={progressContainer}
             refAllTime={allTimeText}
             refCurrentTime={currentTimeText}
+            isPlaying={isPlaying}
           />
+          <div className="volume-control-container">
+            <VolumeControl />
+          </div>
           <Heart 
             isLiked={store.getState().player.isCurrentTrackLiked}
             handleClick={handleLike}
@@ -302,6 +316,6 @@ const prevTrack = (): void => {
         </div>
       </div>
       {<ButtonPanel/>}
-    </>
+    </StyledMusicPanel>
   );
 }

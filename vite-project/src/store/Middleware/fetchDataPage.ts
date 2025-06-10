@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_URL = 'https://localhost:44303/Home';
+const API_URL = 'https://a34295-0341.w.d-f.pw/Home';
 
 export type artistProps = {
     artistId: string;
@@ -8,6 +8,12 @@ export type artistProps = {
     page: number;
 }
 export type quearyProps = {
+    queary: string;
+    pageSize: number;
+    page: number;
+}
+
+export type searchProps = {
     queary: string;
     pageSize: number;
     page: number;
@@ -55,14 +61,14 @@ export const fetchTracksArtistPage = createAsyncThunk(
 
 export const fetchAlbumsArtist = createAsyncThunk(
     'artist/fetchAlbums',
-    async (artistId: string, { rejectWithValue}) => {
+    async (artistProps: artistProps, { rejectWithValue}) => {
         try {
             const response = await fetch(`${API_URL}/GetAlbumsArtist`, { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({Queary: artistId}),
+                body: JSON.stringify({Queary: artistProps.artistId, PageSize: artistProps.pageSize, Page: artistProps.page}),
             });
             const albums = await response.json();
             return albums.albumList;
@@ -72,6 +78,24 @@ export const fetchAlbumsArtist = createAsyncThunk(
     }
 );
 
+export const fetchAlbumsArtistPage = createAsyncThunk(
+    'artist/fetchAlbumsPage',
+    async (artistProps: artistProps, { rejectWithValue}) => {
+        try {
+            const response = await fetch(`${API_URL}/GetAlbumsArtist`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({Queary: artistProps.artistId, PageSize: artistProps.pageSize, Page: artistProps.page}),
+            });
+            const result = await response.json();
+            return result.albumList;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
 
 export const fetchTracksAlbum = createAsyncThunk(
     'album/fetchTracks',
@@ -133,38 +157,76 @@ export const searchTrackPage = createAsyncThunk(
 
 export const searchAlbums = createAsyncThunk(
     'data/searchAlbums',
-    async(queary: string, { rejectWithValue }) => {
+    async(quearyProps: quearyProps, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_URL}/SearchAlbums/${queary}`, {
+            const response = await fetch(`${API_URL}/SearchAlbums`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ Queary: queary }),
+                },
+                body: JSON.stringify({ Queary: quearyProps.queary, PageSize: quearyProps.pageSize, Page: quearyProps.page }),
             });    
             const albums = await response.json();
             return albums.albumList;
-        } catch (error) {
-            return rejectWithValue(null);
+        } catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const searchAlbumPage = createAsyncThunk(
+    'data/searchAlbumsPage',
+    async (searchProps: searchProps, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${API_URL}/SearchAlbums`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ Queary: searchProps.queary, PageSize: searchProps.pageSize, Page: searchProps.page }),
+            });    
+            const result = await response.json();
+            return result.albumList;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
         }
     }
 );
 
 export const searchArtists = createAsyncThunk(
     'data/searchArtists',
-    async(queary: string, { rejectWithValue }) => {
+    async(quearyProps: quearyProps, { rejectWithValue }) => {
         try {
-            const response = await fetch(`${API_URL}/SearchArtists/${queary}`, {
+            const response = await fetch(`${API_URL}/SearchArtists`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ Queary: queary }),
+                },
+                body: JSON.stringify({ Queary: quearyProps.queary, PageSize: quearyProps.pageSize, Page: quearyProps.page }),
             });    
             const artists = await response.json();
             return artists.artistList;
-        } catch (error) {
-            return rejectWithValue(null);
+        } catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const searchArtistPage = createAsyncThunk(
+    'data/searchArtistsPage',
+    async (searchProps: searchProps, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${API_URL}/SearchArtists`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ Queary: searchProps.queary, PageSize: searchProps.pageSize, Page: searchProps.page }),
+            });    
+            const result = await response.json();
+            return result.artistList;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
         }
     }
 );
@@ -185,7 +247,7 @@ export const fetchLikedTracks = createAsyncThunk(
         };
     
         try {
-            const response: any = await fetch(`https://localhost:44303/api/tracksLike/liked`, { 
+            const response: any = await fetch(`https://a34295-0341.w.d-f.pw/api/tracksLike/liked`, { 
                 method: 'GET',
                 headers });
             const answer = await response.json();

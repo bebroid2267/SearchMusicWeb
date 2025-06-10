@@ -63,24 +63,26 @@ export default class TrackManager {
     }
 
      updateProgressTrack(e: any): void {
-        const { duration, currentTime } = e.srcElement;
-        const progressPercent = (currentTime / duration) * 100;
+        if (!this.progressBar || !this.currentTimeTrack || !this.allTimeTrack) return;
 
-        this.allTimeTrack!.textContent = this.secondsToMinutes(duration);
-        this.currentTimeTrack!.textContent = this.secondsToMinutes(currentTime);
-        this.progressBar!.style.width = `${progressPercent}%`;
+        const { duration, currentTime } = e.srcElement;
+        if (isNaN(duration) || isNaN(currentTime)) return;
+
+        const progressPercent = (currentTime / duration) * 100;
+        
+        // Обновляем ширину прогресс-бара
+        this.progressBar.style.width = `${progressPercent}%`;
+
+        // Обновляем отображение времени
+        this.currentTimeTrack.textContent = this.secondsToMinutes(currentTime);
+        this.allTimeTrack.textContent = this.secondsToMinutes(duration);
     }
 
-    private secondsToMinutes(seconds: any) {
+    secondsToMinutes(seconds: number): string {
+        if (isNaN(seconds)) return '0:00';
         const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        const finallySeconds = Math.round(remainingSeconds);
-        if (finallySeconds) {
-            return `${minutes}:${finallySeconds > 9 ? finallySeconds : '0' + finallySeconds}`;
-        }
-        else {
-            return '0:00';
-        }
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
     setCurrentTrack(newTrack: ITrack) {
         if (this.onTrackChange) {

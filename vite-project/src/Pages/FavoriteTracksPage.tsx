@@ -10,6 +10,7 @@ import { AppDispatch } from '../store/store';
 import heartImg from '../../lib/resources/kandinsky-download-1741283020133.png'
 import { useArtistManager } from "../contexts/TrackManagerContext";
 import { motion } from "framer-motion"
+import { fetchLikedTracks } from '../store/Middleware/fetchDataPage';
 
 export default function FavoritePage() {
   const tracks = useSelector(selectLikedTracks);
@@ -25,6 +26,8 @@ export default function FavoritePage() {
       if (!isAuth) {
         dispatch(setCurrentUser());
         navigate('/Auth');
+      } else {
+        dispatch(fetchLikedTracks(null));
       }
   },);
 

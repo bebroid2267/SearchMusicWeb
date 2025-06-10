@@ -248,8 +248,13 @@
     z-index: 10;
     color: gray;
     font-size: 14px;
-    margin-left: -5px;
-    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 12px;
+    margin-right: 20px;
+    max-width: 150px;
+    display: block;
 }
 .blur_album_cover {
     margin-left: -10px;
@@ -339,6 +344,11 @@ li {
     margin: 0;
     margin-top: 5px;
     color: #b9abab;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 200px;
+    font-size: 14px;
 }
 
 
@@ -434,6 +444,10 @@ li {
     font-size: 14px;
     color: darkgrey;
     font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
 }
 
 .music-buttons {
@@ -509,6 +523,7 @@ li {
     }
 
     .track-artist-panel {
+        max-width: 200px;
         font-size: 13px;
     }
 }
@@ -573,6 +588,18 @@ li {
     }
     .btn-enter, .btn-exit {
         margin-right: -50px;
+    }
+    .track-title {
+        font-size: 15px;
+        width: 150px;
+    }
+    .track-artist {
+        font-size: 13px;
+        width: 150px;
+    }
+    .track-artist-panel {
+        max-width: 150px;
+        font-size: 12px;
     }
 }
 
@@ -859,5 +886,20 @@ li {
 @media (min-width: 1701px) {
     #tracks-text {
         margin-top: 40px;
+    }
+}
+
+@media (max-width: 400px) {
+    .track-title {
+        font-size: 14px;
+        width: 120px;
+    }
+    .track-artist {
+        font-size: 12px;
+        width: 120px;
+    }
+    .track-artist-panel {
+        max-width: 120px;
+        font-size: 11px;
     }
 }

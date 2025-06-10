@@ -1,7 +1,26 @@
 import styled from 'styled-components';
-import store from '../store/store';
 
-export const Card = ({onClickPrev, onClickPlay, onClickNext, refProgressBar, refProgressContainer, refCurrentTime, refAllTime}: any) => {
+interface CardProps {
+    onClickPrev: () => void;
+    onClickPlay: () => void;
+    onClickNext: () => void;
+    refProgressBar: any;
+    refProgressContainer: any;
+    refCurrentTime: any;
+    refAllTime: any;
+    isPlaying: boolean;
+}
+
+export const Card = ({
+    onClickPrev, 
+    onClickPlay, 
+    onClickNext, 
+    refProgressBar, 
+    refProgressContainer, 
+    refCurrentTime, 
+    refAllTime,
+    isPlaying
+}: CardProps) => {
   return (
     <StyledWrapper>
         <div className="controls">
@@ -12,23 +31,21 @@ export const Card = ({onClickPrev, onClickPlay, onClickNext, refProgressBar, ref
           <div className='container-high'
           onClick={onClickPlay}
           >
-
-          
             <div 
               className="container" 
             >
               <label>
-                  {store.getState().player.isPlaying ?
+                  {isPlaying ?
                     <div 
                         className="pause-icon" 
                     /> :
-                  <div 
-                    className="play-icon" 
-                  />
+                    <div 
+                        className="play-icon" 
+                    />
                   }
               </label>
+            </div>
           </div>
-        </div>
 
           <svg onClick={onClickNext} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" height={30} width={30}>
             <path clipRule="evenodd" d="M12 21.6a9.6 9.6 0 1 0 0-19.2 9.6 9.6 0 0 0 0 19.2Zm4.448-10.448-3.6-3.6a1.2 1.2 0 0 0-1.696 1.696l1.551 1.552H8.4a1.2 1.2 0 1 0 0 2.4h4.303l-1.551 1.552a1.2 1.2 0 1 0 1.696 1.696l3.6-3.6a1.2 1.2 0 0 0 0-1.696Z" fillRule="evenodd" />
@@ -436,7 +453,7 @@ const StyledWrapper = styled.div`
     height: 15px;
     left: 60%;
     top: 50%;
-    background-color:rgb(218, 204, 216);
+    background-color: rgb(218, 204, 216);
     transform: translate(-60%, -50%) rotate(90deg);
     clip-path: polygon(50% 15%, 0% 100%, 100% 100%);
     transition: all 400ms ease-in-out;
@@ -455,27 +472,24 @@ const StyledWrapper = styled.div`
     top: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
-    background-color:rgb(218, 204, 216);
-    transition: all 400ms ease-in-out;
+    background-color: transparent;
 
-  }
+    &::before, &::after {
+      content: "";
+      position: absolute;
+      width: 35%;
+      height: 100%;
+      background-color: rgb(218, 204, 216);
+      transition: all 0.2s ease;
+    }
 
-  .pause-icon::before {
-    content: "";
-    position: absolute;
-    width: 0%;
-    height: 100%;
-    background-color: rgb(218, 204, 216);
-    left: 0;
-  }
+    &::before {
+      left: 0;
+    }
 
-  .pause-icon::after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 100%;
-    background-color: rgb(218, 204, 216);
-    right: 0;
+    &::after {
+      right: 0;
+    }
   }
 
   .play-btn:checked ~ .pause-icon::before {

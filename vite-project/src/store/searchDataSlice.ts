@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchLikedTracks, searchAlbums, searchArtists, searchTrackPage, searchTracks } from "./Middleware/fetchDataPage";
-import { ITrack } from "../Interfaces";
+import { fetchLikedTracks, searchAlbums, searchArtists, searchTrackPage, searchTracks, searchAlbumPage, searchArtistPage } from "./Middleware/fetchDataPage";
+import { ITrack, IAlbum, IArtist } from "../Interfaces";
 
 const initialState = {
     tracks: [] as ITrack[],
-    album: [],
-    artist: [],
+    album: [] as IAlbum[],
+    artist: [] as IArtist[],
     likedTracks: [],
     queary: '',
     isLastTracksScroll: false,
+    isLastAlbumsScroll: false,
+    isLastArtistsScroll: false,
     isPending: false
 }
 const dataSlice = createSlice({
@@ -21,7 +23,7 @@ const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(searchTracks.fulfilled, (state, action: PayloadAction<any>) => {
-            state.tracks = action.payload;
+            state.tracks = action.payload || [];
             state.isLastTracksScroll = false;
             state.isPending = false;
         });
@@ -30,7 +32,7 @@ const dataSlice = createSlice({
         });
 
         builder.addCase(searchTrackPage.fulfilled, (state, action: PayloadAction<any>) => {
-            const newTracks = action.payload;
+            const newTracks = action.payload || [];
         
             // Удаление дубликатов
             const uniqueTracks = [...state.tracks, ...newTracks].filter((track, index, self) =>
@@ -47,19 +49,57 @@ const dataSlice = createSlice({
         });
         
         builder.addCase(searchAlbums.fulfilled, (state, action: PayloadAction<any>) => {
-            state.album = action.payload;
+            state.album = action.payload || [];
+            state.isLastAlbumsScroll = false;
         });
-        builder.addCase(searchAlbums.rejected, (state, action: PayloadAction<any>) => {
-            state.album = action.payload;
+        builder.addCase(searchAlbums.rejected, (state) => {
+            state.album = [];
+            state.isLastAlbumsScroll = true;
         });
+
+        builder.addCase(searchAlbumPage.fulfilled, (state, action: PayloadAction<any>) => {
+            const newAlbums = action.payload || [];
+        
+            // Удаление дубликатов
+            const uniqueAlbums = [...state.album, ...newAlbums].filter((album, index, self) =>
+                index === self.findIndex((a) => (
+                a.id === album.id
+                ))
+            );
+              
+            state.album = uniqueAlbums;
+        });
+        builder.addCase(searchAlbumPage.rejected, (state) => {
+            state.isLastAlbumsScroll = true;
+        });
+
         builder.addCase(searchArtists.fulfilled, (state, action: PayloadAction<any>) => {
-            state.artist = action.payload;
+            state.artist = action.payload || [];
+            state.isLastArtistsScroll = false;
         });
-        builder.addCase(searchArtists.rejected, (state, action: PayloadAction<any>) => {
-            state.artist = action.payload;
+        builder.addCase(searchArtists.rejected, (state) => {
+            state.artist = [];
+            state.isLastArtistsScroll = true;
         });
+
+        builder.addCase(searchArtistPage.fulfilled, (state, action: PayloadAction<any>) => {
+            const newArtists = action.payload || [];
+        
+            // Удаление дубликатов
+            const uniqueArtists = [...state.artist, ...newArtists].filter((artist, index, self) =>
+                index === self.findIndex((a) => (
+                a.id === artist.id
+                ))
+            );
+              
+            state.artist = uniqueArtists;
+        });
+        builder.addCase(searchArtistPage.rejected, (state) => {
+            state.isLastArtistsScroll = true;
+        });
+
         builder.addCase(fetchLikedTracks.fulfilled, (state, action: PayloadAction<any>) => {
-            state.likedTracks = action.payload;
+            state.likedTracks = action.payload || [];
         })
     }
 });
