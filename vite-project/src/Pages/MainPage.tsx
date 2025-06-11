@@ -29,8 +29,8 @@ export default function MainPage() {
     dispatch(setQuearyUser(queary));
     
     dispatch(searchTracks({queary, page: 0, pageSize: 16}));
-    dispatch(searchAlbums(queary));
-    dispatch(searchArtists(queary));
+    dispatch(searchAlbums({queary, page: 0, pageSize: 16}));
+    dispatch(searchArtists({queary, page: 0, pageSize: 16}));
 
     navigate(`/Result/${queary}`);
   };
