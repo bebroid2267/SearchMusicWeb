@@ -99,15 +99,15 @@ const StyledWrapper = styled.div`
   .svg-exit {
     width: 60px;
     height: 50px;
-    opacity: 80%;
+    opacity: 100%;
     cursor: pointer;
     padding: 13px 20px;
     transition: 0.2s;
-    color: rgb(204, 25, 25);
+    color: rgb(255, 0, 0);
   }
 
   .svg-exit:hover {
-    color: rgb(219, 40, 235);
+    color: rgb(255, 50, 255);
   }
 
 

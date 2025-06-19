@@ -20,10 +20,38 @@ export const InputResult = ({id, value, name, onChange, variant = 'default'}: an
   );
 }
 
-const StyledWrapper = styled.div<{ $variant: 'default' | 'modal' }>`
+const StyledWrapper = styled.div<{ $variant: 'default' | 'modal' | 'header' }>`
   ${props => props.$variant === 'default' && `
     .container-input {
       width: 400px;
+    }
+
+    .label {
+      box-shadow: 0px 40px 100px rgb(194, 56, 199);
+    }
+
+    @media (max-width: 500px) {
+      .container-input {
+        width: 300px !important;
+      }
+    }
+    @media (max-width: 400px) {
+      .container-input {
+        width: 250px !important;
+      }
+      .search_bar {
+        font-size: 12px !important;
+      }
+    }
+  `}
+
+  ${props => props.$variant === 'header' && `
+    .container-input {
+      width: 400px;
+    }
+
+    .label {
+      box-shadow: none;
     }
 
     @media (max-width: 500px) {
@@ -53,11 +81,17 @@ const StyledWrapper = styled.div<{ $variant: 'default' | 'modal' }>`
     display: block;
     width: 100%;
     height: 40px;
-    border-radius: 10px;
-    border: 1px solid #5e5757;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 15px 8px 15px 10px;
     text-align: left;
-    box-shadow: 0px 40px 100px rgb(194, 56, 199);
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+    }
   }
 
   .search_bar {
@@ -68,13 +102,17 @@ const StyledWrapper = styled.div<{ $variant: 'default' | 'modal' }>`
     border: none;
     outline: none;
     font-size: 16px;
-    color: rgb(111, 115, 119);
-    font-weight: 700;
+    color: white;
+    font-weight: 500;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
   }
 
   .search_bar:focus {
     color: white;
-    font-weight: 700;
+    font-weight: 500;
   }
 `;
 

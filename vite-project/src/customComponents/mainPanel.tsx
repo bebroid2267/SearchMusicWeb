@@ -93,7 +93,7 @@ const StyledMainPanel = styled.div`
     padding: 10px;
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.8);
-    box-shadow: 0 0 20px rgba(194, 56, 199, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     animation: slideDown 0.3s ease;
 
     form {
@@ -101,12 +101,6 @@ const StyledMainPanel = styled.div`
 
       > div {
         width: 100%;
-
-        input {
-          width: 100% !important;
-          min-width: 100% !important;
-          max-width: 100% !important;
-        }
       }
     }
 
@@ -200,6 +194,7 @@ export default function MainPanel() {
                   value={queary} 
                   name="Queary" 
                   onChange={setQueary}
+                  variant="header"
                 />
               </form>
             </div>

@@ -35,6 +35,7 @@ export default function ArtistPage() {
     const coverArtist = useRef<HTMLImageElement>(null);
     const panelForChangeColor = useRef<HTMLDivElement>(null);
     const betweenPanelForChangeColor = useRef<HTMLDivElement>(null);
+    const resultArtistUlRef = useRef<HTMLDivElement>(null);
 
     // Инициализация загрузки альбомов при первом рендере
     useEffect(() => {
@@ -111,6 +112,7 @@ export default function ArtistPage() {
         artistManager.coverArtist = coverArtist.current;
         artistManager.gradientDiv = panelForChangeColor.current;
         artistManager.gradientDivBetweenPanel = betweenPanelForChangeColor.current;
+        artistManager.resultArtistUlDiv = resultArtistUlRef.current;
         
         artistManager.changeArtist(artist);
     }, [artist]);
@@ -147,6 +149,7 @@ export default function ArtistPage() {
                                     classNameForTrackText={'artist-page-tracks-h2'} 
                                     neededBtn={true}
                                     currentPage={'none'}
+                                    ref={resultArtistUlRef}
                                 />
                                 <div className="between-panel" ref={betweenPanelForChangeColor}>
                                     <div className="container-random-track">

@@ -1,18 +1,19 @@
 .button-panel {
     position: fixed; /* Оставляем фиксированное позиционирование */
     margin: 0 auto;
-    width: 80%;
+    width: 100%;
     bottom: 80px;
     height: 35px;
     padding-bottom: 1px; /*/ /* Отступ снизу */
     display: flex;
     align-items: center;
-    left: 50%;
+    left: 49%;
     justify-content: space-around;
     transform: translateX(-50%);
     z-index: 10;
     overflow-x: hidden;
     overflow-y: hidden;
+    background: rgba(0, 0, 0, 0);
 }
 .ul-button-panel {
     display: flex;
@@ -22,6 +23,7 @@
     overflow: auto;
     overflow-y: hidden;
     justify-content: space-between;
+    scrollbar-width: none;
 }
 
 .ul-button-panel {
@@ -34,13 +36,13 @@ ul {
 .ul-button-panel li {
     margin-left: 0px;
     display: inline-flex;
-    background-color: rgba(124, 116, 116, 0.2);
+    background-color: var(--button-color, rgba(124, 116, 116, 0.2));
     backdrop-filter: blur(20px);
     flex-grow: 1;
     border-radius: 8px;
     border: 1px solid rgb(46, 45, 45);
     box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .ul-button-panel li:active {
@@ -50,6 +52,7 @@ ul {
 .button-panel-element {
     width: auto !important;
     height: 35px;
+    white-space: nowrap;
 }
 .text-btn-element {
     text-align: center;
@@ -87,8 +90,9 @@ ul {
 
 @media (min-width: 600px) {
     .ul-button-panel li:hover {
-        background-color: rgb(105, 97, 97);
+        background-color: var(--button-hover-color, rgb(105, 97, 97));
         cursor: pointer;
+        transform: translateY(-2px);
     }    
 }
 @media (max-width: 600px) {

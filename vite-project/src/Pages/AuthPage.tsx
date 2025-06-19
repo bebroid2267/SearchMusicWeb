@@ -103,7 +103,7 @@ const AuthPage = () => {
                     <input
                       className="input-field"
                       type="email"
-                      placeholder="Email"
+                      placeholder="Введите почту"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
@@ -113,7 +113,7 @@ const AuthPage = () => {
                     <input
                       className="input-field"
                       type="password"
-                      placeholder="Password"
+                      placeholder="Введите пароль"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />

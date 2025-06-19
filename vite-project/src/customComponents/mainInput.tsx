@@ -35,17 +35,24 @@ const StyledWrapper = styled.div`
     display: block;
     width: 100%;
     height: 40px;
-    border-radius: 10px;
-    // border: 2px solid #5e5757;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 15px 8px 15px 10px;
     text-align: left;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
     box-shadow:
       0px 20px 60px rgb(194, 56, 199),
       0px -20px 60px #19ad88;
-  }
-    .container-input {
-        width: 400px;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
     }
+  }
+  .container-input {
+    width: 400px;
+  }
   .search_bar {
     margin-top: -17px;
     height: 40px;
@@ -54,13 +61,17 @@ const StyledWrapper = styled.div`
     border: none;
     outline: none;
     font-size: 16px;
-    color: rgb(111, 115, 119);
+    color: white;
     font-weight: 500;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
   }
   .search_bar:focus {
-    color: rgb(169, 173, 179);
+    color: white;
     font-weight: 500;
   }  
-  `;
+`;
 
 export default Input;

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { setCurrentTrack, setIsPlay, setPlaylist } from '../store/playerSlice';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import store, { AppDispatch } from '../store/store';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, forwardRef, useEffect, useRef, useState } from 'react';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 import Track from './track';
@@ -14,19 +14,25 @@ import Button from './buttonScrollAlbums';
 import '../../../wwwroot/css/artistTracksPage.css'
 import { fetchTracksArtistPage, searchTrackPage } from '../store/Middleware/fetchDataPage';
 
-
-type Page =  'artist' | 'result' | 'none';
+type Page = 'artist' | 'result' | 'none';
 
 interface TracksProps {
-  tracks: any;
-  className: string;
-  classNameForTrackText: string;
-  handleOpenTracks: any;
-  neededBtn: boolean;
-  currentPage: Page;
+    tracks: ITrack[];
+    className: string;
+    classNameForTrackText: string;
+    neededBtn: boolean;
+    currentPage: Page;
+    handleOpenTracks?: (() => void) | null;
 }
 
-export default function Tracks({ tracks, className, classNameForTrackText, handleOpenTracks, neededBtn, currentPage }: TracksProps) {
+const Tracks = forwardRef<HTMLDivElement, TracksProps>(({ 
+    tracks, 
+    className, 
+    classNameForTrackText, 
+    neededBtn, 
+    currentPage,
+    handleOpenTracks 
+}, ref) => {
   const trackManager = useTrackManager();
   const dispatch = useDispatch<AppDispatch>();
   const artistId = store.getState().artist.artist.id;
@@ -115,7 +121,7 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
   };
   
   return (
-    <div className={'result-' + className}>
+    <div className={'result-' + className} ref={ref}>
       <div className='container-article-tracks'>
         <h2 id={classNameForTrackText}>Треки</h2>
         {neededBtn ?
@@ -137,4 +143,6 @@ export default function Tracks({ tracks, className, classNameForTrackText, handl
       </ul>
     </div>
   );
-}
+});
+
+export default Tracks;

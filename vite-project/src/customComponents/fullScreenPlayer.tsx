@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import '../../wwwroot/css/fullScreenPlayer.css';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCurrentTrack, selectIsPlaying, setCurrentTrack } from '../store/playerSlice';
+import { selectCurrentTrack, selectIsPlaying, setCurrentTrack, setIsPlay } from '../store/playerSlice';
 import { useTrackManager } from '../contexts/TrackManagerContext';
 import { PlayerControls } from './playerControls';
 import { FullscreenHeart } from './fullscreenHeart';
@@ -10,14 +10,18 @@ import { AppDispatch } from '../store/store';
 import { likeTrack, dislikeTrack } from '../store/Middleware/likeTrack';
 import { isLikedTrack } from '../store/Middleware/isLikedTrack';
 import store from '../store/store';
-import { ITrack } from '../Interfaces';
+import { ITrack, IArtist } from '../Interfaces';
 import { fetchUrl } from '../store/Middleware/fetchUrlForTrack';
+import { useNavigate } from 'react-router-dom';
+import { fetchAlbumsArtist, fetchTracksArtist } from '../store/Middleware/fetchDataPage';
+import { setArtist } from '../store/artistSlice';
 
 interface FullScreenPlayerProps {
     onClose: () => void;
 }
 
 export default function FullScreenPlayer({ onClose }: FullScreenPlayerProps) {
+    const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const currentTrack = useSelector(selectCurrentTrack);
     const isPlayingRedux = useSelector(selectIsPlaying);
@@ -77,6 +81,15 @@ export default function FullScreenPlayer({ onClose }: FullScreenPlayerProps) {
 
         if (trackManager.trackManager.trackForUrl) {
             trackManager.trackManager.trackForUrl.addEventListener('timeupdate', updateProgress);
+            
+            // Синхронизируем начальное состояние
+            const { duration, currentTime } = trackManager.trackManager.trackForUrl;
+            if (progressBar.current && currentTimeText.current && allTimeText.current) {
+                const progressPercent = (currentTime / duration) * 100;
+                progressBar.current.style.width = `${progressPercent}%`;
+                currentTimeText.current.textContent = formatTime(currentTime);
+                allTimeText.current.textContent = formatTime(duration);
+            }
         }
 
         return () => {
@@ -218,9 +231,11 @@ export default function FullScreenPlayer({ onClose }: FullScreenPlayerProps) {
         if (isPlaying) {
             trackManager.trackManager.pauseTrack();
             setIsPlaying(false);
+            dispatch(setIsPlay(false));
         } else {
             trackManager.trackManager.playTrack();
             setIsPlaying(true);
+            dispatch(setIsPlay(true));
         }
     };
 
@@ -299,6 +314,22 @@ export default function FullScreenPlayer({ onClose }: FullScreenPlayerProps) {
         }
     };
 
+    const handleOpenArtistPage = async (artist: IArtist) => {
+        onClose(); // Закрываем плеер перед навигацией
+        dispatch(fetchTracksArtist({
+            artistId: artist.id,
+            page: 0,
+            pageSize: 10,
+        }));
+        dispatch(fetchAlbumsArtist({
+            artistId: artist.id,
+            page: 0,
+            pageSize: 10,
+        }));
+        dispatch(setArtist(artist));
+        navigate(`/Artist/${artist.name}`);
+    };
+
     return (
         <StyledWrapper>
             <div className="fullscreen-player" ref={panelForGradient}>
@@ -315,11 +346,24 @@ export default function FullScreenPlayer({ onClose }: FullScreenPlayerProps) {
                     </div>
                     <div className="fullscreen-track-info">
                         <h2 className="fullscreen-track-title">{currentTrack.title}</h2>
-                        <p className="fullscreen-track-artist">
-                            {currentTrack.artists?.map((element: string, index: number) => (
-                                `${element}${index < currentTrack.artists.length - 1 ? ', ' : ''}`
+                        <div className="fullscreen-artists-container">
+                            {currentTrack.artistsEntity?.map((artist: IArtist) => (
+                                <div 
+                                    key={artist.id} 
+                                    className="fullscreen-artist-item"
+                                    onClick={() => handleOpenArtistPage(artist)}
+                                >
+                                    <img 
+                                        src={artist.coverPath} 
+                                        alt={artist.name}
+                                        className="fullscreen-artist-cover"
+                                    />
+                                    <span className="fullscreen-artist-name">
+                                        {artist.name}
+                                    </span>
+                                </div>
                             ))}
-                        </p>
+                        </div>
                     </div>
                     <div className="fullscreen-controls">
                         <PlayerControls
@@ -457,6 +501,42 @@ const StyledWrapper = styled.div`
         margin-top: 20px;
     }
 
+    .fullscreen-artists-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .fullscreen-artist-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+    }
+
+    .fullscreen-artist-cover {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .fullscreen-artist-name {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
     @media (max-height: 700px) {
         .fullscreen-player-content {
             padding: 1rem;
@@ -496,6 +576,19 @@ const StyledWrapper = styled.div`
         .fullscreen-like-button {
             margin-top: 15px;
         }
+
+        .fullscreen-artist-item {
+            padding: 3px 8px;
+        }
+
+        .fullscreen-artist-cover {
+            width: 25px;
+            height: 25px;
+        }
+
+        .fullscreen-artist-name {
+            font-size: 1rem;
+        }
     }
 
     @media (max-width: 400px) {
@@ -507,6 +600,15 @@ const StyledWrapper = styled.div`
 
         .fullscreen-cover-container {
             max-width: 200px;
+        }
+
+        .fullscreen-artist-cover {
+            width: 20px;
+            height: 20px;
+        }
+
+        .fullscreen-artist-name {
+            font-size: 0.9rem;
         }
     }
 `; 

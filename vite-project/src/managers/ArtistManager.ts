@@ -4,6 +4,7 @@ export default class ArtistManager {
     public coverArtist: HTMLImageElement | null = null;
     public gradientDiv: HTMLDivElement | null = null;
     public gradientDivBetweenPanel: HTMLDivElement | null = null;
+    public resultArtistUlDiv: HTMLDivElement | null = null;
 
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D | null;
@@ -44,8 +45,16 @@ export default class ArtistManager {
             if (this.gradientDivBetweenPanel) {
                 this.gradientDivBetweenPanel!.style.background = gradient;
             }
+            if (this.resultArtistUlDiv) {
+                const gradientColor = `linear-gradient(180deg, 
+                    rgba(${r}, ${g}, ${b}, 0.8) 0%,
+                    rgba(${r}, ${g}, ${b}, 0.4) 50%,
+                    rgba(${r}, ${g}, ${b}, 0) 100%
+                )`;
+                this.resultArtistUlDiv!.style.setProperty('--gradient-color', gradientColor);
+                this.resultArtistUlDiv!.querySelector('::before')?.setAttribute('style', `background: ${gradientColor}`);
+            }
         }
-
     }
     public changeArtist(artist: IArtist) {
         this.coverArtist!.crossOrigin = 'anonymous';
